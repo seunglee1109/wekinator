@@ -1,0 +1,6 @@
+#labels instructions
+#Instructions for use
+
+= Instructions =
+
+Instructions are at [http://wiki.cs.princeton.edu/index.php/ChucK/Wekinator/Instructions http://wiki.cs.princeton.edu/index.php/ChucK/Wekinator/Instructions].
