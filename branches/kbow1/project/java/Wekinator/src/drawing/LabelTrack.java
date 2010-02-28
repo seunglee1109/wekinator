@@ -17,15 +17,16 @@ public class LabelTrack {
    // public int x, y;
     float ppHor = 1.0f;
     float ppVert = 10.0f;
-    float[] xvals = new float[0];
     int[] yvals = new int[0];
-    int[] colors = new int[0];
+    float[] hues = new float[0];
 
-    float minX = 0;
-    float maxX = 100;
+    int minInd = 0;
+    int maxInd = 100;
     int numClasses = 0;
 
-    public LabelTrack(float w, float h, float minx, float maxx, int numClasses, PApplet app) {
+    public int minSelected = -1, maxSelected = -1;
+
+    public LabelTrack(float w, float h, int mini, int maxi, int numClasses, PApplet app) {
      //   this.x = x;
      //   this.y = y;
         p = app;
@@ -34,10 +35,16 @@ public class LabelTrack {
         height = h;
         //wzoom = wz;
         //hzoom = hz;
-        this.minX = minx;
-        this.maxX = maxx;
+        this.minInd = mini;
+        this.maxInd = maxi;
 
-        ppHor = ((float)w) / (maxX - minX);
+        System.out.println("width is " + w);
+        System.out.println("max is " + maxInd);
+        System.out.println("min is " + minInd);
+
+
+        ppHor = ((float)w) / (maxInd - minInd + 1);
+        System.out.println("width of each is " + ppHor);
 
         this.numClasses = numClasses;
         setColors();
@@ -46,31 +53,25 @@ public class LabelTrack {
     }
 
     private void setColors() {
-        colors = new int[numClasses];
+        hues = new float[numClasses];
         for (int i = 0; i < numClasses; i++) {
-            colors[i] = p.color(((float)i)/numClasses * 256, 256, 256);
+            hues[i] = (float)i/numClasses * 256;
         }
     }
 
     private void setTempVals() {
-       // xvals = {1.0f, 2.0f, 3.0f};
-       // yvals = new float[3];
-        float[] x1 = {1.f, 2.f, 3.f};
         int[] y1 = {0, 1, 2};
-        xvals = x1;
         yvals = y1;
     }
 
     private float xformx(float x) {
-        return (ppHor * (x - minX));
+        return (ppHor * (x - minInd));
     }
 
 
     public void setVals(float[] x, int[] y) {
-        if (x.length == y.length) {
-            xvals = x;
             yvals = y;
-        }
+        
     }
 
     public void draw() {
@@ -88,25 +89,64 @@ public class LabelTrack {
 
        // p.line(0, 0, 100, 100);
 
-        if (xvals.length > 0) {
-            for (int i= 0; i < xvals.length-1; i++) {
+       if (yvals.length > minInd) {
+            //if draw #0
+          /*  if (minInd < yvals.length) {
+                p.fill(hues[yvals[minInd]]);
+                p.rect(0, 0, (ppHor * .5f), height);
+            }
+             */
+
+            for (int i = minInd; (i <= maxInd && i < yvals.length); i++) {
+          //                  for (int i = minInd; (i <= maxInd && i < yvals.length); i++) {
+           
                //TODO: if no class given - should be black
-                p.fill(colors[yvals[i]]);
-               //p.line(xformx(xvals[i]), xformy(yvals[i]), xformx(xvals[i+1]), xformy(yvals[i+1]));
-               p.rect((ppHor*i), 0, (ppHor*(i+1)), height);
-            }
+                //TODO: offset 50% to left
+               // int c = hues[yvals[i]];
 
-            if (xvals.length > 1) {
-                 p.fill(colors[yvals[xvals.length-1]]);
-               //p.line(xformx(xvals[i]), xformy(yvals[i]), xformx(xvals[i+1]), xformy(yvals[i+1]));
-               p.rect((ppHor*xvals.length-1), 0, (ppHor*(xvals.length-1+1)), height);
-            }
+                //int c  = hues[yvals[i]];
+                if (i >= minSelected && i <= maxSelected) {
+                    p.stroke(0, 0, 256);
+                    p.fill(hues[i], 50, 256);
+                } else {
+                    p.noStroke();
+                    p.fill(hues[i], 256, 256);
+                }
+
+               p.rect((ppHor*i), 0, ppHor, height);
+
+            } 
+
+
+      //  p.fill(30, 100, 100, 100);
+      //  p.rect( 30, 0, 150, 200);
+
         }
-
-
-
 
         p.popStyle();
         p.popMatrix();
     }
+
+   public void  leftClick(float x, float y) {
+        //Start highlight
+        int index = findIndex(x, y);
+        minSelected = index;
+        if (maxSelected < index)
+            maxSelected = index;
+   }
+
+   public void clearClick() {
+        minSelected = -1;
+        maxSelected = -1;
+   }
+
+   public void rightClick(float x, float y) {
+        int index = findIndex(x, y);
+        if (index >= minSelected)
+            maxSelected = index;
+   }
+
+   private int findIndex(float x, float y) {
+        return (int)(x / ppHor);
+   }
 }
