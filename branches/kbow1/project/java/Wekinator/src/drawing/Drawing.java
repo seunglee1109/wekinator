@@ -25,27 +25,37 @@ public class Drawing extends PApplet {
 
     @Override
    public void setup () {
-       size( 400, 400);
+       size( 600, 400);
        colorMode(HSB);
+       smooth();
        background(50, 0, 256);
-       dv = new DataView(300, 300, 3, 2, 3, this);
+       dv = new DataView(600, 400, 3, 2, 3, 100, this);
+
+    //   noLoop();
+    //   String[] fontList = PFont.list();
+             // smooth();
+
+  //println(fontList);
+        
+       
 
    }
 
     @Override
    public void draw () {
-    //tr.draw();
+       background(255);
         dv.draw();
+
+
    }
 
-    @Override
-   public void mouseDragged() {
-       line(mouseX, mouseY, pmouseX, pmouseY);
-   }
-
-    @Override
+   @Override
    public void mouseClicked() {
+       
+       System.out.println("mouse clicked");
        dv.processMouseClick(mouseX, mouseY, mouseButton);
    }
+
+
 
 }

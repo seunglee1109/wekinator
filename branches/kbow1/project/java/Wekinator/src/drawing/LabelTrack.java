@@ -17,52 +17,44 @@ public class LabelTrack {
    // public int x, y;
     float ppHor = 1.0f;
     float ppVert = 10.0f;
-    int[] yvals = new int[0];
-    float[] hues = new float[0];
 
     int minInd = 0;
     int maxInd = 100;
     int numClasses = 0;
-
+    float[] hues;
+    int[] labels;
     public int minSelected = -1, maxSelected = -1;
+    public int unitWidth = 10;
 
-    public LabelTrack(float w, float h, int mini, int maxi, int numClasses, PApplet app) {
+    public LabelTrack(float w, float h, int mini, int maxi, int numClasses, float[] hues, int[] labels, PApplet app) {
      //   this.x = x;
      //   this.y = y;
         p = app;
-
+        this.hues = hues;
+        this.labels = labels;
         width = w;
         height = h;
         //wzoom = wz;
         //hzoom = hz;
         this.minInd = mini;
         this.maxInd = maxi;
-
-        System.out.println("width is " + w);
-        System.out.println("max is " + maxInd);
-        System.out.println("min is " + minInd);
-
-
         ppHor = ((float)w) / (maxInd - minInd + 1);
-        System.out.println("width of each is " + ppHor);
 
         this.numClasses = numClasses;
-        setColors();
 
-        setTempVals();
     }
 
-    private void setColors() {
-        hues = new float[numClasses];
-        for (int i = 0; i < numClasses; i++) {
-            hues[i] = (float)i/numClasses * 256;
-        }
+    public int getUnitWidth() {
+        return unitWidth;
     }
 
-    private void setTempVals() {
-        int[] y1 = {0, 1, 2};
-        yvals = y1;
+    public void setUnitWidth(int w) {
+        unitWidth = w;
+        maxInd = minInd + w;
+        ppHor = width / (maxInd - minInd + 1);
     }
+
+
 
     private float xformx(float x) {
         return (ppHor * (x - minInd));
@@ -70,14 +62,14 @@ public class LabelTrack {
 
 
     public void setVals(float[] x, int[] y) {
-            yvals = y;
+            labels = y;
         
     }
 
     public void draw() {
         p.pushMatrix();
         p.pushStyle();
-        p.fill(100, 100, 256);
+        p.fill(100, 100, 0);
         p.rect(0, 0, width, height);
       //  p.scale((float)ppHor, (float)ppVert);
         //p.translate(x, y);
@@ -89,38 +81,19 @@ public class LabelTrack {
 
        // p.line(0, 0, 100, 100);
 
-       if (yvals.length > minInd) {
-            //if draw #0
-          /*  if (minInd < yvals.length) {
-                p.fill(hues[yvals[minInd]]);
-                p.rect(0, 0, (ppHor * .5f), height);
-            }
-             */
-
-            for (int i = minInd; (i <= maxInd && i < yvals.length); i++) {
-          //                  for (int i = minInd; (i <= maxInd && i < yvals.length); i++) {
-           
-               //TODO: if no class given - should be black
-                //TODO: offset 50% to left
-               // int c = hues[yvals[i]];
-
-                //int c  = hues[yvals[i]];
+       if (labels.length > minInd) {
+            int which = 0;
+            int i = minInd;
+            for (; (i <= maxInd && i < labels.length); i++) {
                 if (i >= minSelected && i <= maxSelected) {
                     p.stroke(0, 0, 256);
-                    p.fill(hues[i], 50, 256);
+                    p.fill(hues[labels[i]], 50, 256);
                 } else {
                     p.noStroke();
-                    p.fill(hues[i], 256, 256);
+                    p.fill(hues[labels[i]], 256, 256);
                 }
-
-               p.rect((ppHor*i), 0, ppHor, height);
-
-            } 
-
-
-      //  p.fill(30, 100, 100, 100);
-      //  p.rect( 30, 0, 150, 200);
-
+               p.rect((ppHor*which++), 0, ppHor, height);
+            }
         }
 
         p.popStyle();
@@ -147,6 +120,6 @@ public class LabelTrack {
    }
 
    private int findIndex(float x, float y) {
-        return (int)(x / ppHor);
+        return (int)(x / ppHor) + minInd;
    }
 }
