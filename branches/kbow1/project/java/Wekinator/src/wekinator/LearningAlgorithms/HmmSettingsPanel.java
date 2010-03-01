@@ -33,7 +33,9 @@ public class HmmSettingsPanel extends javax.swing.JPanel implements LearningAlgo
 
     public void setLearningAlgorithm(HmmLearningAlgorithm la) {
         this.la = la;
-        textNumNeighbors.setText(la.getNumStates() + "");
+        textNumStates.setText(la.getNumStates() + "");
+        textBuffSize.setText(la.getBuffSize() + "");
+        textMinLength.setText(la.getMinLength() + "");
     }
 
     /** This method is called from within the constructor to
@@ -45,45 +47,86 @@ public class HmmSettingsPanel extends javax.swing.JPanel implements LearningAlgo
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        textNumNeighbors = new javax.swing.JTextField();
+        textNumStates = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        textBuffSize = new javax.swing.JTextField();
+        textMinLength = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
 
-        textNumNeighbors.setText("10");
+        textNumStates.setText("10");
 
         jLabel1.setText("Number of states");
+
+        jLabel2.setText("Buffer size");
+
+        textBuffSize.setText("10");
+
+        textMinLength.setText("10");
+
+        jLabel3.setText("Min train buffer length");
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
-                .add(jLabel1)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(textNumNeighbors, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 54, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(79, Short.MAX_VALUE))
+                .addContainerGap()
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                    .add(layout.createSequentialGroup()
+                        .add(jLabel1)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(textNumStates, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 54, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                    .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                        .add(layout.createSequentialGroup()
+                            .add(jLabel3)
+                            .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                            .add(textMinLength, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 54, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                        .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
+                            .add(jLabel2)
+                            .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                            .add(textBuffSize, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 54, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(41, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                .add(textNumNeighbors, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .add(jLabel1))
+            .add(layout.createSequentialGroup()
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(textNumStates, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(jLabel1))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(textBuffSize, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(jLabel2))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(textMinLength, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(jLabel3)))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     public void applySettings() throws Exception {
         boolean valid = validateSettings();
         if (valid) {
-            int i = Integer.parseInt(textNumNeighbors.getText());
+            int i = Integer.parseInt(textNumStates.getText());
             la.setNumStates(i);
+            i = Integer.parseInt(textBuffSize.getText());
+            la.setBuffSize(i);
+            i = Integer.parseInt(textMinLength.getText());
+            la.setMinLength(i);
         } else {
+            setLearningAlgorithm(la); //reset what we can
             throw new Exception("Invalid settings");
         }
     }
 
     public boolean validateSettings() {
         try {
-            int i = Integer.parseInt(textNumNeighbors.getText());
-            if (i > 0)
+            int numStates = Integer.parseInt(textNumStates.getText());
+            int bSize = Integer.parseInt(textBuffSize.getText());
+            int ml = Integer.parseInt(textMinLength.getText());
+
+            if (numStates > 1 && bSize > 1 && ml > 1 && ml <= bSize)
                 return true;
         } catch (Exception ex) {
             return false;
@@ -92,7 +135,7 @@ public class HmmSettingsPanel extends javax.swing.JPanel implements LearningAlgo
     }
 
     public void reset() {
-        textNumNeighbors.setText(la.getNumStates()+ "");
+        textNumStates.setText(la.getNumStates()+ "");
     }
 
     public JPanel getPanel() {
@@ -102,7 +145,11 @@ public class HmmSettingsPanel extends javax.swing.JPanel implements LearningAlgo
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JTextField textNumNeighbors;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JTextField textBuffSize;
+    private javax.swing.JTextField textMinLength;
+    private javax.swing.JTextField textNumStates;
     // End of variables declaration//GEN-END:variables
 
 }

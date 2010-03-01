@@ -143,6 +143,8 @@ public abstract class LearningAlgorithm implements Serializable {
              return SMOLearningAlgorithm.readFromInputStream(i, true);
          } else if (name.equals(OtherClassifierLearningAlgorithm.class.getName())) {
              return OtherClassifierLearningAlgorithm.readFromInputStream(i, true);
+         } else if (name.equals(HmmLearningAlgorithm.class.getName())) {
+            return HmmLearningAlgorithm.readFromInputStream(i, true);
          }
          else throw new IOException("No learning algorithm found for name " + name);
      }
