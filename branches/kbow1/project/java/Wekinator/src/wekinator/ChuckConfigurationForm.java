@@ -86,6 +86,8 @@ public class ChuckConfigurationForm extends javax.swing.JFrame {
     private void initComponents() {
 
         buttonGroup1 = new javax.swing.ButtonGroup();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jPanel3 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         radioUseChuckSynth = new javax.swing.JRadioButton();
         labelSynthClass = new javax.swing.JLabel();
@@ -243,75 +245,70 @@ public class ChuckConfigurationForm extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
                 .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(jPanel1Layout.createSequentialGroup()
-                                .add(radioUseChuckSynth)
-                                .add(8, 8, 8)
-                                .add(buttonChooseChuckSynth)
-                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 664, Short.MAX_VALUE)
-                                .add(helpSynth))
-                            .add(radioUseOSCSynth)
-                            .add(jPanel1Layout.createSequentialGroup()
-                                .add(27, 27, 27)
-                                .add(jLabel9)
-                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                .add(labelSynthClass))))
+                        .add(radioUseChuckSynth)
+                        .add(8, 8, 8)
+                        .add(buttonChooseChuckSynth)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 237, Short.MAX_VALUE)
+                        .add(helpSynth))
+                    .add(radioUseOSCSynth)
                     .add(jPanel1Layout.createSequentialGroup()
-                        .add(45, 45, 45)
+                        .add(27, 27, 27)
+                        .add(jLabel9)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(labelSynthClass)))
+                .addContainerGap())
+            .add(jPanel1Layout.createSequentialGroup()
+                .add(45, 45, 45)
+                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jPanel1Layout.createSequentialGroup()
                         .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                             .add(jPanel1Layout.createSequentialGroup()
-                                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                                    .add(jPanel1Layout.createSequentialGroup()
-                                        .add(jLabel10)
-                                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                        .add(textSynthNumParams, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 63, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                        .add(comboRealInteger, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                                    .add(jPanel1Layout.createSequentialGroup()
-                                        .add(labelSynthMaxParamVals)
-                                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                        .add(textSynthMaxParamVals, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 63, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
-                                .add(8, 8, 8)
-                                .add(jLabel11))
-                            .add(jPanel1Layout.createSequentialGroup()
-                                .add(labelSynthExpects)
-                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                                .add(comboUseDist, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                            .add(jPanel1Layout.createSequentialGroup()
-                                .add(jLabel12)
-                                .add(10, 10, 10)
-                                .add(textSynthReceivePort, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 63, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                .add(jLabel10)
                                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                .add(jLabel13)
+                                .add(textSynthNumParams, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 63, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                .add(textSynthSendPort, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 63, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
-                        .add(469, 469, 469)))
-                .addContainerGap())
+                                .add(comboRealInteger, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                            .add(jPanel1Layout.createSequentialGroup()
+                                .add(labelSynthMaxParamVals)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                .add(textSynthMaxParamVals, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 63, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+                        .add(8, 8, 8)
+                        .add(jLabel11))
+                    .add(jPanel1Layout.createSequentialGroup()
+                        .add(labelSynthExpects)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                        .add(comboUseDist, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                    .add(jPanel1Layout.createSequentialGroup()
+                        .add(jLabel12)
+                        .add(10, 10, 10)
+                        .add(textSynthReceivePort, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 63, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(jLabel13)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(textSynthSendPort, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 63, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(45, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel1Layout.createSequentialGroup()
-                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jPanel1Layout.createSequentialGroup()
-                        .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                            .add(buttonChooseChuckSynth)
-                            .add(radioUseChuckSynth))
-                        .add(3, 3, 3)
-                        .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                            .add(jLabel9)
-                            .add(labelSynthClass))
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                        .add(radioUseOSCSynth)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                            .add(jLabel10)
-                            .add(textSynthNumParams, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                            .add(comboRealInteger, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                            .add(jLabel11)))
-                    .add(helpSynth))
+                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(buttonChooseChuckSynth)
+                    .add(radioUseChuckSynth))
+                .add(3, 3, 3)
+                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jLabel9)
+                    .add(labelSynthClass))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .add(radioUseOSCSynth)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jLabel10)
+                    .add(textSynthNumParams, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(comboRealInteger, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(jLabel11))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(labelSynthMaxParamVals)
@@ -326,6 +323,7 @@ public class ChuckConfigurationForm extends javax.swing.JFrame {
                     .add(textSynthReceivePort, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(jLabel13)
                     .add(textSynthSendPort, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+            .add(helpSynth)
         );
 
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("Features (Input)"));
@@ -418,7 +416,7 @@ public class ChuckConfigurationForm extends javax.swing.JFrame {
                         .add(checkEnableCustomChuckFeature)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(buttonChooseChuckFeatureExtractor)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 117, Short.MAX_VALUE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 136, Short.MAX_VALUE)
                         .add(helpFeatures))
                     .add(jPanel4Layout.createSequentialGroup()
                         .add(27, 27, 27)
@@ -476,19 +474,17 @@ public class ChuckConfigurationForm extends javax.swing.JFrame {
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel5Layout.createSequentialGroup()
-                .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jPanel5Layout.createSequentialGroup()
-                        .add(checkEnablePlayalong)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(buttonChoosePlayalongFile)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 221, Short.MAX_VALUE)
-                        .add(helpPlayalong))
-                    .add(jPanel5Layout.createSequentialGroup()
-                        .add(27, 27, 27)
-                        .add(jLabel15)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(labelScorePlayer)))
-                .addContainerGap())
+                .add(checkEnablePlayalong)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(buttonChoosePlayalongFile)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 235, Short.MAX_VALUE)
+                .add(helpPlayalong))
+            .add(jPanel5Layout.createSequentialGroup()
+                .add(27, 27, 27)
+                .add(jLabel15)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(labelScorePlayer)
+                .addContainerGap(170, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -568,6 +564,12 @@ public class ChuckConfigurationForm extends javax.swing.JFrame {
                 .addContainerGap()
                 .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(jPanel2Layout.createSequentialGroup()
+                        .add(jLabel3)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(buttonChangeChuckExecutable)
+                        .add(245, 245, 245)
+                        .add(helpCoreChuck))
+                    .add(jPanel2Layout.createSequentialGroup()
                         .add(24, 24, 24)
                         .add(labelChuckExecutable))
                     .add(jPanel2Layout.createSequentialGroup()
@@ -576,19 +578,13 @@ public class ChuckConfigurationForm extends javax.swing.JFrame {
                         .add(buttonChangeCoreChuckLocation))
                     .add(jPanel2Layout.createSequentialGroup()
                         .add(24, 24, 24)
-                        .add(labelCoreChuckDirectory))
-                    .add(jPanel2Layout.createSequentialGroup()
-                        .add(jLabel3)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(buttonChangeChuckExecutable)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 214, Short.MAX_VALUE)
-                        .add(helpCoreChuck)))
-                .addContainerGap())
+                        .add(labelCoreChuckDirectory))))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel2Layout.createSequentialGroup()
                 .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(helpCoreChuck)
                     .add(jPanel2Layout.createSequentialGroup()
                         .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                             .add(jLabel3)
@@ -600,9 +596,8 @@ public class ChuckConfigurationForm extends javax.swing.JFrame {
                             .add(jLabel2)
                             .add(buttonChangeCoreChuckLocation))
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(labelCoreChuckDirectory))
-                    .add(helpCoreChuck))
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .add(labelCoreChuckDirectory)))
+                .addContainerGap(6, Short.MAX_VALUE))
         );
 
         buttonSaveConfiguration1.setText("Export as .ck file...");
@@ -612,32 +607,33 @@ public class ChuckConfigurationForm extends javax.swing.JFrame {
             }
         });
 
-        org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(layout.createSequentialGroup()
+        org.jdesktop.layout.GroupLayout jPanel3Layout = new org.jdesktop.layout.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(jPanel4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .add(jPanel5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .add(jPanel2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .add(layout.createSequentialGroup()
+                    .add(jPanel3Layout.createSequentialGroup()
                         .add(buttonLoadConfiguration)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                         .add(buttonSaveConfiguration)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                         .add(buttonSaveConfiguration1))
-                    .add(layout.createSequentialGroup()
+                    .add(jPanel3Layout.createSequentialGroup()
                         .add(buttonCancel)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(buttonOK))
-                    .add(jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 596, Short.MAX_VALUE))
+                    .add(jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(layout.createSequentialGroup()
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
                 .add(jPanel4, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
@@ -646,15 +642,33 @@ public class ChuckConfigurationForm extends javax.swing.JFrame {
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(buttonLoadConfiguration)
                     .add(buttonSaveConfiguration)
                     .add(buttonSaveConfiguration1))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(buttonCancel)
                     .add(buttonOK))
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+
+        jScrollPane1.setViewportView(jPanel3);
+
+        org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(layout.createSequentialGroup()
+                .addContainerGap()
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 632, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(layout.createSequentialGroup()
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 627, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
@@ -1051,8 +1065,10 @@ public class ChuckConfigurationForm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel labelChuckExecutable;
     private javax.swing.JLabel labelCoreChuckDirectory;
     private javax.swing.JLabel labelCustomFeatureExtractor;
