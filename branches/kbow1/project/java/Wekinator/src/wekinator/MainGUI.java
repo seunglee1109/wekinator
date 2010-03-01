@@ -137,6 +137,8 @@ public class MainGUI extends javax.swing.JFrame {
         buttonGroupSettingsSource = new javax.swing.ButtonGroup();
         buttonGroupProcessingSource = new javax.swing.ButtonGroup();
         buttonQuit = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jPanel1 = new javax.swing.JPanel();
         panelMainTabs = new javax.swing.JTabbedPane();
         panelOSC = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
@@ -178,6 +180,7 @@ public class MainGUI extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("The Wekinator");
+        setMinimumSize(new java.awt.Dimension(300, 300));
 
         buttonQuit.setText("Quit");
         buttonQuit.addActionListener(new java.awt.event.ActionListener() {
@@ -186,6 +189,12 @@ public class MainGUI extends javax.swing.JFrame {
             }
         });
 
+        jScrollPane1.setPreferredSize(new java.awt.Dimension(400, 400));
+
+        jPanel1.setPreferredSize(new java.awt.Dimension(700, 700));
+
+        panelMainTabs.setMinimumSize(new java.awt.Dimension(500, 500));
+        panelMainTabs.setPreferredSize(new java.awt.Dimension(500, 500));
         panelMainTabs.addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentShown(java.awt.event.ComponentEvent evt) {
                 panelMainTabsComponentShown(evt);
@@ -196,6 +205,8 @@ public class MainGUI extends javax.swing.JFrame {
                 panelMainTabsStateChanged(evt);
             }
         });
+
+        panelOSC.setPreferredSize(new java.awt.Dimension(500, 500));
 
         jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder("OSC"));
 
@@ -239,11 +250,11 @@ public class MainGUI extends javax.swing.JFrame {
                     .add(jPanel5Layout.createSequentialGroup()
                         .addContainerGap()
                         .add(buttonOscConnect)
-                        .add(227, 227, 227)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(buttonOscDisconnect))
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel5Layout.createSequentialGroup()
                         .add(23, 23, 23)
-                        .add(labelOscStatus, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 777, Short.MAX_VALUE))
+                        .add(labelOscStatus, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 783, Short.MAX_VALUE))
                     .add(jPanel5Layout.createSequentialGroup()
                         .addContainerGap()
                         .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -280,8 +291,8 @@ public class MainGUI extends javax.swing.JFrame {
                     .add(jLabel8, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 24, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 44, Short.MAX_VALUE)
                 .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(buttonOscDisconnect)
-                    .add(buttonOscConnect))
+                    .add(buttonOscConnect)
+                    .add(buttonOscDisconnect))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(labelOscStatus)
                 .addContainerGap())
@@ -294,7 +305,7 @@ public class MainGUI extends javax.swing.JFrame {
         jPanel8Layout.setHorizontalGroup(
             jPanel8Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel8Layout.createSequentialGroup()
-                .add(chuckRunnerPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 800, Short.MAX_VALUE)
+                .add(chuckRunnerPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 806, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel8Layout.setVerticalGroup(
@@ -327,13 +338,13 @@ public class MainGUI extends javax.swing.JFrame {
             panelTabFeatureConfigurationLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(panelTabFeatureConfigurationLayout.createSequentialGroup()
                 .add(featureConfigurationPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(260, Short.MAX_VALUE))
+                .addContainerGap(266, Short.MAX_VALUE))
         );
         panelTabFeatureConfigurationLayout.setVerticalGroup(
             panelTabFeatureConfigurationLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(panelTabFeatureConfigurationLayout.createSequentialGroup()
                 .add(featureConfigurationPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(109, Short.MAX_VALUE))
+                .addContainerGap(127, Short.MAX_VALUE))
         );
 
         panelMainTabs.addTab("Features Setup", panelTabFeatureConfiguration);
@@ -342,17 +353,40 @@ public class MainGUI extends javax.swing.JFrame {
         panelTabLearningSystemConfiguration.setLayout(panelTabLearningSystemConfigurationLayout);
         panelTabLearningSystemConfigurationLayout.setHorizontalGroup(
             panelTabLearningSystemConfigurationLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, learningSystemConfigurationPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 818, Short.MAX_VALUE)
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, learningSystemConfigurationPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 824, Short.MAX_VALUE)
         );
         panelTabLearningSystemConfigurationLayout.setVerticalGroup(
             panelTabLearningSystemConfigurationLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(panelTabLearningSystemConfigurationLayout.createSequentialGroup()
                 .add(learningSystemConfigurationPanel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 551, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(73, Short.MAX_VALUE))
+                .addContainerGap(91, Short.MAX_VALUE))
         );
 
         panelMainTabs.addTab("Learning Setup", panelTabLearningSystemConfiguration);
         panelMainTabs.addTab("Use it!", trainRunPanel1);
+
+        org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(0, 857, Short.MAX_VALUE)
+            .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                .add(jPanel1Layout.createSequentialGroup()
+                    .addContainerGap()
+                    .add(panelMainTabs, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 845, Short.MAX_VALUE)
+                    .addContainerGap()))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(0, 700, Short.MAX_VALUE)
+            .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                .add(jPanel1Layout.createSequentialGroup()
+                    .addContainerGap()
+                    .add(panelMainTabs, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 688, Short.MAX_VALUE)
+                    .addContainerGap()))
+        );
+
+        jScrollPane1.setViewportView(jPanel1);
 
         wekMenu.setText("Wekinator");
 
@@ -456,15 +490,18 @@ public class MainGUI extends javax.swing.JFrame {
             .add(layout.createSequentialGroup()
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(layout.createSequentialGroup()
-                        .add(21, 21, 21)
+                        .add(33, 33, 33)
                         .add(buttonQuit))
-                    .add(panelMainTabs, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 839, Short.MAX_VALUE))
+                    .add(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 876, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
-                .add(panelMainTabs, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 670, Short.MAX_VALUE)
+                .addContainerGap()
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 536, Short.MAX_VALUE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(buttonQuit))
         );
@@ -574,8 +611,10 @@ private void menuItemViewFeaturesActionPerformed(java.awt.event.ActionEvent evt)
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel8;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel labelOscStatus;
     private javax.swing.JLabel labelOscStatus1;
     private wekinator.LearningSystemConfigurationPanel learningSystemConfigurationPanel;

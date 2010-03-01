@@ -181,6 +181,9 @@ public class BuildPanel extends javax.swing.JPanel {
 
         jButton1.setText("jButton1");
 
+        setMinimumSize(new java.awt.Dimension(482, 700));
+        setPreferredSize(new java.awt.Dimension(482, 700));
+
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Set parameter values"));
 
         comboSynthAction.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "play these parameters", "send its parameters here", "play these parameters on demand", "do nothing" }));
@@ -381,7 +384,7 @@ public class BuildPanel extends javax.swing.JPanel {
                     .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel7, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel6, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(12, Short.MAX_VALUE))
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)

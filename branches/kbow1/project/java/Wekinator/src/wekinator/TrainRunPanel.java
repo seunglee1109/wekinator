@@ -215,6 +215,9 @@ public class TrainRunPanel extends javax.swing.JPanel {
 
         jLabel3.setText("jLabel3");
 
+        setMinimumSize(new java.awt.Dimension(750, 650));
+        setPreferredSize(new java.awt.Dimension(750, 650));
+
         layoutPanel.setLayout(new java.awt.CardLayout());
 
         trainPanel.setMinimumSize(new java.awt.Dimension(200, 200));
@@ -304,7 +307,7 @@ public class TrainRunPanel extends javax.swing.JPanel {
                     .add(buttonSave)
                     .add(menuPanel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(layoutPanel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 483, Short.MAX_VALUE))
+                .add(layoutPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
