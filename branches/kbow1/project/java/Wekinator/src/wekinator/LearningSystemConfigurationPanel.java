@@ -36,6 +36,7 @@ public class LearningSystemConfigurationPanel extends javax.swing.JPanel {
     protected int numParams = 0;
     protected String[] paramNames = new String[0];
     protected boolean[] isParamDiscrete = new boolean[0];
+    protected int[] maxNumParamVals = new int[0];
     protected FeatureConfiguration featureConfiguration = null;
     protected LearningSystem learningSystem = null;
     protected Logger logger = Logger.getLogger(LearningSystemConfigurationPanel.class.getName());
@@ -43,9 +44,10 @@ public class LearningSystemConfigurationPanel extends javax.swing.JPanel {
 
     //Call this when chuck system set & reset (this panel can be persistant)
     public void configure(int numParams, String[] paramNames,
-            boolean[] isParamDiscrete, FeatureConfiguration featureConfiguration) {
+            boolean[] isParamDiscrete, int[] maxNumParamVals, FeatureConfiguration featureConfiguration) {
         this.numParams = numParams;
         this.paramNames = paramNames;
+        this.maxNumParamVals = maxNumParamVals;
         this.isParamDiscrete = isParamDiscrete;
         this.featureConfiguration = featureConfiguration;
         this.setLearningSystem(new LearningSystem(numParams));
@@ -87,6 +89,7 @@ public class LearningSystemConfigurationPanel extends javax.swing.JPanel {
                 this.configure(cs.getNumParams(),
                         cs.getParamNames(),
                         cs.isIsParamDiscrete(),
+                        cs.getNumSynthMaxParamVals(),
                         WekinatorInstance.getWekinatorInstance().getFeatureConfiguration());
             }
         }
@@ -426,6 +429,7 @@ public class LearningSystemConfigurationPanel extends javax.swing.JPanel {
                             i, //paramNum
                             paramNames[i],
                             isParamDiscrete[i],
+                            maxNumParamVals[i],
                             algs[i],
                             true,
                             featureConfiguration);
@@ -536,7 +540,7 @@ public class LearningSystemConfigurationPanel extends javax.swing.JPanel {
         //  LearningSystem ls = new LearningSystem(2);
         //How to get settings re: param types?!
 
-        panel.configure(3, names, isDiscrete, fc);
+        panel.configure(3, names, isDiscrete, maxVals, fc);
         frame.add(panel);
         frame.setVisible(true);
 

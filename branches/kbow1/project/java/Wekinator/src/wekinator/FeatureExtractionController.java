@@ -4,6 +4,7 @@
  */
 package wekinator;
 
+import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
@@ -13,11 +14,16 @@ import java.beans.PropertyChangeSupport;
  * @author rebecca
  */
 public class FeatureExtractionController {
-    private static final FeatureExtractionController ref = new FeatureExtractionController();
     protected FeatureViewer featureViewer = null;
     protected boolean extracting = false;
     public static final String PROP_EXTRACTING = "extracting";
     private PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
+    protected static double[] lastChuckFeatures = new double[0];
+    protected static double[] lastOscFeatures = new double[0];
+    protected static double[] lastAllFeatures = new double[0];
+    protected static int numChuckFeatures = 0;
+    protected static int numOscFeatures = 0;
+    private static final FeatureExtractionController ref = new FeatureExtractionController();
 
     /**
      * Add PropertyChangeListener.
@@ -38,7 +44,15 @@ public class FeatureExtractionController {
     }
 
     private FeatureExtractionController() {
+        WekinatorInstance.getWekinatorInstance().addPropertyChangeListener(new PropertyChangeListener() {
 
+            public void propertyChange(PropertyChangeEvent evt) {
+                wekInstanceChanged(evt);
+            }
+
+        });
+
+        setNumFeatsFromConfig(WekinatorInstance.getWekinatorInstance().getFeatureConfiguration());
     }
 
     /**
@@ -73,13 +87,43 @@ public class FeatureExtractionController {
         ref.featureViewer.toFront();
     }
 
-    public static void updateFeatures(double[] d) {
-        double[] fs = WekinatorInstance.getWekinatorInstance().getFeatureConfiguration().process(d);
+    private static void updateFeatures() {
+        double[] fs;
+        if (numChuckFeatures != 0 && numOscFeatures == 0) {        
+            fs = WekinatorInstance.getWekinatorInstance().getFeatureConfiguration().process(lastChuckFeatures);
+        } else if (numChuckFeatures == 0 && numOscFeatures != 0) {
+            fs = WekinatorInstance.getWekinatorInstance().getFeatureConfiguration().process(lastOscFeatures);
+        } else {
 
-        if (ref.featureViewer != null) {
-            ref.featureViewer.updateFeatures(fs);
+            for (int i = 0; i < numChuckFeatures; i++) {
+                lastAllFeatures[i] = lastChuckFeatures[i];
+            }
+            for (int i = 0; i < numOscFeatures; i++) {
+                lastAllFeatures[numChuckFeatures + i] = lastOscFeatures[i];
+            }
+            fs = WekinatorInstance.getWekinatorInstance().getFeatureConfiguration().process(lastAllFeatures);
         }
-        WekinatorLearningManager.getInstance().updateFeatures(fs);
+
+       // if (isExtracting()) {
+            if (ref.featureViewer != null) {
+                ref.featureViewer.updateFeatures(fs);
+            }
+            WekinatorLearningManager.getInstance().updateFeatures(fs);
+       // }
+    }
+
+    public static void updateChuckFeatures(double[] d) {
+        if (d.length == numChuckFeatures) {
+            lastChuckFeatures = d;
+            updateFeatures();
+        }
+    }
+
+    public static void updateOscFeatures(double[] d) {
+        if (d.length == numOscFeatures) {
+            lastOscFeatures = d;
+            updateFeatures();
+        }
     }
 
     public static void startExtracting() {
@@ -90,5 +134,32 @@ public class FeatureExtractionController {
     public static void stopExtracting() {
         setExtracting(false);
         OscHandler.getOscHandler().stopExtractingFeatures();
+    }
+
+    private void setNumFeatsFromConfig(FeatureConfiguration fc) {
+        if (fc == null) {
+            numChuckFeatures = 0;
+            numOscFeatures = 0;
+            lastChuckFeatures = new double[0];
+            lastOscFeatures = new double[0];
+            lastAllFeatures = new double[0];
+        } else {
+            int numTotal = fc.getNumBaseFeaturesEnabled();
+            lastAllFeatures = new double[numTotal];
+            numOscFeatures = fc.getNumCustomOscFeatures();
+            lastOscFeatures = new double[numOscFeatures];
+            numChuckFeatures = numTotal - numOscFeatures;
+            lastChuckFeatures = new double[numChuckFeatures];
+        }
+    }
+
+
+    private void wekInstanceChanged(PropertyChangeEvent evt) {
+        if (evt.getPropertyName().equals(WekinatorInstance.PROP_FEATURECONFIGURATION)) {
+            FeatureConfiguration fc = WekinatorInstance.getWekinatorInstance().getFeatureConfiguration();
+            //TODO: Not sure if hid setup changing here will be bad thing in terms of # chuck features expected
+            //i.e. fc itself might not be replaced, but might change setup / num feats
+            setNumFeatsFromConfig(fc);
+        }
     }
 }

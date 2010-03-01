@@ -28,6 +28,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import wekinator.LearningAlgorithms.HmmLearningAlgorithm;
 import wekinator.util.SerializedFileUtil;
 import wekinator.util.Util;
 
@@ -41,6 +42,7 @@ public class LearningAlgorithmConfigurationPanel extends javax.swing.JPanel {
     protected int paramNum = 0;
     protected String paramName = null;
     protected boolean discrete = true;
+    protected int maxVals = 0;
     protected LearningAlgorithm currentLearningAlgorithm = null;
     protected LearningAlgorithm loadedLearningAlgorithm = null;
     protected boolean[] featureSelected = null;
@@ -179,6 +181,14 @@ public class LearningAlgorithmConfigurationPanel extends javax.swing.JPanel {
         setParamNameLabel();
     }
 
+    public void setMaxVals(int m) {
+        maxVals = m;
+    }
+
+    public int getMaxVals() {
+        return maxVals;
+    }
+
     /**
      * Get the value of paramNum
      *
@@ -214,11 +224,13 @@ public class LearningAlgorithmConfigurationPanel extends javax.swing.JPanel {
     public LearningAlgorithmConfigurationPanel(int paramNum,
             String paramName,
             boolean discrete,
+            int maxVals,
             LearningAlgorithm currentLearningAlgorithm,
             boolean learnerEnabled,
             FeatureConfiguration fc) {
 
         initComponents();
+        setMaxVals(maxVals);
         setParamName(paramName);
         setParamNum(paramNum);
         setDiscrete(discrete);
@@ -782,7 +794,7 @@ public class LearningAlgorithmConfigurationPanel extends javax.swing.JPanel {
         labelLearnerStatus.setText("Adaboost.M1, not yet trained, using 6 features");
         labelLearnerStatus.setEnabled(false);
 
-        comboSelectClassifier.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "AdaBoostM.1", "Decision Tree", "K-Nearest Neighbor", "Support Vector Machine" }));
+        comboSelectClassifier.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "AdaBoostM.1", "Decision Tree", "K-Nearest Neighbor", "Support Vector Machine", "HMM" }));
 
         buttonLoadFile.setText("Choose file...");
         buttonLoadFile.addActionListener(new java.awt.event.ActionListener() {
@@ -1237,6 +1249,8 @@ public class LearningAlgorithmConfigurationPanel extends javax.swing.JPanel {
                     selected = new IbkLearningAlgorithm();
                 } else if (i == 3) {
                     selected = new SMOLearningAlgorithm();
+                } else if (i == 4) {
+                    selected = new HmmLearningAlgorithm(maxVals);
                 }
             } else {
                 selected = new NNLearningAlgorithm();
@@ -1273,7 +1287,7 @@ public class LearningAlgorithmConfigurationPanel extends javax.swing.JPanel {
 
         JFrame frame = new JFrame();
         // LearningAlgorithmConfigurationPanel panel = new LearningAlgorithmConfigurationPanel(0, "My param", true, null);
-        LearningAlgorithmConfigurationPanel panel = new LearningAlgorithmConfigurationPanel(0, "p1", false, null, true, fc);
+        LearningAlgorithmConfigurationPanel panel = new LearningAlgorithmConfigurationPanel(0, "p1", false, 2, null, true, fc);
         frame.add(panel);
         frame.setVisible(true);
 
