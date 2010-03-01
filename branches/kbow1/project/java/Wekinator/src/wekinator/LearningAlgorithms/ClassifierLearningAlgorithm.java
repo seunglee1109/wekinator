@@ -78,7 +78,9 @@ public abstract class ClassifierLearningAlgorithm extends LearningAlgorithm {
 
             Evaluation eval = new Evaluation(instances);
             eval.evaluateModel(getClassifier(), instances);
-            return eval.correct() / instances.numInstances();
+          //  eval.
+          //  return eval.correct() / instances.numInstances(); //BAD: lowers accuracy when class missing
+            return eval.correct() / (eval.correct() + eval.incorrect());
         } else {
             throw new Exception("Cannot evaluate: Not trained");
         }
