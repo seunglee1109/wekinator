@@ -15,16 +15,12 @@ import java.awt.Dimension;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.ObjectInputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.border.EtchedBorder;
-import wekinator.util.OverwritePromptingFileChooser;
-import wekinator.util.SerializedFileUtil;
 import wekinator.util.Util;
 
 /**
@@ -413,7 +409,7 @@ public class LearningSystemConfigurationPanel extends javax.swing.JPanel {
             }
             myAlgorithmPanels = new LearningAlgorithmConfigurationPanel[0];
         } else {
-            if (myAlgorithmPanels == null || myAlgorithmPanels.length != algs.length) {
+            //if (myAlgorithmPanels == null || myAlgorithmPanels.length != algs.length) {
                 //Reset from scratch
                 if (myAlgorithmPanels != null) {
                     for (int i = 0; i < myAlgorithmPanels.length; i++) {
@@ -437,20 +433,39 @@ public class LearningSystemConfigurationPanel extends javax.swing.JPanel {
                     p.setBorder(new EtchedBorder());
                     panelAdvancedParent.add(p);
                 }
-            } else {
+         /*   } else {
                 //Just update the panels we've already got
                 for (int i = 0; i < algs.length; i++) {
                     //verify panels[i] will never be null here
-                    myAlgorithmPanels[i].setCurrentLearningAlgorithm(algs[i]);
-                    if (algs[i] != null) {
-                        myAlgorithmPanels[i].setCurrentLearningAlgorithmSelected();
+                    //Problem, what if I used to be discrete and now I'm not??
+                    if (myAlgorithmPanels[i].discrete == isParamDiscrete[i]) {
+
+                        myAlgorithmPanels[i].setCurrentLearningAlgorithm(algs[i]);
+                        if (algs[i] != null) {
+                            myAlgorithmPanels[i].setCurrentLearningAlgorithmSelected();
+                        } else {
+                            myAlgorithmPanels[i].setNewLearningAlgorithmSelected();
+                        }
                     } else {
-                        myAlgorithmPanels[i].setNewLearningAlgorithmSelected();
+                        panelAdvancedParent.remove(myAlgorithmPanels[i]);
+                        LearningAlgorithmConfigurationPanel p =
+                            new LearningAlgorithmConfigurationPanel(
+                            i, //paramNum
+                            paramNames[i],
+                            isParamDiscrete[i],
+                            maxNumParamVals[i],
+                            algs[i],
+                            true,
+                            featureConfiguration);
+                        myAlgorithmPanels[i] = p;
+                        p.setBorder(new EtchedBorder());
+                        panelAdvancedParent.add(p);
+
                     }
                 //   myAlgorithmPanels[i].setDisabled(!learningSystem.getLearnerEnabled(i));
                 }
 
-            }
+            } */
         }
 
         int height = myDatasetPanel.getPreferredSize().height;

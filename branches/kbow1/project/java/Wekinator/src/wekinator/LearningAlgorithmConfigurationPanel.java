@@ -243,7 +243,22 @@ public class LearningAlgorithmConfigurationPanel extends javax.swing.JPanel {
         }
         checkDisabled.setSelected(!learnerEnabled);
      //   this.featureConfiguration = fc;
+        WekinatorInstance.getWekinatorInstance().addPropertyChangeListener(new PropertyChangeListener() {
+
+            public void propertyChange(PropertyChangeEvent evt) {
+                wekInstChanged(evt);
+            }
+
+
+        });
         updateFeatures();
+    }
+
+    private void wekInstChanged(PropertyChangeEvent evt) {
+        if (evt.getPropertyName().equals(WekinatorInstance.PROP_FEATURECONFIGURATION)) {
+            //TODO: update feature name listeners on feature configuration
+            updateFeatures();
+        }
     }
 
     public void setCurrentLearningAlgorithmSelected() {

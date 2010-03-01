@@ -283,14 +283,14 @@ public class TrackSet {
     }
 
     public int getSelectedMin() {
-        if (selectedTrack == -1 || clickState != ClickState.LR_LABEL)
+        if (selectedTrack == -1 || clickState == ClickState.NONE)
             return -1;
 
         return myLabels[selectedTrack].minSelected;
     }
 
     public int getSelectedMax() {
-        if (selectedTrack == -1 || clickState != ClickState.LR_LABEL)
+        if (selectedTrack == -1 || clickState == ClickState.NONE)
             return -1;
 
         return myLabels[selectedTrack].maxSelected;

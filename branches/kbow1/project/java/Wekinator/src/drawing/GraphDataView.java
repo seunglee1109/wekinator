@@ -42,7 +42,7 @@ public class GraphDataView {
             ts.processMouseClick(mouseX - tsRegion.x1, mouseY-tsRegion.y1, mouseButton);
         } else if (csRegion.inRegion(mouseX, mouseY)) {
             int clicked = cs.processMouseClick(mouseX-csRegion.x1, mouseY-csRegion.y1, mouseButton);
-            if (clicked != -1 && ts.clickState == ClickState.LR_LABEL) {
+            if (clicked != -1 && ts.clickState != ClickState.NONE) {
                changeLabels(ts.selectedTrack, ts.getSelectedMin(), ts.getSelectedMax(), clicked);
             }
         }
