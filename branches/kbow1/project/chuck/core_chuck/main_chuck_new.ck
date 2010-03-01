@@ -19,6 +19,9 @@ ProcessingFeatureExtractor processingFE;
 CustomFeatureExtractor customFE;
 CustomOSCFeatureExtractor oscCustomFE;
 
+//NEW:
+0 => int oscFeaturesOnly;
+
 //The rate at which features will be extracted: edit this!
 //(note this is also like the "hop size")
 50::ms => dur rate;
@@ -642,6 +645,11 @@ fun void computeNumFeats() {
 fun void sendFeatures() {
 	//<<< "sending " , numFeats>>>;
 	//don't recompute # feats here every time-- it's expensive!	
+
+	if (!(useAudio || useTrackpadXY || useMotionXYZ || useOtherHid || useProcessing || useCustom)) {
+		return;
+	}
+
 	xmit.startMsg( "/features", featureMessageString);
 	if (useAudio) {
 		for (0 => int i; i < audioFE.numFeatures(); i++) {
@@ -677,7 +685,7 @@ fun void sendFeatures() {
 		for (0 => int i; i < oscCustomFE.numFeatures(); i++) {
 			oscCustomFE.getFeatures()[i] => xmit.addFloat;
 		}
-	}
+	} 
 }
 
 //TODO: Way to gracefully change this? Enforce class # agreement on java?
@@ -807,12 +815,14 @@ fun void oscUseFeatureListWait() {
 				oscCustomFE.stop();
 			}
 			if (use > 0) {
-				1 => useOscCustom;
+			/*	1 => useOscCustom;
 				new CustomOSCFeatureExtractor @=> oscCustomFE;
 				oscCustomFE.setup(use, recv);
 				if (!oscCustomFE.isOK) {
 					0 => useOscCustom;
-				}
+				} */
+			//NEW:
+				0 => useOscCustom;
 			} else {
 				0 => useOscCustom;
 			}
@@ -843,7 +853,7 @@ fun void oscUseFeatureListWait() {
 fun void oscUseFeatureMessageWait() {
 	while (true) {
 		oscUseFeatureMessage => now;
-		<<< "Chuck: received feature MESSAGE: BAD ">>>;
+		<<< "BAD BAD BAD Chuck: received feature MESSAGE: BAD ">>>;
 		string s;
 		int i;
 		<<< "Received feature message" >>>;
