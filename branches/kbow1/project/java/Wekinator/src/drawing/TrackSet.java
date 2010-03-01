@@ -4,7 +4,11 @@
  */
 
 package drawing;
+import java.util.LinkedList;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import processing.core.*;
+import wekinator.SimpleDataset;
 
 /**
  *
@@ -32,8 +36,8 @@ public class TrackSet {
     public Region myRegion = null;
     int numPoints = 0;
     PFont myZoomFont = null;
-    protected String[] pNames = null;
-    protected String [] fNames = null;
+    protected String[] labelNames = null;
+    protected String [] trackNames = null;
     public Region scrollTUp = null;
     public Region scrollTDown = null;
     public Region scrollLUp = null;
@@ -48,19 +52,44 @@ public class TrackSet {
     protected int numLabelsShown;
     protected float nameWidth = 80;
     protected float vertScrollSize = 10;
+    protected SimpleDataset d;
 
-    public TrackSet(int w, int h, int numTracks, int numLabels, int numClasses, float[] hues, float[][] data, int[][] labels, PApplet app) {
+    public TrackSet(int w, int h, SimpleDataset d, float[] hues, PApplet app) {
         p = app;
+        this.d = d;
+        int maxNumClasses = 0;
+        int numDiscrete = 0;
+        int numContinuous = 0;
+        int maxValues[] = d.getMaxLegalDiscreteParamValues();
+        LinkedList<Integer> discIds = new LinkedList<Integer>();
+        LinkedList<Integer> contIds = new LinkedList<Integer>();
+        for (int i = 0; i < d.getNumParameters(); i++) {
+            if (d.isParameterDiscrete(i)) {
+                numDiscrete++;
+                discIds.add(i);
+                if (maxValues[i] > maxNumClasses) {
+                    maxNumClasses = maxValues[i];
+                }
+            } else {
+                contIds.add(i);
+                numContinuous++;
+            }
+        }
+        int numTracksTotal = d.getNumFeatures() + numContinuous;
+        int numLabelsTotal = numDiscrete;
+        trackNames = new String[numTracksTotal];
+        labelNames = new String[numDiscrete];
+
         minTrack = 0;
-        maxTrack = Math.min(numTracks - 1, maxNumTracksShown - 1);
+        maxTrack = Math.min(numTracksTotal - 1, maxNumTracksShown - 1);
         numTracksShown = maxTrack - minTrack + 1;
         minLabel = 0;
-        maxLabel = Math.min(numLabels-1, maxNumLabelsShown-1);
+        maxLabel = Math.min(numLabelsTotal-1, maxNumLabelsShown-1);
         numLabelsShown = maxLabel - minLabel + 1;
 
         myZoomFont = p.createFont("Helvetica", 10);
 
-        numPoints = data[0].length;
+        numPoints = d.getNumDatapoints(); 
         width = w;
         height = h;
         trackWidth  = w - 2 * hSpace - nameWidth - vertScrollSize;
@@ -72,10 +101,14 @@ public class TrackSet {
         float heightSoFar = vSpace + ctrlRegionHeight;
         scrollLUp = new Region(hSpace, heightSoFar, hSpace + vertScrollSize, heightSoFar + vertScrollSize);
 
-        myLabels = new LabelTrack[numLabels];
+        myLabels = new LabelTrack[numLabelsTotal];
         labelRegions = new Region[numLabelsShown];
-        for (int i = 0; i < numLabels; i++) {
-            myLabels[i] = new LabelTrack(trackWidth, labelHeight, minInd, maxInd, numClasses, hues, labels[i], app);
+
+        String[] pnames = d.getParameterNames();
+        String[] fnames = d.getFeatureNames(); //add listener for this?
+        for (int i = 0; i < numLabelsTotal; i++) {
+            myLabels[i] = new LabelTrack(trackWidth, labelHeight, minInd, maxInd, hues, d, discIds.get(i), app);
+            labelNames[i] = pnames[discIds.get(i)];
         }
         for (int i = 0; i < numLabelsShown; i++) {
              labelRegions[i] = new Region(hSpace + vertScrollSize + nameWidth, heightSoFar, hSpace + nameWidth + trackWidth + vertScrollSize, heightSoFar + labelHeight);
@@ -86,13 +119,22 @@ public class TrackSet {
 
 
 
-        myTracks = new PlotTrack[numTracks];
+        myTracks = new PlotTrack[numTracksTotal];
         trackRegions = new Region[numTracksShown];
         scrollTUp = new Region(hSpace, heightSoFar, hSpace + vertScrollSize, heightSoFar + vertScrollSize);
 
-        for (int i = 0; i < numTracks; i++) {
-            myTracks[i] = new PlotTrack(trackWidth, trackHeight, minInd, maxInd, -2f, 2f, data[i], app);
+        int t = 0;
+        for (int i = 0; i < contIds.size(); i++) {
+            myTracks[t] = new PlotTrack(trackWidth, trackHeight, minInd, maxInd, d, true, contIds.get(i), app);
+            trackNames[t] = pnames[contIds.get(i)];
+            t++;
         }
+        for (int i = 0; i < d.getNumFeatures(); i++) {
+            myTracks[t] = new PlotTrack(trackWidth, trackHeight, minInd, maxInd, d, false, i, app);
+            trackNames[t] = fnames[i];
+            t++;
+        }
+
         for (int i = 0; i < numTracksShown; i++) {
             trackRegions[i] = new Region(hSpace + nameWidth + vertScrollSize, heightSoFar, hSpace + nameWidth + trackWidth + vertScrollSize, heightSoFar + trackHeight);
             heightSoFar += trackHeight + vSpace;
@@ -103,18 +145,30 @@ public class TrackSet {
         hs1 = new HScrollbar((int)hSpace, 40, w - 2 *(int)hSpace, 10, 16);
         zoomIn = new Region(hSpace, 20, hSpace + 10, 30);
         zoomOut = new Region(hSpace + 20, 20, hSpace + 30, 30);
-        setNames();
+
+        d.addChangeListener(new ChangeListener() {
+
+            public void stateChanged(ChangeEvent e) {
+                datasetChanged();
+            }
+
+    });
+
     }
 
-    private void setNames() {
-        pNames = new String[myLabels.length];
-        for (int i= 0; i < pNames.length; i++ ){
-            pNames[i] = "Param_" + i;
-        }
-        fNames = new String[myTracks.length];
-        for (int i = 0; i < fNames.length; i++) {
-            fNames[i] = "Feat_" + i;
-        }
+
+
+    private void datasetChanged() {
+        //TODO:
+        //recompute names
+        //recompute slider (numpoints has changed)
+        //min, max to show have changed?
+
+        numPoints = d.getNumDatapoints();
+
+        //TODO: update names
+
+
     }
 
     protected int zoomLevel = 0;
@@ -209,7 +263,9 @@ public class TrackSet {
                     }
                     selectedTrack = labelNum;
                     myLabels[labelNum].leftClick(mouseX - labelRegions[region].x1, mouseY - labelRegions[region].y1);
-                    clickState = ClickState.L_LABEL;
+                    if (clickState != ClickState.LR_LABEL) {
+                        clickState = ClickState.L_LABEL;
+                    }
                 } else if (clickState != ClickState.NONE) {
                     //User has clicked outside a label
                     myLabels[selectedTrack].clearClick();
@@ -306,7 +362,7 @@ public class TrackSet {
             p.pushMatrix();
             p.translate(labelRegions[rowNum].x1, labelRegions[rowNum].y1);
             myLabels[i].draw();
-            p.text(pNames[i], -5, 0);
+            p.text(labelNames[i], -5, 0);
             p.popMatrix();
             rowNum++;
         }
@@ -316,7 +372,7 @@ public class TrackSet {
             p.pushMatrix();
             p.translate(trackRegions[rowNum].x1, trackRegions[rowNum].y1);
             myTracks[i].draw();
-            p.text(fNames[i], -5, 0);
+            p.text(trackNames[i], -5, 0);
             p.popMatrix();
             rowNum++;
         }

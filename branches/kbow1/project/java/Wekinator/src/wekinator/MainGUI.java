@@ -6,6 +6,7 @@
 //Update.
 package wekinator;
 
+import drawing.GraphDataViewFrame;
 import java.awt.Frame;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -173,6 +174,7 @@ public class MainGUI extends javax.swing.JFrame {
         menuItemViewConsole = new javax.swing.JMenuItem();
         menuItemViewFeatures = new javax.swing.JMenuItem();
         menuItemViewDataset = new javax.swing.JMenuItem();
+        menuItemViewDataset1 = new javax.swing.JMenuItem();
         menuItemOtfScore = new javax.swing.JMenuItem();
         helpMenu1 = new javax.swing.JMenu();
         contentsMenuItem1 = new javax.swing.JMenuItem();
@@ -455,6 +457,14 @@ public class MainGUI extends javax.swing.JFrame {
         });
         viewMenu.add(menuItemViewDataset);
 
+        menuItemViewDataset1.setText("Graphical dataset editor");
+        menuItemViewDataset1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItemViewDataset1ActionPerformed(evt);
+            }
+        });
+        viewMenu.add(menuItemViewDataset1);
+
         menuItemOtfScore.setText("Parameter clipboard");
         menuItemOtfScore.setEnabled(false);
         menuItemOtfScore.addActionListener(new java.awt.event.ActionListener() {
@@ -589,6 +599,16 @@ private void menuItemOtfScoreActionPerformed(java.awt.event.ActionEvent evt) {//
 private void menuItemViewFeaturesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemViewFeaturesActionPerformed
     FeatureExtractionController.showFeatureViewer();
 }//GEN-LAST:event_menuItemViewFeaturesActionPerformed
+
+private void menuItemViewDataset1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemViewDataset1ActionPerformed
+    LearningSystem ls = WekinatorInstance.getWekinatorInstance().getLearningSystem();
+    if (ls != null && ls.getDataset() != null) {
+         new GraphDataViewFrame(ls.getDataset()).setVisible(true);
+
+    }
+
+}//GEN-LAST:event_menuItemViewDataset1ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem aboutMenuItem1;
     private javax.swing.ButtonGroup buttonGroupClassifierSource;
@@ -622,6 +642,7 @@ private void menuItemViewFeaturesActionPerformed(java.awt.event.ActionEvent evt)
     private javax.swing.JMenuItem menuItemOtfScore;
     private javax.swing.JMenuItem menuItemViewConsole;
     private javax.swing.JMenuItem menuItemViewDataset;
+    private javax.swing.JMenuItem menuItemViewDataset1;
     private javax.swing.JMenuItem menuItemViewFeatures;
     private javax.swing.JMenuItem menuSaveSystem;
     private javax.swing.JTabbedPane panelMainTabs;

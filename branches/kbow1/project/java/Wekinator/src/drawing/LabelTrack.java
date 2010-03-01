@@ -2,45 +2,50 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package drawing;
+
 import processing.core.*;
+import wekinator.SimpleDataset;
 
 /**
  *
  * @author rebecca
  */
 public class LabelTrack {
-    public float width = 0f, height = 0f;
-    public double wzoom = 1.0, hzoom = 1.0;
+
+    public float width = 0f,  height = 0f;
+    public double wzoom = 1.0,  hzoom = 1.0;
     public PApplet p = null;
-   // public int x, y;
+    // public int x, y;
     float ppHor = 1.0f;
     float ppVert = 10.0f;
-
     int minInd = 0;
     int maxInd = 100;
     int numClasses = 0;
     float[] hues;
-    int[] labels;
-    public int minSelected = -1, maxSelected = -1;
+    // int[] labels;
+    public int minSelected = -1,  maxSelected = -1;
     public int unitWidth = 10;
+    SimpleDataset d = null;
+    int myId = 0;
 
-    public LabelTrack(float w, float h, int mini, int maxi, int numClasses, float[] hues, int[] labels, PApplet app) {
-     //   this.x = x;
-     //   this.y = y;
+    public LabelTrack(float w, float h, int mini, int maxi, float[] hues, SimpleDataset d, int myId, PApplet app) {
+        //   this.x = x;
+        //   this.y = y;
         p = app;
+        this.d = d;
+        this.myId = myId;
         this.hues = hues;
-        this.labels = labels;
+        //    this.labels = abc; //get from data
         width = w;
         height = h;
         //wzoom = wz;
         //hzoom = hz;
         this.minInd = mini;
         this.maxInd = maxi;
-        ppHor = ((float)w) / (maxInd - minInd + 1);
+        ppHor = ((float) w) / (maxInd - minInd + 1);
 
-        this.numClasses = numClasses;
+        this.numClasses = hues.length;
 
     }
 
@@ -54,16 +59,8 @@ public class LabelTrack {
         ppHor = width / (maxInd - minInd + 1);
     }
 
-
-
     private float xformx(float x) {
         return (ppHor * (x - minInd));
-    }
-
-
-    public void setVals(float[] x, int[] y) {
-            labels = y;
-        
     }
 
     public void draw() {
@@ -71,7 +68,7 @@ public class LabelTrack {
         p.pushStyle();
         p.fill(100, 100, 0);
         p.rect(0, 0, width, height);
-      //  p.scale((float)ppHor, (float)ppVert);
+        //  p.scale((float)ppHor, (float)ppVert);
         //p.translate(x, y);
         //p.sca
         //p.stroke(0);
@@ -79,20 +76,35 @@ public class LabelTrack {
         p.noStroke();
         p.rectMode(PApplet.CORNER);
 
-       // p.line(0, 0, 100, 100);
+        // p.line(0, 0, 100, 100);
 
-       if (labels.length > minInd) {
+        //TODO: block on datset change here.
+        if (d.getNumDatapoints() > minInd) {
             int which = 0;
             int i = minInd;
-            for (; (i <= maxInd && i < labels.length); i++) {
-                if (i >= minSelected && i <= maxSelected) {
-                    p.stroke(0, 0, 256);
-                    p.fill(hues[labels[i]], 50, 256);
+            for (; (i <= maxInd && i < d.getNumDatapoints()); i++) {
+                Double v = d.getParam(i, myId);
+                if (!v.isNaN()) {
+                    if (i >= minSelected && i <= maxSelected) {
+                       // p.stroke(0, 0, 256);
+                        p.noStroke();
+                        p.fill(hues[(int) d.getParam(i, myId)], 150, 256);
+                    } else {
+                        p.noStroke();
+                        p.fill(hues[(int) d.getParam(i, myId)], 256, 256);
+                    }
                 } else {
-                    p.noStroke();
-                    p.fill(hues[labels[i]], 256, 256);
+                    if (i >= minSelected && i <= maxSelected) {
+                       // p.stroke(0, 0, 256);
+                        p.noStroke();
+                        p.fill(200);
+                    } else {
+                        p.noStroke();
+                        p.fill(0);
+                    }
                 }
-               p.rect((ppHor*which++), 0, ppHor, height);
+                p.rect((ppHor * which++), 0, ppHor, height);
+
             }
         }
 
@@ -100,26 +112,28 @@ public class LabelTrack {
         p.popMatrix();
     }
 
-   public void  leftClick(float x, float y) {
+    public void leftClick(float x, float y) {
         //Start highlight
         int index = findIndex(x, y);
         minSelected = index;
-        if (maxSelected < index)
+        if (maxSelected < index) {
             maxSelected = index;
-   }
+        }
+    }
 
-   public void clearClick() {
+    public void clearClick() {
         minSelected = -1;
         maxSelected = -1;
-   }
+    }
 
-   public void rightClick(float x, float y) {
+    public void rightClick(float x, float y) {
         int index = findIndex(x, y);
-        if (index >= minSelected)
+        if (index >= minSelected) {
             maxSelected = index;
-   }
+        }
+    }
 
-   private int findIndex(float x, float y) {
-        return (int)(x / ppHor) + minInd;
-   }
+    private int findIndex(float x, float y) {
+        return (int) (x / ppHor) + minInd;
+    }
 }

@@ -8,6 +8,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.EventListenerList;
 import processing.core.*;
+import wekinator.SimpleDataset;
 
 /**
  *
@@ -26,19 +27,20 @@ public class ClassSelector {
     int cWidth = 20;
     int cHeight = 20;
     float[] hues;
-           PFont myFont;
+    PFont myFont;
 
-    public ClassSelector(float w, float h, int numClasses, float[] hues, PApplet app) {
+    public ClassSelector(float w, float h, SimpleDataset d, float[] hues, PApplet app) {
         this.hues = hues;
         width = w;
         height = h;
-        this.numClasses = numClasses;
+              
+        this.numClasses = hues.length;
         p = app;
-        classRegions = new Region[numClasses];
+        classRegions = new Region[numClasses+1];
 
         int thisH = vSpace;
-        for (int i = 0; i < numClasses; i++) {
-            classRegions[i] = new Region(hSpace, thisH, hSpace + cWidth, thisH + cHeight);
+        for (int i = 0; i < numClasses+1; i++) {
+            classRegions[i] = new Region(hSpace+10, thisH +5, hSpace + 10 + cWidth, thisH + 5 +cHeight);
             thisH += cHeight + vSpace;
         }
 
@@ -110,6 +112,13 @@ public class ClassSelector {
             p.rect(hSpace + 10, thisH + 5, cWidth, cHeight);
             thisH += cHeight + vSpace;
        }
+       //Now add "no class"
+       p.fill(0);
+            p.text("None", hSpace-17, thisH + 15);
+            p.fill(0);
+            p.rect(hSpace + 10, thisH + 5, cWidth, cHeight);
+            thisH += cHeight + vSpace;
+
        p.popStyle();
 
     }

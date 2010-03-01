@@ -132,7 +132,7 @@ public class SimpleDataset implements Serializable {
      * @param hasInstances new value of hasInstances
      */
     protected void setHasInstances(boolean hasInstances) {
-        System.out.println("has instances set to " + hasInstances);
+       // System.out.println("has instances set to " + hasInstances);
         boolean oldHasInstances = this.hasInstances;
         this.hasInstances = hasInstances;
         propertyChangeSupport.firePropertyChange(PROP_HASINSTANCES, oldHasInstances, hasInstances);
@@ -260,7 +260,7 @@ public class SimpleDataset implements Serializable {
         audioSegments = new LinkedList<RawAudioSegment>();
     }
 
-    void setFeatureValue(int index, int featNum, double value) {
+    public void setFeatureValue(int index, int featNum, double value) {
         if (featNum < 0 || featNum >= numFeatures) {
             throw new IllegalArgumentException("Invalid feature number in setFeatureValue");
         }
@@ -271,14 +271,14 @@ public class SimpleDataset implements Serializable {
         } //else TODO ?
     }
 
-    void setParameterMissing(int index, int paramNum) {
+   public void setParameterMissing(int index, int paramNum) {
         if (paramNum >= 0 && paramNum < numParams) {
             Instance i = allInstances.instance(index);
             i.setMissing(numMetaData + numFeatures + paramNum);
         }
     }
 
-    void setParameterValue(int index, int paramNum, double value) {
+    public void setParameterValue(int index, int paramNum, double value) {
         if (paramNum < 0 || paramNum >= numParams) {
             throw new IllegalArgumentException("Invalid parameter number in setParameterValue");
         }
@@ -660,7 +660,7 @@ public class SimpleDataset implements Serializable {
         in.setDataset(allInstances);
         allInstances.add(in);
         setHasInstances(true);
-     fireStateChanged();
+        fireStateChanged();
 
 
     // idMap.put(thisId, in);

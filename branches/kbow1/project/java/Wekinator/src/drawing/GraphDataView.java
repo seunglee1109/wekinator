@@ -6,12 +6,13 @@
 package drawing;
 import drawing.TrackSet.ClickState;
 import processing.core.*;
+import wekinator.SimpleDataset;
 
 /**
  *
  * @author rebecca
  */
-public class DataView {
+public class GraphDataView {
     public int width = 0, height = 0;
     public PApplet p = null;
     public TrackSet ts = null;
@@ -28,8 +29,8 @@ public class DataView {
     public int csHeight = 200;
     float[] hues;
     int numClasses = 0;
-    float[][] data = null;
-    int[][] labels = null;
+    SimpleDataset d;
+
 
     void processMouseClick(int mouseX, int mouseY, int mouseButton) {
        /* if (clickState == ClickState.NONE && mouseButton == PApplet.LEFT) {
@@ -41,34 +42,52 @@ public class DataView {
             ts.processMouseClick(mouseX - tsRegion.x1, mouseY-tsRegion.y1, mouseButton);
         } else if (csRegion.inRegion(mouseX, mouseY)) {
             int clicked = cs.processMouseClick(mouseX-csRegion.x1, mouseY-csRegion.y1, mouseButton);
-            if (ts.clickState == ClickState.LR_LABEL) {
+            if (clicked != -1 && ts.clickState == ClickState.LR_LABEL) {
                changeLabels(ts.selectedTrack, ts.getSelectedMin(), ts.getSelectedMax(), clicked);
             }
         }
     }
 
-    public DataView(int w, int h, int numTracks, int numLabels, int numClasses, int numPoints, PApplet app) {
+    public GraphDataView(int w, int h, SimpleDataset d, PApplet app) {
         p = app;
+        this.d = d;
         width = w;
         height = h;
         tsWidth = (int)(w - 3 * hSpace - ClassSelector.getPreferredWidth());
         tsHeight = (int)(h - 2 * vSpace);
         csWidth = ClassSelector.getPreferredWidth();
         csHeight =(int)(h - 2 * vSpace);
-        this.numClasses = numClasses;
+
+        int maxNumClasses = 0;
+        int numDiscrete = 0;
+        int numContinuous = 0;
+        int maxValues[] = d.getMaxLegalDiscreteParamValues();
+        for (int i = 0; i < d.getNumParameters(); i++) {
+            if (d.isParameterDiscrete(i)) {
+                numDiscrete++;
+                if (maxValues[i] > maxNumClasses) {
+                    maxNumClasses = maxValues[i];
+                }
+            } else {
+                numContinuous++;
+            }
+        }
+
+        numClasses = maxNumClasses;
         setColors();
 
-        tmpPopulate(numTracks, numLabels, numClasses, numPoints);
 
-        cs = new ClassSelector(csWidth, csHeight, numClasses, hues, app);
-        ts = new TrackSet(tsWidth, tsHeight, numTracks, numLabels, numClasses, hues, data, labels, app);
+     //   tmpPopulate(numTracks, numLabels, numClasses, numPoints);
+
+        cs = new ClassSelector(csWidth, csHeight, d, hues, app);
+        ts = new TrackSet(tsWidth, tsHeight, d, hues, app);
 
         csRegion = new Region(hSpace, vSpace, hSpace + csWidth, vSpace + csHeight);
         tsRegion = new Region(hSpace*2 + csWidth, vSpace, hSpace*2 + csWidth + tsWidth, vSpace + tsHeight);
         ts.myRegion = tsRegion; //hack
     }
 
-    private void tmpPopulate(int numTracks, int numLabels, int numClasses, int numPoints) {
+    /*private void tmpPopulate(int numTracks, int numLabels, int numClasses, int numPoints) {
         data = new float[numTracks][numPoints];
         labels = new int[numLabels][numPoints];
 
@@ -82,7 +101,7 @@ public class DataView {
                 labels[i][j] = (int)(Math.random() * numClasses);
             }
         }
-    }
+    } */
 
 
 /*    private float getOffsetY(int tNum) {
@@ -101,8 +120,20 @@ public class DataView {
     }
 
     //Data model stuff!!!
-    private void changeLabels(int selectedTrack, int selectedMin, int selectedMax, int clicked) {
-        //TODO!
+    private void changeLabels(int selectedParam, int selectedMin, int selectedMax, int c) {
+        System.out.println("changing to class " + c  + " for track " + selectedParam);
+
+        if (c < d.getMaxLegalDiscreteParamValues()[selectedParam])  {
+            for (int i = selectedMin; i <= selectedMax && i < d.getNumDatapoints(); i++) {
+                d.setParameterValue(i, selectedParam, c);
+            }
+            
+        } else {
+            for (int i = selectedMin; i <= selectedMax  && i < d.getNumDatapoints(); i++) {
+                d.setParameterMissing(i, selectedParam);
+            }
+        }
+
 
     }
 
