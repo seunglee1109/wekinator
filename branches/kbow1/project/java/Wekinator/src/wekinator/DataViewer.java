@@ -10,23 +10,10 @@
  */
 package wekinator;
 
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Font;
 import java.io.File;
 import java.io.IOException;
-import java.text.ParseException;
-import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.table.AbstractTableModel;
-import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
 /**
@@ -36,18 +23,9 @@ import javax.swing.table.TableColumn;
 public class DataViewer extends javax.swing.JFrame {
 
     SimpleDataset myDataset = null;
+    private javax.swing.JTable table;
+    private DataTableModel model;
 
-    /** Creates new form DataViewer */
-    /* public DataViewer() {
-    initComponents();
-    populateTable();
-    } */
-
-    /* public DataViewer(Instances[] ii, MainGUI gui) {
-    initComponents();
-    populateTable(ii);
-    this.gui = gui;
-    }*/
     public DataViewer(SimpleDataset dataset) {
         initComponents();
         myDataset = dataset;
@@ -187,69 +165,10 @@ public class DataViewer extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_buttonListen1ActionPerformed
 
-     private File findArffFileToSave() throws IOException {
-         return null;
-         //TODOTODOTODO: handle this after get fileext support in.
-     }
-
-  /*  private File findArffFileToSave() throws IOException {
-        JFileChooser fc = new OverwritePromptingFileChooser();
-        fc.setDialogType(JFileChooser.SAVE_DIALOG);
-        fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
-
-        fc.setFileFilter(new FileFilter() {
-
-            @Override
-            public boolean accept(File f) {
-                if (f.isDirectory()) {
-                    return true;
-                }
-
-                String ext = "";
-                String s = f.getName();
-                int i = s.lastIndexOf('.');
-
-                if (i > 0 && i < s.length() - 1) {
-                    ext = s.substring(i + 1).toLowerCase();
-                }
-
-                if (ext != null) {
-                    if (ext.equals("arff")) {
-                        return true;
-                    } else {
-                        return false;
-                    }
-                }
-                return false;
-            }
-
-            @Override
-            public String getDescription() {
-                return ".arff files";
-            }
-        });
-
-        //TODO: handle extension appropriately here
-        String location = WekinatorInstance.getWekinatorInstance().getSettings().getLastFeatureFileLocation();
-        if (location == null || location.equals("")) {
-            location = WekinatorInstance.getWekinatorInstance().getSettings().getDefaultFeatureFileLocation();
-        }
-        fc.setCurrentDirectory(new File(location));
-
-        File file = null;
-
-        int returnVal = fc.showSaveDialog(this);
-        if (returnVal == JFileChooser.APPROVE_OPTION) {
-
-            file = fc.getSelectedFile();
-            try {
-                WekinatorInstance.getWekinatorInstance().getSettings().setLastFeatureFileLocation(file.getCanonicalPath());
-            } catch (IOException ex) {
-                WekinatorInstance.getWekinatorInstance().getSettings().setLastFeatureFileLocation(file.getAbsolutePath());
-            }
-        }
-        return file;
-    } */
+    private File findArffFileToSave() throws IOException {
+        return null;
+    //TODOTODOTODO: handle this after get fileext support in.
+    }
 
     /**
      * @param args the command line arguments
@@ -283,334 +202,30 @@ public class DataViewer extends javax.swing.JFrame {
     private javax.swing.JButton buttonListen1;
     private javax.swing.JScrollPane scrollTable;
     // End of variables declaration//GEN-END:variables
-    private javax.swing.JTable table;
-    private DataTableModel model;
-    //  private MainGUI gui;
 
-    /*
-    private void populateTable() {
-    //  table = new JTable(new DataTableModel(2, 3));
-    BufferedReader reader = null;
-    Instances instances[] = new Instances[2];
-    try {
-    reader = new BufferedReader(new FileReader("/Users/rebecca/work/weka-3-5-6/data/iris.arff"));
-    ArffReader arff = new ArffReader(reader);
-    Instances data = arff.getData();
-    Instances data2 = new Instances(data);
-    data.setClassIndex(data.numAttributes() - 1);
-    data2.setClassIndex(data.numAttributes() - 1);
-    instances[0] = data;
-    instances[1] = data2;
-    } catch (IOException ex) {
-    Logger.getLogger(DataViewer.class.getName()).log(Level.SEVERE, null, ex);
-    } finally {
-    try {
-    reader.close();
-    } catch (IOException ex) {
-    Logger.getLogger(DataViewer.class.getName()).log(Level.SEVERE, null, ex);
-    }
-    }
-
-    model = new DataTableModel(instances);
-    table = new JTable(model);
-    scrollTable.setViewportView(table);
-    } */
     private void populateTable(SimpleDataset data) {
         model = new DataTableModel(data);
         table = new JTable(model);
         setTableColumns();
-
-
-        //table.setPreferredScrollableViewportSize(new Dimension(1000,1000));
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         scrollTable.setViewportView(table);
 
         table.repaint();
-        //scrollTable.setVie
-        //scrollTable.repaint();
-
     }
 
     private void setTableColumns() {
-       // table.getColumnModel().get
-       table.getColumnModel().getColumn(0).setPreferredWidth(30);
-       table.getColumnModel().getColumn(1).setPreferredWidth(40);
-         table.getColumnModel().getColumn(2).setPreferredWidth(100); 
+        // table.getColumnModel().get
+        table.getColumnModel().getColumn(0).setPreferredWidth(30);
+        table.getColumnModel().getColumn(1).setPreferredWidth(40);
+        table.getColumnModel().getColumn(2).setPreferredWidth(100);
         for (int i = 3; i < table.getColumnCount(); i++) {
             TableColumn c = table.getColumnModel().getColumn(i);
             c.setPreferredWidth(50);
-           c.setMinWidth(20);
-        
+            c.setMinWidth(20);
+
             c.setResizable(true);
 
         }
     }
-}
-
-class DataTableModel extends AbstractTableModel {
-
-    private String[] columnNames;
-    //  private Object[][] data;
-    int numMetaData, numFeats, numParams;
-    SimpleDataset dataset;
-    // Instances instances[];
-
-    /* public DataTableModel(Instances ii[]) {
-    instances = ii;
-    //Hack: Assume all instances same length (includes same rows in all)
-    if (ii.length == 0) {
-    this.numFeats = 0;
-    this.numParams = 0;
-    //  data = new Object[0][0];
-    return;
-    }
-
-    numFeats = ii[0].numAttributes() - 1;
-    numParams = ii.length;
-
-    setColNames();
-
-    //  setFeatures(ii[0]);
-    /*  for (int i = 0; i < ii.length; i++) {
-    setParamsAll(i, ii[i].attributeToDoubleArray(ii[i].classIndex()));
-    }
-
-
-    }*/
-    public DataTableModel(SimpleDataset dataset) {
-        this.dataset = dataset;
-        this.numFeats = dataset.getNumFeatures();
-        this.numParams = dataset.getNumParameters();
-        this.numMetaData = 3; //for now, ID, time, & training round
-
-
-        setColNames();
-
-        //  setFeatures(ii[0]);
-      /*  for (int i = 0; i < ii.length; i++) {
-        setParamsAll(i, ii[i].attributeToDoubleArray(ii[i].classIndex()));
-        } */
-        dataset.addChangeListener(new ChangeListener() {
-
-            public void stateChanged(ChangeEvent e) {
-                fireTableDataChanged(); //TODO for efficiency, update this... 
-            }
-        });
-
-    }
-
-    protected void setColNames() {
-        columnNames = new String[numMetaData + numFeats + numParams];
-        columnNames[0] = "ID";
-        columnNames[1] = "Time";
-        columnNames[2] = "Training round";
-
-        //  columnNames[0] = "ID";
-        for (int i = 0; i < numFeats; i++) {
-            columnNames[i + numMetaData] = dataset.getFeatureName(i);
-        }
-        for (int i = 0; i < numParams; i++) {
-            columnNames[numMetaData + numFeats + i] = dataset.getParameterName(i);
-        }
-    }
-
-    public int getColumnCount() {
-        return columnNames.length;
-    }
-
-    public int getRowCount() {
-        return dataset.getNumDatapoints(); //TODO TODO TODO this is 0 for some reason!
-    }
-
-    public void addRow() {
-
-        double[] features = new double[numFeats];
-        double[] params = new double[numParams];
-        boolean[] mask = new boolean[numParams];
-        dataset.addInstance(features, params, mask, new Date());
-        int row = dataset.getNumDatapoints();
-
-        fireTableRowsInserted(row, row);
-
-    }
-
-    public String getColumnName(int col) {
-        return columnNames[col];
-    }
-
-    public Object getValueAt(int row, int col) {
-        if (row >= dataset.getNumDatapoints()) {
-            return null;
-        }
-
-        if (col == 0) {
-            return dataset.getID(row);
-        } else if (col == 1) {
-            return dataset.dateDoubleToString(dataset.getTimestamp(row));
-        } else if (col == 2) {
-            return dataset.getTrainingRound(row);
-        } else if (col < numMetaData + numFeats) {
-            return dataset.getFeature(row, (col - numMetaData));
-        } else if (col < numMetaData + numFeats + numParams) {
-            //Treat as strings to represent missing values!
-            Double d = dataset.getParam(row, col - numMetaData - numFeats);
-            if (d.isNaN()) {
-                return "?";
-            } else {
-                return Double.toString(d);
-            }
-        } else {
-            return null;
-        }
-    }
-
-    public Class getColumnClass(int c) {
-        return getValueAt(0, c).getClass();
-    }
-
-    /*
-     * Don't need to implement this method unless your table's
-     * editable.
-     */
-    public boolean isCellEditable(int row, int col) {
-        //Note that the data/cell address is constant,
-        //no matter where the cell appears onscreen.
-        if (col >= 1) { //don't allow editing of ID
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /*
-     * Don't need to implement this method unless your table's
-     * data can change.
-     */
-    public void setValueAt(Object value, int row, int col) {
-        if (col == 0) {
-            //shouldn't be editing this: it's an ID
-            System.out.println("Error: shouldn't edit this cell");
-            return;
-        }
-
-        //TODO: check that this value is legal!
-        if (col == 1) {
-            //Timestamp
-            if (value instanceof String) {
-                try {
-                    dataset.setTimestamp(row, (String) value);
-                } catch (ParseException ex) {
-                    //TODO
-                    Logger.getLogger(DataTableModel.class.getName()).log(Level.SEVERE, null, ex);
-                    return;
-                }
-            } else {
-                //TODO: return or set back to 1st val?
-                System.out.println("Bad");
-                return;
-            }
-
-        } else if (col == 2) {
-            //Training round
-            if (value instanceof Integer) {
-                dataset.setTrainingRound(row, (Integer) value);
-            } else {
-                //TODO
-                System.out.println("Bad");
-                return;
-            }
-
-        } else if (col < numMetaData + numFeats) {
-            //Assume all double feats for now
-            if (value instanceof Double) {
-
-                dataset.setFeatureValue(row, (col - numMetaData), (Double) value);
-            } else {
-                System.out.println("Uh oh");
-                return;
-            }
-
-        } else if (col < numMetaData + numFeats + numParams) {
-            //Check if legal? Probably should.
-            int paramNum = col - numMetaData - numFeats;
-            double d = 0;
-
-
-            if (value instanceof Integer) {
-                d = ((Integer) value).intValue();
-            } else if (value instanceof Double) {
-                d = ((Double) value).doubleValue();
-            } else if (value instanceof String) {
-                String s = (String) value;
-                if (s.equals("?")) {
-                    dataset.setParameterMissing(row, paramNum);
-                    fireTableCellUpdated(row, col);
-                    return; //TODO: clean up position logic here
-
-                } else {
-                    try {
-                        d = Double.parseDouble((String) value);
-                    } catch (Exception ex) {
-                        System.out.println("BAD!"); //TODO
-                        return;
-                    }
-                }
-            }
-
-            if (dataset.isParameterDiscrete(paramNum)) {
-                if (d >= 0 && d <= dataset.maxLegalDiscreteParamValue(paramNum)) {
-                    dataset.setParameterValue(row, paramNum, d);
-                } else {
-                    //TODO: can I erase this?
-                    System.out.println("Bad value!");
-                    return;
-                }
-
-            } else {
-                dataset.setParameterValue(row, paramNum, d);
-            }
-        }
-
-        // data[row][col] = value;
-        fireTableCellUpdated(row, col);
-    }
-
-    void deleteRows(int[] selectedRows) {
-
-        //tmp: examine:
-        //Assumption is that selectedRows will always be in increasing order
-     /*   for (int i = 0; i < selectedRows.length; i++) {
-        System.out.println(selectedRows[i]);
-        } */
-
-        for (int j = selectedRows.length - 1; j >= 0; j--) {
-
-            //Delete the weka representation
-            System.out.println("Trying to delete row " + selectedRows[j]);
-
-            dataset.deleteInstance(selectedRows[j]);
-
-            fireTableRowsDeleted(selectedRows[j], selectedRows[j]);
-        }
-
-    }
-
-    double[] getSelectedParams(int row) {
-        System.out.println("made it here");
-        double f[] = new double[numParams];
-        for (int i = 0; i < numParams; i++) {
-            // f[i] = (float) instances[i].instance(row).classValue();
-            f[i] = dataset.getParam(row, i);
-            Double d = new Double(f[i]);
-            if (d.isNaN()) {
-                System.out.println("AHFALJFLSDJGSDFDLFJDFDJ NaN here");
-            }
-        }
-        return f;
-    }
-
-    
-
-
 }
 
