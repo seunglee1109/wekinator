@@ -29,7 +29,7 @@ public class Drawing extends PApplet {
        colorMode(HSB);
        smooth();
        background(50, 0, 256);
-       dv = new DataView(600, 400, 3, 2, 3, 100, this);
+       dv = new DataView(600, 400, 10, 5, 3, 100, this);
 
     //   noLoop();
     //   String[] fontList = PFont.list();

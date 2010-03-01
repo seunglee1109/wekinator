@@ -32,37 +32,89 @@ public class TrackSet {
     public Region myRegion = null;
     int numPoints = 0;
     PFont myZoomFont = null;
+    protected String[] pNames = null;
+    protected String [] fNames = null;
+    public Region scrollTUp = null;
+    public Region scrollTDown = null;
+    public Region scrollLUp = null;
+    public Region scrollLDown = null;
+    protected int minTrack = 0;
+    protected int maxTrack = 0;
+    protected final int maxNumTracksShown = 5;
+    protected int minLabel = 0;
+    protected int maxLabel = 0;
+    protected final int maxNumLabelsShown = 3;
+    protected int numTracksShown;
+    protected int numLabelsShown;
+    protected float nameWidth = 80;
+    protected float vertScrollSize = 10;
 
     public TrackSet(int w, int h, int numTracks, int numLabels, int numClasses, float[] hues, float[][] data, int[][] labels, PApplet app) {
         p = app;
+        minTrack = 0;
+        maxTrack = Math.min(numTracks - 1, maxNumTracksShown - 1);
+        numTracksShown = maxTrack - minTrack + 1;
+        minLabel = 0;
+        maxLabel = Math.min(numLabels-1, maxNumLabelsShown-1);
+        numLabelsShown = maxLabel - minLabel + 1;
+
         myZoomFont = p.createFont("Helvetica", 10);
 
         numPoints = data[0].length;
         width = w;
         height = h;
-        trackWidth  = w - 2 * hSpace;
-        trackHeight = ((float) h - vSpace - ctrlRegionHeight -(numTracks+numLabels + 1)* vSpace - numLabels * labelHeight) / (numTracks);
+        trackWidth  = w - 2 * hSpace - nameWidth - vertScrollSize;
+
+        float spaceLeftForTracks = ((float) h - ctrlRegionHeight - numLabelsShown * labelHeight - vSpace * (numTracksShown + numLabelsShown + 2));
+        trackHeight = spaceLeftForTracks / numTracksShown;
+        //trackHeight = ((float) h - vSpace - ctrlRegionHeight -(numTracks+numLabels + 1)* vSpace - numLabels * labelHeight) / (numTracks);
 
         float heightSoFar = vSpace + ctrlRegionHeight;
+        scrollLUp = new Region(hSpace, heightSoFar, hSpace + vertScrollSize, heightSoFar + vertScrollSize);
+
         myLabels = new LabelTrack[numLabels];
-        labelRegions = new Region[numLabels];
+        labelRegions = new Region[numLabelsShown];
         for (int i = 0; i < numLabels; i++) {
             myLabels[i] = new LabelTrack(trackWidth, labelHeight, minInd, maxInd, numClasses, hues, labels[i], app);
-            labelRegions[i] = new Region(hSpace, heightSoFar, trackWidth, heightSoFar + labelHeight);
-            heightSoFar += labelHeight + vSpace;
+        }
+        for (int i = 0; i < numLabelsShown; i++) {
+             labelRegions[i] = new Region(hSpace + vertScrollSize + nameWidth, heightSoFar, hSpace + nameWidth + trackWidth + vertScrollSize, heightSoFar + labelHeight);
+             heightSoFar += labelHeight + vSpace;
         }
 
+        scrollLDown = new Region(hSpace, heightSoFar - vertScrollSize - vSpace, hSpace + vertScrollSize, heightSoFar - vSpace);
+
+
+
         myTracks = new PlotTrack[numTracks];
-        trackRegions = new Region[numTracks];
+        trackRegions = new Region[numTracksShown];
+        scrollTUp = new Region(hSpace, heightSoFar, hSpace + vertScrollSize, heightSoFar + vertScrollSize);
+
         for (int i = 0; i < numTracks; i++) {
-            trackRegions[i] = new Region(hSpace, heightSoFar, trackWidth, heightSoFar + trackHeight);
             myTracks[i] = new PlotTrack(trackWidth, trackHeight, minInd, maxInd, -2f, 2f, data[i], app);
+        }
+        for (int i = 0; i < numTracksShown; i++) {
+            trackRegions[i] = new Region(hSpace + nameWidth + vertScrollSize, heightSoFar, hSpace + nameWidth + trackWidth + vertScrollSize, heightSoFar + trackHeight);
             heightSoFar += trackHeight + vSpace;
         }
+        scrollTDown = new Region(hSpace, heightSoFar - vertScrollSize - vSpace, hSpace + vertScrollSize, heightSoFar - vSpace);
+
 
         hs1 = new HScrollbar((int)hSpace, 40, w - 2 *(int)hSpace, 10, 16);
         zoomIn = new Region(hSpace, 20, hSpace + 10, 30);
         zoomOut = new Region(hSpace + 20, 20, hSpace + 30, 30);
+        setNames();
+    }
+
+    private void setNames() {
+        pNames = new String[myLabels.length];
+        for (int i= 0; i < pNames.length; i++ ){
+            pNames[i] = "Param_" + i;
+        }
+        fNames = new String[myTracks.length];
+        for (int i = 0; i < fNames.length; i++) {
+            fNames[i] = "Feat_" + i;
+        }
     }
 
     protected int zoomLevel = 0;
@@ -109,9 +161,9 @@ public class TrackSet {
                     }
                     return;
                 } else if (zoomOut.inRegion(mouseX, mouseY)) {
-                         zoomLevel--;
-                         int w = getWidthForZoomLevel();
-               for (int i = 0; i < myTracks.length; i++) {
+                    zoomLevel--;
+                    int w = getWidthForZoomLevel();
+                    for (int i = 0; i < myTracks.length; i++) {
                         myTracks[i].setUnitWidth(w);
                     }
 
@@ -119,18 +171,44 @@ public class TrackSet {
                         myLabels[i].setUnitWidth(w);
                     }
                     return;
+                } else if (scrollLDown.inRegion(mouseX, mouseY)) {
+                    if (maxLabel < myLabels.length - 1) {
+                        minLabel++;
+                        maxLabel++;
+                        
+                    }
+                    return;
+                } else  if (scrollLUp.inRegion(mouseX, mouseY)) {
+                    if (minLabel > 0) {
+                        minLabel--;
+                        maxLabel--;
+                    }
+                    return;
+                } else  if (scrollTDown.inRegion(mouseX, mouseY)) {
+                    if (maxTrack < myTracks.length - 1) {
+                        minTrack++;
+                        maxTrack++;
+                    }
+                    return;
+                } else  if (scrollTUp.inRegion(mouseX, mouseY)) {
+                    if (minTrack > 0) {
+                        minTrack--;
+                        maxTrack--;
+                    }
                 }
 
 
 
             //if click in label, clear any existing region
                 int region = findRegion(labelRegions, mouseX, mouseY);
-                if (region != -1) {
-                    if (selectedTrack != region && clickState != ClickState.NONE) {
+                int labelNum = findLabelForRegion(region);
+
+                if (labelNum != -1) {
+                    if (selectedTrack != labelNum && clickState != ClickState.NONE) {
                         myLabels[selectedTrack].clearClick();
                     }
-                    selectedTrack = region;
-                    myLabels[region].leftClick(mouseX - labelRegions[region].x1, mouseY - labelRegions[region].y1);
+                    selectedTrack = labelNum;
+                    myLabels[labelNum].leftClick(mouseX - labelRegions[region].x1, mouseY - labelRegions[region].y1);
                     clickState = ClickState.L_LABEL;
                 } else if (clickState != ClickState.NONE) {
                     //User has clicked outside a label
@@ -140,7 +218,8 @@ public class TrackSet {
                 }
         } else if (mouseButton == PApplet.RIGHT && clickState != ClickState.NONE) {
               int region = findRegion(labelRegions, mouseX, mouseY);
-              if (region == selectedTrack) {
+                int labelNum = findLabelForRegion(region);
+              if (labelNum != -1 && labelNum == selectedTrack) {
                  myLabels[selectedTrack].rightClick(mouseX - labelRegions[region].x1, mouseY - labelRegions[region].y1);
                  clickState = ClickState.LR_LABEL;
               }
@@ -161,6 +240,17 @@ public class TrackSet {
         return myLabels[selectedTrack].maxSelected;
     }
 
+    private int findLabelForRegion(int regionNum) {
+        
+        if (regionNum == -1)
+            return -1;
+        
+        int labelNum = minLabel + regionNum;
+        if (labelNum <= maxLabel)
+            return labelNum;
+        
+        return -1;
+    }
 
     private int findRegion(Region[] regions, float x, float y) {
         int r = -1;
@@ -208,19 +298,27 @@ public class TrackSet {
         p.pushStyle();
         p.fill(10, 10, 256);
         p.rect(0, 0, width, height);
-
-        for (int i = 0; i < myLabels.length; i++) {
+         p.textFont(myZoomFont);
+            p.fill(0);
+            p.textAlign(PApplet.RIGHT, PApplet.TOP);
+        int rowNum = 0;
+        for (int i = minLabel; i <= maxLabel; i++) {
             p.pushMatrix();
-            p.translate(labelRegions[i].x1, labelRegions[i].y1);
+            p.translate(labelRegions[rowNum].x1, labelRegions[rowNum].y1);
             myLabels[i].draw();
+            p.text(pNames[i], -5, 0);
             p.popMatrix();
+            rowNum++;
         }
 
-        for (int i = 0; i < myTracks.length; i++) {
+        rowNum = 0;
+        for (int i = minTrack; i <= maxTrack; i++) {
             p.pushMatrix();
-            p.translate(trackRegions[i].x1, trackRegions[i].y1);
+            p.translate(trackRegions[rowNum].x1, trackRegions[rowNum].y1);
             myTracks[i].draw();
+            p.text(fNames[i], -5, 0);
             p.popMatrix();
+            rowNum++;
         }
 
         hs1.update(p.mousePressed, p.mouseX - (int)myRegion.x1, p.mouseY - (int) myRegion.y1);
@@ -237,6 +335,34 @@ public class TrackSet {
         p.rect(zoomOut.x1, zoomOut.y1, 10, 10);
          p.fill(0);
         p.text("-", zoomOut.x1 + 5, zoomOut.y1+5);
+
+        p.pushMatrix();
+        p.translate(scrollLDown.x1, scrollLDown.y1);
+        p.fill(200);
+        p.rect(0, 0, vertScrollSize, vertScrollSize);
+        p.popMatrix();
+
+
+        p.pushMatrix();
+        p.translate(scrollLUp.x1, scrollLUp.y1);
+        p.fill(200);
+        p.rect(0, 0, vertScrollSize, vertScrollSize);
+        p.popMatrix();
+
+
+
+        p.pushMatrix();
+        p.translate(scrollTUp.x1, scrollTUp.y1);
+        p.fill(200);
+        p.rect(0, 0, vertScrollSize, vertScrollSize);
+        p.popMatrix();
+
+
+        p.pushMatrix();
+        p.translate(scrollTDown.x1, scrollTDown.y1);
+        p.fill(200);
+        p.rect(0, 0, vertScrollSize, vertScrollSize);
+        p.popMatrix();
 
         p.popStyle();
     }
@@ -259,7 +385,8 @@ class HScrollbar
     ratio = (float)sw / (float)widthtoheight;
     xpos = xp;
     ypos = yp-sheight/2;
-    spos = xpos + swidth/2 - sheight/2;
+    //spos = xpos + swidth/2 - sheight/2;
+    spos = 0;
     newspos = spos;
     sposMin = xpos;
     sposMax = xpos + swidth - sheight;
