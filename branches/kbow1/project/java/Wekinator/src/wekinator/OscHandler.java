@@ -33,6 +33,7 @@ public class OscHandler {
     String returnHandshakeString = "/hiback";
     String featureInfoString = "/featureInfo";
     String featuresString = "/features"; //used for chuck features (not osc feats)
+    String oscFeatureString = "/oscCustomFeatures"; 
     String stopString = "/stop";
     String classLabelString = "/classLabel";
     String classDistString = "/classDist";
@@ -217,6 +218,7 @@ public class OscHandler {
         receiver.addListener(returnHandshakeString, listener);
         addFeatureInfoListener();
         addFeatureListener();
+        addOscFeatureListener();
         addParamFromSynthListener();
         addHidSetupBegunListener();
         addHidSetupStoppedListener();
@@ -348,7 +350,7 @@ public class OscHandler {
         System.out.println("Requested hid setup start");
     }
 
-    void setUseTrackpad(boolean useTrackpad) throws IOException {
+   /* void setUseTrackpad(boolean useTrackpad) throws IOException {
         Object[] o = new Object[2];
         o[0] = trackpadMessageString;
         o[1] = new Integer(useTrackpad ? 1 : 0);
@@ -418,7 +420,7 @@ public class OscHandler {
         o[1] = new Integer(numFeats);
         OSCMessage msg = new OSCMessage(sendFeatureMessageString, o);
         sender.send(msg);
-    }
+    } */
 
     void requestHidSetupStop() throws IOException {
         Object[] o = new Object[1];
@@ -858,10 +860,28 @@ public class OscHandler {
                         Logger.getLogger(OscHandler.class.getName()).log(Level.WARNING, "Received feature is not a float");
                     }
                 }
-                FeatureExtractionController.updateFeatures(d);
+                FeatureExtractionController.updateChuckFeatures(d);
             }
         };
         receiver.addListener(featuresString, listener);
+    }
+
+    private void addOscFeatureListener() {
+        OSCListener listener = new OSCListener() {
+            public void acceptMessage(java.util.Date time, OSCMessage message) {
+                Object[] o = message.getArguments();
+                double d[]  = new double[o.length];
+                for (int i = 0; i < o.length; i++) {
+                    if (o[i] instanceof Float) {
+                        d[i] = ((Float) o[i]).floatValue();
+                    } else {
+                        Logger.getLogger(OscHandler.class.getName()).log(Level.WARNING, "Received feature is not a float");
+                    }
+                }
+                FeatureExtractionController.updateOscFeatures(d);
+            }
+        };
+        receiver.addListener(oscFeatureString, listener);
     }
 
     private void addParamFromSynthListener() {
