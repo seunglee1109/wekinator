@@ -10,6 +10,7 @@
  */
 package wekinator;
 
+import javax.swing.event.ChangeEvent;
 import wekinator.LearningAlgorithms.NNLearningAlgorithm;
 import wekinator.LearningAlgorithms.ClassifierLearningAlgorithm;
 import wekinator.LearningAlgorithms.AdaboostM1LearningAlgorithm;
@@ -28,6 +29,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.event.ChangeListener;
 import wekinator.LearningAlgorithms.HmmLearningAlgorithm;
 import wekinator.util.SerializedFileUtil;
 import wekinator.util.Util;
@@ -38,7 +40,7 @@ import wekinator.util.Util;
  */
 public class LearningAlgorithmConfigurationPanel extends javax.swing.JPanel {
 
-  //  protected FeatureConfiguration featureConfiguration;
+    protected FeatureConfiguration featureConfiguration;
     protected int paramNum = 0;
     protected String paramName = null;
     protected boolean discrete = true;
@@ -49,6 +51,12 @@ public class LearningAlgorithmConfigurationPanel extends javax.swing.JPanel {
     protected int[] loadedFeatureMapping = null;
     protected File fileToLoadFrom = null;
     protected boolean hasUsableLoadedFile = false;
+    protected ChangeListener featureNamesListener = new ChangeListener() {
+
+        public void stateChanged(ChangeEvent e) {
+            featureNamesChanged();
+        }
+    };
 
     public boolean isHasUsableLoadedFile() {
         return hasUsableLoadedFile;
@@ -230,6 +238,7 @@ public class LearningAlgorithmConfigurationPanel extends javax.swing.JPanel {
             FeatureConfiguration fc) {
 
         initComponents();
+        updateFeatureConfiguration(fc);
         setMaxVals(maxVals);
         setParamName(paramName);
         setParamNum(paramNum);
@@ -242,15 +251,34 @@ public class LearningAlgorithmConfigurationPanel extends javax.swing.JPanel {
             setNewLearningAlgorithmSelected();
         }
         checkDisabled.setSelected(!learnerEnabled);
-     //   this.featureConfiguration = fc;
+        //   this.featureConfiguration = fc;
         WekinatorInstance.getWekinatorInstance().addPropertyChangeListener(new PropertyChangeListener() {
 
             public void propertyChange(PropertyChangeEvent evt) {
                 wekInstChanged(evt);
             }
-
-
         });
+        updateFeatures();
+    }
+
+    private void updateFeatureConfiguration(FeatureConfiguration newfc) {
+        if (newfc == featureConfiguration) {
+            return;
+        }
+
+        if (featureConfiguration != null) {
+            featureConfiguration.removeFeatureNamesChangeListener(featureNamesListener);
+        }
+
+        featureConfiguration = newfc;
+        if (newfc != null) {
+            featureConfiguration.addFeatureNamesChangeListener(featureNamesListener);
+        }
+
+
+    }
+
+    private void featureNamesChanged() {
         updateFeatures();
     }
 
@@ -276,7 +304,7 @@ public class LearningAlgorithmConfigurationPanel extends javax.swing.JPanel {
         WekinatorInstance wek = WekinatorInstance.getWekinatorInstance();
         JFileChooser fc = new JFileChooser();
         fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
-         String location = WekinatorInstance.getWekinatorInstance().getSettings().getLastLocation(LearningAlgorithm.getFileExtension());
+        String location = WekinatorInstance.getWekinatorInstance().getSettings().getLastLocation(LearningAlgorithm.getFileExtension());
         if (location == null || location.equals("")) {
             location = HidSetup.getDefaultLocation();
         }
@@ -309,16 +337,16 @@ public class LearningAlgorithmConfigurationPanel extends javax.swing.JPanel {
     }
 
     private void loadLearnerFromNewFile() {
-       /* File f = chooseLoadFile();
+        /* File f = chooseLoadFile();
         if (f != null) {
-            loadLearnerFromFile(f);
+        loadLearnerFromFile(f);
         } */
         File file = Util.findLoadFile(LearningAlgorithm.getFileExtension(),
                 LearningAlgorithm.getFileTypeDescription(),
                 LearningAlgorithm.getDefaultLocation(),
                 this);
         if (file != null) {
-                loadLearnerFromFile(file);
+            loadLearnerFromFile(file);
         }
     }
 
@@ -1099,7 +1127,7 @@ public class LearningAlgorithmConfigurationPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_radioUseCurrentActionPerformed
 
     private void radioSelectionChanged() {
-    //    checkDisabled.setEnabled(!radioUseNew.isSelected());
+        //    checkDisabled.setEnabled(!radioUseNew.isSelected());
         checkDisabled.setEnabled(false);
 
         if (radioUseNew.isSelected()) {

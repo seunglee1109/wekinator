@@ -58,6 +58,7 @@ public class WekinatorInstance {
     public void setCustomOscFeatureNames(String[] n){
         customOscFeatureNames = n;
         hasCustomOscFeatureNames = (n != null && n.length != 0);
+        fireOscFeatureNamesChanged();
     }
 
     public String[] getCustomOscFeatureNames() {
