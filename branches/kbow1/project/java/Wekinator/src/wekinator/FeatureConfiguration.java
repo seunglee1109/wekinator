@@ -918,6 +918,9 @@ public class FeatureConfiguration implements Serializable {
 
     public void writeToOutputStreamNew(ObjectOutputStream o) throws IOException {
         //each feature
+        o.writeObject("FeatureConfiguration version 1: with custom osc name support");
+        o.writeInt(1);
+
         o.writeInt(features.size());
 
         for (Feature f : features.values()) {
@@ -972,11 +975,29 @@ public class FeatureConfiguration implements Serializable {
             o.writeInt(1);
             hidSetup.writeToOutputStream(o);
         }
+        
+        //Version 1:
+        Feature osc = features.get(CUSTOMOSC);
+        o.writeBoolean(osc.hasFancyName);
+        if (osc.hasFancyName) {
+            o.writeObject(osc.fancyNames);
+        }
 
      }
 
     public static FeatureConfiguration readFromInputStream(ObjectInputStream i) throws IOException, ClassNotFoundException {
         FeatureConfiguration fc = new FeatureConfiguration();
+        int savedVersion = 0;
+
+        try {
+            String obj = (String)i.readObject(); //Saved version / description
+            savedVersion = i.readInt();
+
+        } catch (Exception ex) {
+            //Do nothing: older version
+        }
+
+
         int numFeats = i.readInt();
         for (int n = 0; n < numFeats; n++) {
             String name = (String)i.readObject();
@@ -1056,6 +1077,20 @@ public class FeatureConfiguration implements Serializable {
         }
         fc.committedNumTotalFeatures = fc.getNumFeaturesEnabled();
         fc.committedNumBaseFeatures = fc.getNumBaseFeaturesEnabled();
+
+        //version 1:
+        if (savedVersion > 1) {
+         //TODO ABC
+            boolean hasFancyOsc = i.readBoolean();
+            Feature osc = fc.features.get(CUSTOMOSC);
+
+            if (hasFancyOsc) {
+                osc.hasFancyName = true;
+               osc.setFancyNames((String[])i.readObject());
+            } else {
+                osc.hasFancyName = false;
+            }
+        }
 
         return fc;
     }

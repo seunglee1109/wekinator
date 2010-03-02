@@ -533,6 +533,7 @@ public class BuildPanel extends javax.swing.JPanel {
       
     private void startRecording() {
         try {
+            //Error here?
        WekinatorLearningManager.getInstance().startDatasetCreation();
        WekinatorLearningManager.getInstance().setParamsAndMask(getParams(), getMask());
         } catch (Exception ex) {
@@ -554,7 +555,7 @@ public class BuildPanel extends javax.swing.JPanel {
 
     private boolean[] getMask() {
         boolean[] m = new boolean[numParams];
-        System.out.println("mask:");
+       // System.out.println("mask:"); //inf loop here!
         for (int i = 0; i < paramPanels.length; i++) {
             m[i] = paramPanels[i].getUse();
             System.out.println(m[i]);
@@ -660,6 +661,7 @@ public class BuildPanel extends javax.swing.JPanel {
     }
 
     //The user has entered in new parameter values in the minipanes
+    //This is coming from minipanels ONLY
     private void paramsChanged(ChangeEvent e) {
          double[] p = getParams();
            boolean[] b = getMask();
@@ -671,6 +673,7 @@ public class BuildPanel extends javax.swing.JPanel {
             OscHandler.getOscHandler().sendParamsToSynth(getParams());
             System.out.println("Sending params...");
         }
+           //Propogate changes to LM
         WekinatorLearningManager.getInstance().setParamsAndMask(p, b);
     }
 

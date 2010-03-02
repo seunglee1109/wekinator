@@ -183,7 +183,9 @@ public class ParameterMiniPanel extends javax.swing.JPanel {
         //TODO error checking?
         this.value = value;
         if (isDiscrete) {
-            comboInt.setSelectedIndex((int)value); //Test!
+            if (comboInt.getSelectedIndex() != (int)value) {
+                comboInt.setSelectedIndex((int)value); //Test!
+            }
         } else {
             textValue.setText(value + "");
         }

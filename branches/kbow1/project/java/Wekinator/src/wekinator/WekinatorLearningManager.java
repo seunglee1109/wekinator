@@ -171,7 +171,7 @@ public class WekinatorLearningManager {
     }
 
     public void setParamsAndMask(double[] params, boolean[] mask) {
-        setParams(params);
+        setParams(params); //this screws it up: everyone's listening!
         //Need to check if null?
         WekinatorInstance.getWekinatorInstance().getLearningSystem().setParamMask(mask);
         this.mask = mask;
