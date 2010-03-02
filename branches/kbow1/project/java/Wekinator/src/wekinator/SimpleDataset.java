@@ -769,8 +769,10 @@ public class SimpleDataset implements Serializable {
     public void setFeatureName(int featureNum, String name) {
         if (featureNum >= 0 && featureNum < numFeatures) {
             featureNames[featureNum] = name;
-                fireStateChanged();
-
+            //TODO: must change attribute name too
+           //  allInstances.attribute(numMeta + featureNum).
+             allInstances.renameAttribute(numMetaData + featureNum, name);
+             fireStateChanged();
         }
 
     }

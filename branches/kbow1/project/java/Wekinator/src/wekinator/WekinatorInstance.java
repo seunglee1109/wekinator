@@ -19,6 +19,9 @@ import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.EventListenerList;
 
 /**
  * Ideally, captures current state of the system, including all active component objects
@@ -26,7 +29,7 @@ import java.util.logging.SimpleFormatter;
  * @author rebecca
  */
 public class WekinatorInstance {
-    private static WekinatorInstance ref = null;
+    protected EventListenerList listenerList = new EventListenerList();
     protected ChuckConfiguration configuration = null;
     private WekinatorSettings settings = null;
     protected HidSetup currentHidSetup;
@@ -41,6 +44,26 @@ public class WekinatorInstance {
     protected PlayalongScore playalongScore = null;
     public static final String PROP_PLAYALONGSCORE = "playalongScore";
     public static final String PROP_NUMPARAMS = "numParams";
+
+    protected String[] customOscFeatureNames = new String[0];
+    protected boolean hasCustomOscFeatureNames = false;
+    private static WekinatorInstance ref = null;
+    private ChangeEvent oscFeatureNameChangeEvent = null;
+
+
+    public boolean hasCustomOscFeatureNames() {
+        return hasCustomOscFeatureNames;
+    }
+
+    public void setCustomOscFeatureNames(String[] n){
+        customOscFeatureNames = n;
+        hasCustomOscFeatureNames = (n != null && n.length != 0);
+    }
+
+    public String[] getCustomOscFeatureNames() {
+        return customOscFeatureNames;
+    }
+
 
     protected int numParams = -1;
 
@@ -515,5 +538,27 @@ public class WekinatorInstance {
 
     public WekinatorSettings getSettings() {
         return settings;
+    }
+
+
+    public void addOscFeatureNamesChangeListener(ChangeListener l) {
+        listenerList.add(ChangeListener.class, l);
+    }
+
+    public void removeOscFeatureNamesChangeListener(ChangeListener l) {
+        listenerList.remove(ChangeListener.class, l);
+    }
+
+    protected void fireOscFeatureNamesChanged() {
+        Object[] listeners = listenerList.getListenerList();
+        for (int i = listeners.length - 2; i >= 0; i -=2 ) {
+            if (listeners[i] == ChangeListener.class) {
+                if (oscFeatureNameChangeEvent == null) {
+                    oscFeatureNameChangeEvent = new ChangeEvent(this);
+                    
+                }
+                ((ChangeListener)listeners[i+1]).stateChanged(oscFeatureNameChangeEvent);
+            }
+        }
     }
 }

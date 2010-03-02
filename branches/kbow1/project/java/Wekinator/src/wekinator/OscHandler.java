@@ -33,7 +33,8 @@ public class OscHandler {
     String returnHandshakeString = "/hiback";
     String featureInfoString = "/featureInfo";
     String featuresString = "/features"; //used for chuck features (not osc feats)
-    String oscFeatureString = "/oscCustomFeatures"; 
+    String oscFeatureString = "/oscCustomFeatures";
+    String oscFeatureNamesString = "/oscCustomFeaturesNames";
     String stopString = "/stop";
     String classLabelString = "/classLabel";
     String classDistString = "/classDist";
@@ -219,6 +220,7 @@ public class OscHandler {
         addFeatureInfoListener();
         addFeatureListener();
         addOscFeatureListener();
+        addOscFeatureNameListener();
         addParamFromSynthListener();
         addHidSetupBegunListener();
         addHidSetupStoppedListener();
@@ -883,6 +885,27 @@ public class OscHandler {
         };
         receiver.addListener(oscFeatureString, listener);
     }
+
+    private void addOscFeatureNameListener() {
+        OSCListener listener = new OSCListener() {
+            public void acceptMessage(java.util.Date time, OSCMessage message) {
+                Object[] o = message.getArguments();
+                String s[]  = new String[o.length];
+                for (int i = 0; i < o.length; i++) {
+                    if (o[i] instanceof String) {
+                        s[i] = (String) o[i];
+                    } else {
+                        Logger.getLogger(OscHandler.class.getName()).log(Level.WARNING, "Received feature is not a float");
+                    }
+                }
+               // if (WekinatorInstance.getWekinatorInstance().getFeatureConfiguration() != null) {
+                   WekinatorInstance.getWekinatorInstance().setCustomOscFeatureNames(s);
+               // }
+            }
+        };
+        receiver.addListener(oscFeatureNamesString, listener);
+    }
+
 
     private void addParamFromSynthListener() {
         OSCListener listener = new OSCListener() {

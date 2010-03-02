@@ -575,6 +575,12 @@ public class FeatureConfiguration implements Serializable {
 
     public FeatureConfiguration() {
         populateFeatureList();
+        WekinatorInstance.getWekinatorInstance().addOscFeatureNamesChangeListener(new ChangeListener() {
+
+            public void stateChanged(ChangeEvent e) {
+                wekOscFeaturesChanged();
+            }
+        });
     }
 
     /**
@@ -630,6 +636,8 @@ public class FeatureConfiguration implements Serializable {
         if (errorString.length() > 0) {
             throw new Exception(errorString);
         }
+
+       syncOscFeatures();
 
         //Commit # features
         committedNumTotalFeatures = getNumFeaturesEnabled();
@@ -1078,6 +1086,18 @@ public class FeatureConfiguration implements Serializable {
                 }
                 ((ChangeListener)listeners[i+1]).stateChanged(featureNameChangeEvent);
             }
+        }
+    }
+
+
+    private void wekOscFeaturesChanged() {
+        syncOscFeatures();
+    }
+    
+    protected void syncOscFeatures() {
+     if (WekinatorInstance.getWekinatorInstance().hasCustomOscFeatureNames()) {
+            if (isUseCustomOscFeatures() && getNumCustomOscFeatures() == WekinatorInstance.getWekinatorInstance().getCustomOscFeatureNames().length)
+            setOscCustomFeatureNames(WekinatorInstance.getWekinatorInstance().getCustomOscFeatureNames());
         }
     }
 }
