@@ -16,6 +16,12 @@ public class MetaFeature implements Serializable {
     protected Feature myFeature = null;
     protected String myName = "DefaultMetaFeature";
 
+/*    protected String readableName = "DefaultMetaFeature";
+
+    public String getReadableName() {
+        return readableName;
+    } */
+
     public enum Type {
 
         DELTA_1s,
@@ -26,9 +32,9 @@ public class MetaFeature implements Serializable {
     public static String nameForType(Type type) {
         switch (type) {
             case DELTA_1s:
-                return "1stDer";
+                return "1stDiff";
             case DELTA_2:
-                return "2ndDer";
+                return "2ndDiff";
             case SMOOTH_1:
                 return "Smooth1";
         }

@@ -18,6 +18,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.EventListenerList;
 import wekinator.util.SerializedFileUtil;
 
 /**
@@ -63,6 +66,8 @@ public class FeatureConfiguration implements Serializable {
     };
 
     //TODO: add support for multiple channels!
+   protected EventListenerList listenerList = new EventListenerList();
+
     public static final String FFT = "FFT";
     public static final String CENTROID = "Centroid";
     public static final String FLUX = "Flux";
@@ -84,6 +89,11 @@ public class FeatureConfiguration implements Serializable {
     private PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
     protected int committedNumTotalFeatures = 0;
     protected int committedNumBaseFeatures = 0;
+
+    private ChangeEvent featureNameChangeEvent = null;
+    public ChangeEvent getFeatureNameChangeEvent() {
+        return featureNameChangeEvent;
+    }
 
     public static String getFileExtension() {
         return "wfconf";
@@ -743,9 +753,11 @@ public class FeatureConfiguration implements Serializable {
 
         for (Feature f : featuresInOrder) {
             if (f.enabled) {
-                for (int i = 0; i < f.getDimensionality(); i++) {
-                    s[index++] = f.name + "_" + i;
+                String[] ss = f.getReadableNames();
+                for (int i = 0; i < ss.length; i++) {
+                    s[index++] = ss[i];
                 }
+                
             }
         }
         return s;
@@ -763,11 +775,14 @@ public class FeatureConfiguration implements Serializable {
 
             if (feat.enabled) {
                 ArrayList<LinkedList<MetaFeature>> mflists = feat.metaFeatures;
+                String[] ss = feat.getReadableNames();
                 for (int j = 0; j < feat.getDimensionality(); j++) {
-                    s[i++] = feat.name + "_" + featNum;
-                    featNum++;
+                    
+                    s[i++] = ss[j];
+                    
                     for (MetaFeature mf : mflists.get(j)) {
-                        s[i++] = mf.getFeatureName() + "_" + featNum; //err: mf is null here!
+                       /// s[i++] = ss[j] + "_" + featNum++; //err: mf is null here!
+                        s[i++] = ss[j] + "_" + mf.getOperationName();
                     }
 
                 }
@@ -837,9 +852,28 @@ public class FeatureConfiguration implements Serializable {
         public boolean enabled = false;
         public ArrayList<LinkedList<MetaFeature>> metaFeatures = null;
         protected int dimensionality = 0;
+        public boolean hasFancyName = false;
+        public String[] fancyNames = new String[0];
+
+        public String[] getReadableNames() {
+            if (hasFancyName) {
+                return fancyNames;
+            } else {
+                String s[] = new String[dimensionality];
+                for (int i = 0; i < dimensionality; i++) {
+                    s[i] = name + "_" + i;
+                }
+                return s;
+            }
+        }
 
         public int getDimensionality() {
             return dimensionality;
+        }
+
+        public void setFancyNames(String[] s) {
+            fancyNames = s;
+            hasFancyName = (s != null);
         }
 
         public void writeToOutputStream(ObjectOutputStream o) throws IOException {
@@ -1016,5 +1050,34 @@ public class FeatureConfiguration implements Serializable {
         fc.committedNumBaseFeatures = fc.getNumBaseFeaturesEnabled();
 
         return fc;
+    }
+
+    public void setOscCustomFeatureNames(String[] names) {
+        if (names == null || names.length != getNumCustomOscFeatures()) {
+            throw new IllegalArgumentException("Wrong size of feature names");
+        }
+        Feature osc = features.get(CUSTOMOSC);
+        osc.setFancyNames(names);
+        fireFeatureNamesChanged();
+    }
+
+    public void addFeatureNamesChangeListener(ChangeListener l) {
+        listenerList.add(ChangeListener.class, l);
+    }
+
+    public void removeFeatureNamesChangeListener(ChangeListener l) {
+        listenerList.remove(ChangeListener.class, l);
+    }
+
+    protected void fireFeatureNamesChanged() {
+        Object[] listeners = listenerList.getListenerList();
+        for (int i = listeners.length - 2; i >= 0; i -=2 ) {
+            if (listeners[i] == ChangeListener.class) {
+                if (featureNameChangeEvent == null) {
+                    featureNameChangeEvent = new ChangeEvent(this);
+                }
+                ((ChangeListener)listeners[i+1]).stateChanged(featureNameChangeEvent);
+            }
+        }
     }
 }
