@@ -56,8 +56,8 @@ if (me.args() > 0) {
 
 mc.setup();
 mc.getNumParams() => int numParams;
-mc.useDistribution() => int wantDist;
-mc.useDistributionArray() @=> int wantDistArray[];
+mc.useDistribution() => int wantDist; //uses mc.amIUsingDistribution from cmd line, for osc_synth_proxy.ck
+mc.useDistributionArray() @=> int wantDistArray[]; //ditto
 mc.isDiscrete() => int isDiscrete;
 mc.isDiscreteArray() @=> int isDiscreteArray[];
 mc.getNumClasses() => int numClasses;
@@ -118,12 +118,16 @@ if (isDiscrete && wantDist) {
 
 0 => int paramArraySize;
 "" => string s2;
+//<<< "discrete a size is " , isDiscreteArray.size() >>>;
+//<<< "want dist size is " , wantDistArray.size() >>>;
+//<<< "num classes size ", numClassesArray.size() >>>;
 for (0 => int i; i < numParams; i++) {
+//	<<< "i is ", i>>>;
 	if (isDiscreteArray[i] && wantDistArray[i]) {
 		paramArraySize + numClassesArray[i] => paramArraySize;
 		for (0 => int j; j < numClassesArray[i]; j++) {
 			s2 + "f" => s2;
-			if (j != numClassesArray[j] - 1) {
+			if (j != numClassesArray[i] - 1) {
 				s2 + " " => s2;
 			}
 		}
@@ -721,6 +725,7 @@ fun void oscParamsWait() {
 	float vals[paramArraySize];
 	while (true) {
 		oscParams => now;
+		<<< "Received osc parameters">>>;
 		while (oscParams.nextMsg() != 0) {
 			for (0 => int i; i < paramArraySize; i++) {
 				oscParams.getFloat() => vals[i];

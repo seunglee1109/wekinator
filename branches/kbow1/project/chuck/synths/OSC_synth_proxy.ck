@@ -53,13 +53,14 @@ public class SynthClass {
 	//TODO: Make sure your synth is listening for this /OSCSynth/setup message
 	fun void setup() {
 		xmitSynth.setHost( synthHostname, synthPort );
-		for (0 => int i; i < numParams; i++) {
-			"f " +=> paramString;
-		}
+
 		if (! amIDiscrete || !amIUsingDistribution) {
 			numParams => expectedParamSize;
 		} else {
 			numParams * myNumClasses => expectedParamSize;
+		}
+		for (0 => int i; i < expectedParamSize; i++) {
+			"f " +=> paramString;
 		}
 
 		//Will happen 1x at beginning
@@ -69,11 +70,15 @@ public class SynthClass {
 
 	//TODO: Make sure your synth is listening for /OSCSynth/params message
 	fun void setParams(float params[]) {
+		//<<< "OSC synth proxy received ", params.size(), " params">>>;
 		if (params.size() == expectedParamSize) {
+			<<< "Send to synth:", params[0], paramString, expectedParamSize >>>;
 			xmitSynth.startMsg("/OSCSynth/params", paramString);
 			for (0 => int i; i < expectedParamSize; i++) {
 				params[i] => xmitSynth.addFloat;
+				//<<< params[i]>>>;
 			}
+			
 			debug("Sent params to OSC synth");
 		} else {
 			<<< "Error in OSC_synth: Unexpected size of params: Expected ", expectedParamSize, " received ", params.size()>>>;
