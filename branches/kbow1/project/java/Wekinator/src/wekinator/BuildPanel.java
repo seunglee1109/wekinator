@@ -553,7 +553,7 @@ public class BuildPanel extends javax.swing.JPanel {
         return p;
     }
 
-    private boolean[] getMask() {
+    public boolean[] getMask() {
         boolean[] m = new boolean[numParams];
        // System.out.println("mask:"); //inf loop here!
         for (int i = 0; i < paramPanels.length; i++) {

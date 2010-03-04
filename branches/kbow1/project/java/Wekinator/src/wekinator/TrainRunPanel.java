@@ -439,4 +439,8 @@ public class TrainRunPanel extends javax.swing.JPanel {
         f.add(p);
         f.setVisible(true);
     }
+
+    public boolean[] getMask() {
+        return buildPanel.getMask();
+    }
 }

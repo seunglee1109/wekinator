@@ -304,6 +304,24 @@ public class SimpleDataset implements Serializable {
         }
     }
 
+    public void processEndGestures(boolean[] mask) {
+        //For each param in mask, delete all lables w/in same training round w/ same label, except last
+        for (int i = 0; i < mask.length; i++) {
+            if (mask[i]) {
+                for (int j = 0; j < allInstances.numInstances()-1; j++ ) {
+                    Instance i1 = allInstances.instance(j);
+                    Instance i2 = allInstances.instance(j+1);
+                    if (!i1.isMissing(numMetaData + numFeatures + i)
+                            && !i2.isMissing(numMetaData + numFeatures + i)
+                            && i1.value(numMetaData + numFeatures + i) == i2.value(numMetaData + numFeatures + i)
+                            && getTrainingRound(j) == getTrainingRound(j+1)) {
+                        i1.setMissing(numMetaData + numFeatures + i);
+                    }
+                }
+            }
+        }
+    }
+
     private Instances createInstancesForParameter(int paramNum) {
         if (paramNum < 0 || paramNum >= numParams) {
             throw new IllegalArgumentException("Invalid paramNum");

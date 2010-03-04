@@ -50,7 +50,6 @@ public class WekinatorInstance {
     private static WekinatorInstance ref = null;
     private ChangeEvent oscFeatureNameChangeEvent = null;
 
-
     public boolean hasCustomOscFeatureNames() {
         return hasCustomOscFeatureNames;
     }

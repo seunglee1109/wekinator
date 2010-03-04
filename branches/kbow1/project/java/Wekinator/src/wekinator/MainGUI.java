@@ -176,6 +176,9 @@ public class MainGUI extends javax.swing.JFrame {
         menuItemViewDataset = new javax.swing.JMenuItem();
         menuItemViewDataset1 = new javax.swing.JMenuItem();
         menuItemOtfScore = new javax.swing.JMenuItem();
+        actionMenu = new javax.swing.JMenu();
+        menuEndGesture = new javax.swing.JMenuItem();
+        menuAllGesture = new javax.swing.JMenuItem();
         helpMenu1 = new javax.swing.JMenu();
         contentsMenuItem1 = new javax.swing.JMenuItem();
         aboutMenuItem1 = new javax.swing.JMenuItem();
@@ -476,6 +479,21 @@ public class MainGUI extends javax.swing.JFrame {
 
         menuBar.add(viewMenu);
 
+        actionMenu.setText("Actions");
+
+        menuEndGesture.setText("Label gesture ends");
+        menuEndGesture.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuEndGestureActionPerformed(evt);
+            }
+        });
+        actionMenu.add(menuEndGesture);
+
+        menuAllGesture.setText("Label whole gestures");
+        actionMenu.add(menuAllGesture);
+
+        menuBar.add(actionMenu);
+
         helpMenu1.setText("Help");
 
         contentsMenuItem1.setText("Contents");
@@ -609,8 +627,18 @@ private void menuItemViewDataset1ActionPerformed(java.awt.event.ActionEvent evt)
 
 }//GEN-LAST:event_menuItemViewDataset1ActionPerformed
 
+private void menuEndGestureActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuEndGestureActionPerformed
+    boolean[] mask = trainRunPanel1.getMask();
+    LearningSystem ls = WekinatorInstance.getWekinatorInstance().getLearningSystem();
+    if (WekinatorInstance.getWekinatorInstance().getLearningSystem() != null && ls.getDataset() != null) {
+        ls.getDataset().processEndGestures(mask);
+    }
+
+}//GEN-LAST:event_menuEndGestureActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem aboutMenuItem1;
+    private javax.swing.JMenu actionMenu;
     private javax.swing.ButtonGroup buttonGroupClassifierSource;
     private javax.swing.ButtonGroup buttonGroupProcessingSource;
     private javax.swing.ButtonGroup buttonGroupSettingsSource;
@@ -638,7 +666,9 @@ private void menuItemViewDataset1ActionPerformed(java.awt.event.ActionEvent evt)
     private javax.swing.JLabel labelOscStatus;
     private javax.swing.JLabel labelOscStatus1;
     private wekinator.LearningSystemConfigurationPanel learningSystemConfigurationPanel;
+    private javax.swing.JMenuItem menuAllGesture;
     private javax.swing.JMenuBar menuBar;
+    private javax.swing.JMenuItem menuEndGesture;
     private javax.swing.JMenuItem menuItemOtfScore;
     private javax.swing.JMenuItem menuItemViewConsole;
     private javax.swing.JMenuItem menuItemViewDataset;

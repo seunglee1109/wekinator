@@ -281,6 +281,9 @@ public class WekinatorLearningManager {
         WekinatorInstance.getWekinatorInstance().getLearningSystem().trainInBackground(paramNum);
     }
 
+    protected double[] lastFeatures;
+    protected double[] lastParams;
+
     public void updateFeatures(double[] features) {
         if (mode == Mode.RUNNING) {
             try {
@@ -293,10 +296,12 @@ public class WekinatorLearningManager {
                 Logger.getLogger(WekinatorLearningManager.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else if (mode == Mode.DATASET_CREATION) {
-
-            WekinatorInstance.getWekinatorInstance().getLearningSystem().addToTraining(features, params);
-
-
+           // if (!WekinatorInstance.getWekinatorInstance().isGestureEndMode()) {
+                WekinatorInstance.getWekinatorInstance().getLearningSystem().addToTraining(features, params);
+           // } else {
+           //     lastFeatures = features;
+           //     lastParams = params;
+           // }
         }
     }
     /**

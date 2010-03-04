@@ -1171,7 +1171,7 @@ public class LearningSystem {
                             } else {
                                 setTrainResults(i, 0);
                             }
-                            System.out.println("ERROR encountered here");
+                            System.out.println("ERROR encountered here 2" + ex.getMessage());
                         }
                     }
                     setEvalStatus(new EvalStatus(-1, numParams, numDone, numErrs, (evaluationType == EvaluationType.CV), false));
@@ -1194,7 +1194,7 @@ public class LearningSystem {
                                 System.out.println("I was cancelled");
                                 return new Integer(0);
                     } catch (Exception ex) {
-                        System.out.println("ERROR encountered here");
+                        System.out.println("ERROR encountered here" + ex.getMessage());
                         setEvalStatus(new EvalStatus(learnerToEvaluate, 1, 0, 1, (evaluationType == EvaluationType.CV), false));
                         if (evaluationType == EvaluationType.CV) {
                             setCvResults(learnerToEvaluate, 0);
