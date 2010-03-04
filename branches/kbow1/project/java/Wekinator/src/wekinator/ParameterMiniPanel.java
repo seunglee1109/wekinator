@@ -198,7 +198,12 @@ public class ParameterMiniPanel extends javax.swing.JPanel {
     public double getVal() {
         //Try parsing:
         if (isDiscrete) {
-            return ((Integer) comboInt.getSelectedItem());
+            try {
+                
+                return ((Integer) comboInt.getSelectedItem());
+            } catch (Exception ex) {
+                return 0.0;
+            }
         } else {
             return value;
         }
