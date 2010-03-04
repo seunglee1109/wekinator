@@ -85,6 +85,7 @@ class Delta1 extends MetaFeature {
 
     double last = 0.0;
 
+
     protected Delta1(Feature f) {
         this.myFeature = f;
         this.myName = MetaFeature.nameForType(Type.DELTA_1s);
@@ -155,22 +156,18 @@ class Smooth1 extends MetaFeature {
 class History extends MetaFeature {
 
     LinkedList<Double> history;
-    int n = 2;
+    public static int n = 2; //hack
 
     protected History(Feature f) {
-        this(f, 1);
+         this.myFeature = f;
+        this.myName = MetaFeature.nameForType(Type.HISTORY);
+       // this.n = n;
+        history = new LinkedList<Double>();
+        initList();
     }
 
     public int getSize() {
         return n;
-    }
-
-    protected History(Feature f, int n) {
-        this.myFeature = f;
-        this.myName = MetaFeature.nameForType(Type.HISTORY);
-        this.n = n;
-        history = new LinkedList<Double>();
-        initList();
     }
 
     private void initList() {
@@ -182,10 +179,10 @@ class History extends MetaFeature {
         }
     }
 
-    public void setN(int n) {
-        this.n = n;
+   /* public void setN(int n) {
+        History.n = n;
         initList();
-    }
+    } */
 
     @Override
     public Type getType() {
@@ -196,12 +193,17 @@ class History extends MetaFeature {
     public double[] computeForNextFeature(double[] f, int startIndex) {
         double[] val = new double[n];
        // val[0] = f[startIndex] - last;
-        history.remove();
-        history.add(f[startIndex]);
+        //history.remove();
+        
+
+        //history.add(f[startIndex]);
         int i = 0;
         for (Double d : history) {
             val[i] = d;
+            i++;
         }
+        history.removeLast();
+        history.addFirst(f[startIndex]);
         return val;
     }
 }

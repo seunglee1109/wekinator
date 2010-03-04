@@ -853,7 +853,11 @@ public class SimpleDataset implements Serializable {
     public String dateDoubleToString(double d) { //TODO: test!
         Date date;
         try {
-            date = dateFormat.parse(Double.toString(d));
+            String ds = Double.toString(d);
+            while (ds.length() < 8) {
+                ds = "0" + ds;
+            }
+            date = dateFormat.parse(ds);
             return prettyDateFormat.format(date);
 
         } catch (ParseException ex) {
