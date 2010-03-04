@@ -5,13 +5,14 @@
 package wekinator;
 
 import java.io.Serializable;
+import java.util.LinkedList;
 import wekinator.FeatureConfiguration.Feature;
 
 /**
  *
  * @author rebecca
  */
-public class MetaFeature implements Serializable {
+public abstract class MetaFeature implements Serializable {
 
     protected Feature myFeature = null;
     protected String myName = "DefaultMetaFeature";
@@ -26,7 +27,8 @@ public class MetaFeature implements Serializable {
 
         DELTA_1s,
         DELTA_2,
-        SMOOTH_1
+        SMOOTH_1,
+        HISTORY
     };
 
     public static String nameForType(Type type) {
@@ -37,13 +39,13 @@ public class MetaFeature implements Serializable {
                 return "2ndDiff";
             case SMOOTH_1:
                 return "Smooth1";
+            case HISTORY:
+                return "History";
         }
         return "Other";
     }
 
-    public Type getType() {
-        return null;
-    }
+    public abstract Type getType();
 
     public static MetaFeature createForType(Type type, Feature f) {
         switch (type) {
@@ -53,6 +55,8 @@ public class MetaFeature implements Serializable {
                 return new Delta2(f);
             case SMOOTH_1:
                 return new Smooth1(f);
+            case HISTORY:
+                return new History(f);
         }
         return null;
 
@@ -70,9 +74,10 @@ public class MetaFeature implements Serializable {
         return myFeature;
     }
 
-    public double[] computeForNextFeature(double[] f, int startIndex) {
-        return f;
+    public abstract double[] computeForNextFeature(double[] f, int startIndex);
 
+    public int getSize() {
+        return 1;
     }
 }
 
@@ -146,5 +151,60 @@ class Smooth1 extends MetaFeature {
         return val;
     }
 }
+
+class History extends MetaFeature {
+
+    LinkedList<Double> history;
+    int n = 2;
+
+    protected History(Feature f) {
+        this(f, 1);
+    }
+
+    public int getSize() {
+        return n;
+    }
+
+    protected History(Feature f, int n) {
+        this.myFeature = f;
+        this.myName = MetaFeature.nameForType(Type.HISTORY);
+        this.n = n;
+        history = new LinkedList<Double>();
+        initList();
+    }
+
+    private void initList() {
+        while (history.size() < n) {
+            history.add(0.);
+        }
+        while (history.size() > n) {
+            history.remove();
+        }
+    }
+
+    public void setN(int n) {
+        this.n = n;
+        initList();
+    }
+
+    @Override
+    public Type getType() {
+        return Type.HISTORY;
+    }
+
+    @Override
+    public double[] computeForNextFeature(double[] f, int startIndex) {
+        double[] val = new double[n];
+       // val[0] = f[startIndex] - last;
+        history.remove();
+        history.add(f[startIndex]);
+        int i = 0;
+        for (Double d : history) {
+            val[i] = d;
+        }
+        return val;
+    }
+}
+
 
 

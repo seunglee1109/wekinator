@@ -190,7 +190,9 @@ public class FeatureConfiguration implements Serializable {
             if (f.enabled) {
                 for (List<MetaFeature> l : f.metaFeatures) {
                     if (l != null) {
-                        s += l.size();
+                        for (MetaFeature mf : l) {
+                            s += mf.getSize();
+                        }
                     }
                 }
             }
@@ -790,7 +792,9 @@ public class FeatureConfiguration implements Serializable {
                     
                     for (MetaFeature mf : mflists.get(j)) {
                        /// s[i++] = ss[j] + "_" + featNum++; //err: mf is null here!
-                        s[i++] = ss[j] + "_" + mf.getOperationName();
+                        for (int k = 0; k < mf.getSize(); k++) {
+                            s[i++] = ss[j] + "_" + mf.getOperationName() + "_" + k;
+                        }
                     }
 
                 }
