@@ -74,7 +74,7 @@ public class EditPanel extends javax.swing.JPanel {
 
         learningSystem = ls;
 
-        if (numParams != oldNumParams) {
+      //  if (numParams != oldNumParams) {
             panelDrilldown.removeAll();
             learnerPanels = new LearnerEditPanel[numParams];
             CardLayout c = (CardLayout) panelDrilldown.getLayout();
@@ -99,7 +99,7 @@ public class EditPanel extends javax.swing.JPanel {
             c.show(panelDrilldown, "all");
             panelDrilldown.repaint();
 
-        }
+       // }
         setButtonsEnabled();
 
     }

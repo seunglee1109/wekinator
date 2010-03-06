@@ -335,6 +335,7 @@ public class LearningSystemConfigurationPanel extends javax.swing.JPanel {
         }
 
         //If no errors, apply changes globally
+        //error here?
         if (learningSystem != WekinatorInstance.getWekinatorInstance().getLearningSystem()) {
             WekinatorInstance.getWekinatorInstance().setLearningSystem(learningSystem);
             //ABC: set mask NOW.

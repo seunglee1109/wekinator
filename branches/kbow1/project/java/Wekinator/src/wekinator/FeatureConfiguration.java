@@ -922,8 +922,8 @@ public class FeatureConfiguration implements Serializable {
 
     public void writeToOutputStreamNew(ObjectOutputStream o) throws IOException {
         //each feature
-        o.writeObject("FeatureConfiguration version 1: with custom osc name support");
-        o.writeInt(1);
+        o.writeObject("FeatureConfiguration version 2: with custom osc name support; mf history length");
+        o.writeInt(2);
 
         o.writeInt(features.size());
 
@@ -986,6 +986,9 @@ public class FeatureConfiguration implements Serializable {
         if (osc.hasFancyName) {
             o.writeObject(osc.fancyNames);
         }
+
+        //version 2:
+        o.writeInt(History.n);
 
      }
 
@@ -1083,7 +1086,7 @@ public class FeatureConfiguration implements Serializable {
         fc.committedNumBaseFeatures = fc.getNumBaseFeaturesEnabled();
 
         //version 1:
-        if (savedVersion > 1) {
+        if (savedVersion >= 1) {
          //TODO ABC
             boolean hasFancyOsc = i.readBoolean();
             Feature osc = fc.features.get(CUSTOMOSC);
@@ -1094,6 +1097,12 @@ public class FeatureConfiguration implements Serializable {
             } else {
                 osc.hasFancyName = false;
             }
+        }
+
+        if (savedVersion >= 2) {
+            int n = i.readInt();
+            History.n = n;
+
         }
 
         return fc;

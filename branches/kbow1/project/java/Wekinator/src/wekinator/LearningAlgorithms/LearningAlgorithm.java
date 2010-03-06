@@ -62,7 +62,7 @@ public abstract class LearningAlgorithm implements Serializable {
      */
     protected void setTrainingState(TrainingState trainingState) {
         TrainingState oldTrainingState = this.trainingState;
-        this.trainingState = trainingState;
+        this.trainingState = trainingState; //abc: this next line is firing & causing reaction; not 2nd time
         propertyChangeSupport.firePropertyChange(PROP_TRAININGSTATE, oldTrainingState, trainingState);
     }
     protected PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);

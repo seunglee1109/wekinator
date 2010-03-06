@@ -88,7 +88,7 @@ public abstract class ClassifierLearningAlgorithm extends LearningAlgorithm {
     }
 
     public double computeCVAccuracy(int numFolds, Instances instances) throws Exception {
-        if (getTrainingState() == TrainingState.TRAINED) {
+        if (getTrainingState() != TrainingState.TRAINING) {
              //          Thread.sleep(3000);
 
             //TODO: is it necessary to copy here? Depends on implementation of SimpleDataset

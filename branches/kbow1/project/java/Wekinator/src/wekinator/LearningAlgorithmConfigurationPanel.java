@@ -838,6 +838,11 @@ public class LearningAlgorithmConfigurationPanel extends javax.swing.JPanel {
         labelLearnerStatus.setEnabled(false);
 
         comboSelectClassifier.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "AdaBoostM.1", "Decision Tree", "K-Nearest Neighbor", "Support Vector Machine", "HMM" }));
+        comboSelectClassifier.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboSelectClassifierActionPerformed(evt);
+            }
+        });
 
         buttonLoadFile.setText("Choose file...");
         buttonLoadFile.addActionListener(new java.awt.event.ActionListener() {
@@ -1143,6 +1148,10 @@ public class LearningAlgorithmConfigurationPanel extends javax.swing.JPanel {
     private void checkDisabledActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkDisabledActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_checkDisabledActionPerformed
+
+    private void comboSelectClassifierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboSelectClassifierActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_comboSelectClassifierActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buttonCancel;

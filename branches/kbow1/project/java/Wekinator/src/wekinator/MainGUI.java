@@ -10,12 +10,14 @@ import drawing.GraphDataViewFrame;
 import java.awt.Frame;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 import wekinator.ChuckRunner.ChuckRunnerState;
+import wekinator.util.Util;
 
 /**
  *
@@ -419,7 +421,11 @@ public class MainGUI extends javax.swing.JFrame {
         fileMenu.add(jMenuItem2);
 
         jMenuItem3.setText("Save dataset");
-        jMenuItem3.setEnabled(false);
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
         fileMenu.add(jMenuItem3);
 
         jMenuItem4.setText("Load global configuration");
@@ -635,6 +641,28 @@ private void menuEndGestureActionPerformed(java.awt.event.ActionEvent evt) {//GE
     }
 
 }//GEN-LAST:event_menuEndGestureActionPerformed
+
+private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+    LearningSystem ls = WekinatorInstance.getWekinatorInstance().getLearningSystem();
+    if (ls != null && ls.getDataset() != null) {
+
+        File file = Util.findSaveFile("arff",
+                "arff file",
+                LearningSystem.getDefaultLocation(),
+                this);
+        if (file != null) {
+            try {
+                ls.getDataset().writeInstancesToArff(file);
+               // ls.writeToFile(file); //TODOTODOTODO: update last path on this.
+               // Util.setLastFile(LearningSystem.getFileExtension(), file);
+            } catch (Exception ex) {
+                Logger.getLogger(TrainRunPanel.class.getName()).log(Level.INFO, null, ex);
+                JOptionPane.showMessageDialog(this, ex.getMessage(), "Could not save to file", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+}//GEN-LAST:event_jMenuItem3ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem aboutMenuItem1;

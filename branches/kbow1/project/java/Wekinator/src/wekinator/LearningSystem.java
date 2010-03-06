@@ -273,7 +273,7 @@ public class LearningSystem {
         this.trainResults[index] = newTrainResults;
         propertyChangeSupport.fireIndexedPropertyChange(PROP_TRAINRESULTS, index, oldTrainResults, newTrainResults);
     }
-    protected boolean isRunnable = false;
+    protected boolean isRunnable = true; //aa
     public static final String PROP_ISRUNNABLE = "isRunnable";
 
     /**
@@ -282,7 +282,7 @@ public class LearningSystem {
      * @return the value of isRunnable
      */
     public boolean isIsRunnable() {
-        return isRunnable;
+        return true;
     }
 
     /**
@@ -293,6 +293,7 @@ public class LearningSystem {
     protected void setIsRunnable(boolean isRunnable) {
         boolean oldIsRunnable = this.isRunnable;
         this.isRunnable = isRunnable;
+        this.isRunnable = true;
         propertyChangeSupport.firePropertyChange(PROP_ISRUNNABLE, oldIsRunnable, isRunnable);
     }
 
@@ -627,7 +628,7 @@ public class LearningSystem {
     //should disallow this in GUI.
     protected void updateRunnable() {
         if (learners == null || learners.length == 0) {
-            setIsRunnable(false);
+           // setIsRunnable(false);
         }
 
         int numTrained = 0;
@@ -638,7 +639,7 @@ public class LearningSystem {
                 }
             }
         }
-        setIsRunnable(numTrained > 0);
+       // setIsRunnable(numTrained > 0);
     }
 
 
@@ -745,7 +746,7 @@ public class LearningSystem {
         if (this.learners != null) {
             for (int i = 0; i < this.learners.length; i++) {
                 if (this.learners[i] != null) {
-                    this.learners[i].removePropertyChangeListener(learnerChangeListener);
+                    this.learners[i].removePropertyChangeListener(learnerChangeListener); //removed here?
                 }
             }
         }
@@ -753,7 +754,7 @@ public class LearningSystem {
         if (this.learners != null) {
             for (int i = 0; i < this.learners.length; i++) {
                 if (this.learners[i] != null) {
-                    this.learners[i].addPropertyChangeListener(learnerChangeListener);
+                    this.learners[i].addPropertyChangeListener(learnerChangeListener); //added here?
                 }
             }
         }
@@ -788,7 +789,7 @@ public class LearningSystem {
 
         this.learners[index] = newLearners;
         if (this.learners[index] != null) {
-            this.learners[index].addPropertyChangeListener(learnerChangeListener);
+            this.learners[index].addPropertyChangeListener(learnerChangeListener); //added here? YES 1st
         }
         //   updateInitializationState();
         updateTrainable();
