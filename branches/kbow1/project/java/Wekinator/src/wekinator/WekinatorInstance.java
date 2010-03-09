@@ -50,6 +50,9 @@ public class WekinatorInstance {
     private static WekinatorInstance ref = null;
     private ChangeEvent oscFeatureNameChangeEvent = null;
 
+    public static int recvPort = 6448;
+    public static int sendPort = 6453;
+
     public boolean hasCustomOscFeatureNames() {
         return hasCustomOscFeatureNames;
     }
@@ -177,6 +180,13 @@ public class WekinatorInstance {
                 setState(State.FEATURE_SETUP_DONE);
             }
         }
+
+        //New: invalidate learning configuration
+        if (!FeatureConfiguration.equal(featureConfiguration, WekinatorInstance.getWekinatorInstance().getFeatureConfiguration())) {
+             setLearningSystem(null);
+
+        }
+
     }
 
     boolean canUse(LearningSystem ls) {

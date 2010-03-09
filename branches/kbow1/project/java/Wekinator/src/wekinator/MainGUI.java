@@ -37,9 +37,10 @@ public class MainGUI extends javax.swing.JFrame {
     /** Creates new form Bigger1 */
     public MainGUI() {
         initComponents();
+        learningSystemConfigurationPanel.setMainGUI(this);
         //Anywhere we add a listener, also update to current property.
 
-       // FeatureManager fm = wek.getFeatureManager();
+        // FeatureManager fm = wek.getFeatureManager();
         ChuckSystem.getChuckSystem().addPropertyChangeListener(new PropertyChangeListener() {
 
             public void propertyChange(PropertyChangeEvent evt) {
@@ -56,7 +57,7 @@ public class MainGUI extends javax.swing.JFrame {
             }
         });
         updateGUIforOscStatus();
-      //  fm.hidSetup = wek.getCurrentHidSetup(); //TODO: put in fm
+        //  fm.hidSetup = wek.getCurrentHidSetup(); //TODO: put in fm
         wek.getCurrentHidSetup().addPropertyChangeListener(new PropertyChangeListener() {
 
             public void propertyChange(PropertyChangeEvent evt) {
@@ -82,8 +83,14 @@ public class MainGUI extends javax.swing.JFrame {
                 runnerPropertyChange(evt);
             }
         });
+        try {
+            OscHandler.getOscHandler().setupOsc();
+        } catch (IOException ex) {
+            Logger.getLogger(MainGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
         runOscIfNeeded();
         runChuckIfNeeded();
+        updatePanels();
     }
 
     private void runOscIfNeeded() {
@@ -91,9 +98,10 @@ public class MainGUI extends javax.swing.JFrame {
                 WekinatorRunner.connectAutomatically &&
                 OscHandler.getOscHandler().getConnectionState() == OscHandler.ConnectionState.NOT_CONNECTED) {
 
-                connectOSC();
-        } 
+            connectOSC();
+        }
     }
+
     private void runChuckIfNeeded() {
         if (WekinatorRunner.chuckFile != null &&
                 ChuckRunner.getConfiguration() != null &&
@@ -119,11 +127,17 @@ public class MainGUI extends javax.swing.JFrame {
     private void updateRunnerState(ChuckRunner.ChuckRunnerState state) {
         if (state == ChuckRunnerState.RUNNING) {
             wek.useConfigurationNextSession();
-            //also connect!
-            connectOSC();
+        //also connect!
+        //connectOSC(); //changed: We'll wait to hear from chuck.
 
         } else {
-            OscHandler.getOscHandler().end();
+            try {
+                OscHandler.getOscHandler().end();
+                OscHandler.getOscHandler().setupOsc();
+            } catch (IOException ex) {
+                Logger.getLogger(MainGUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
         }
     }
 
@@ -145,16 +159,10 @@ public class MainGUI extends javax.swing.JFrame {
         panelMainTabs = new javax.swing.JTabbedPane();
         panelOSC = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
-        labelOscStatus1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        textOscReceive = new javax.swing.JTextField();
-        jLabel9 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
-        textOscSend = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
         buttonOscConnect = new javax.swing.JButton();
         buttonOscDisconnect = new javax.swing.JButton();
         labelOscStatus = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
         jPanel8 = new javax.swing.JPanel();
         chuckRunnerPanel1 = new wekinator.ChuckRunnerPanel();
         panelTabFeatureConfiguration = new javax.swing.JPanel();
@@ -196,7 +204,7 @@ public class MainGUI extends javax.swing.JFrame {
             }
         });
 
-        jScrollPane1.setPreferredSize(new java.awt.Dimension(400, 400));
+        jScrollPane1.setPreferredSize(new java.awt.Dimension(500, 500));
 
         jPanel1.setPreferredSize(new java.awt.Dimension(700, 700));
 
@@ -217,20 +225,6 @@ public class MainGUI extends javax.swing.JFrame {
 
         jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder("OSC"));
 
-        labelOscStatus1.setText("Set the ports to begin.");
-
-        jLabel2.setText("Recv Port");
-
-        textOscReceive.setText("6448");
-
-        jLabel9.setText("(Send port used in ChucK)");
-
-        jLabel8.setText("(Receive port used in ChucK)");
-
-        textOscSend.setText("6453");
-
-        jLabel1.setText("Send Port");
-
         buttonOscConnect.setText("Connect");
         buttonOscConnect.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -248,6 +242,9 @@ public class MainGUI extends javax.swing.JFrame {
 
         labelOscStatus.setText("OSC Status: Not connected yet.");
 
+        jLabel1.setFont(new java.awt.Font("Lucida Grande", 2, 13)); // NOI18N
+        jLabel1.setText("Manually connect only if you're running ChucK from command line");
+
         org.jdesktop.layout.GroupLayout jPanel5Layout = new org.jdesktop.layout.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
@@ -261,42 +258,17 @@ public class MainGUI extends javax.swing.JFrame {
                         .add(buttonOscDisconnect))
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel5Layout.createSequentialGroup()
                         .add(23, 23, 23)
-                        .add(labelOscStatus, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 783, Short.MAX_VALUE))
+                        .add(labelOscStatus, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 438, Short.MAX_VALUE))
                     .add(jPanel5Layout.createSequentialGroup()
                         .addContainerGap()
-                        .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(jLabel2)
-                            .add(jPanel5Layout.createSequentialGroup()
-                                .add(jLabel1)
-                                .add(10, 10, 10)
-                                .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                                    .add(jPanel5Layout.createSequentialGroup()
-                                        .add(textOscReceive, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 71, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                        .add(jLabel9))
-                                    .add(jPanel5Layout.createSequentialGroup()
-                                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                        .add(textOscSend, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 71, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                        .add(jLabel8))))
-                            .add(labelOscStatus1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 151, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))))
+                        .add(jLabel1)))
                 .addContainerGap())
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel5Layout.createSequentialGroup()
-                .add(labelOscStatus1)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(jLabel2)
-                    .add(textOscReceive, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(jLabel9))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(jLabel1)
-                    .add(textOscSend, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(jLabel8, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 24, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 44, Short.MAX_VALUE)
+                .add(jLabel1)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 14, Short.MAX_VALUE)
                 .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(buttonOscConnect)
                     .add(buttonOscDisconnect))
@@ -327,14 +299,17 @@ public class MainGUI extends javax.swing.JFrame {
         panelOSCLayout.setHorizontalGroup(
             panelOSCLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel8, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .add(jPanel5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .add(panelOSCLayout.createSequentialGroup()
+                .add(jPanel5, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(345, Short.MAX_VALUE))
         );
         panelOSCLayout.setVerticalGroup(
             panelOSCLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(panelOSCLayout.createSequentialGroup()
                 .add(jPanel8, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jPanel5, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .add(jPanel5, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(239, 239, 239))
         );
 
         panelMainTabs.addTab("Chuck & OSC Setup", panelOSC);
@@ -548,7 +523,7 @@ private void buttonQuitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
         FeatureExtractionController.stopExtracting();
     }
 
-    
+
     OscHandler.getOscHandler().end();
 
     if (ChuckRunner.getRunnerState() == ChuckRunner.ChuckRunnerState.RUNNING) {
@@ -559,29 +534,37 @@ private void buttonQuitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
     }
     //Want to save settings here!
     wek.saveCurrentSettings();
-    
+
     System.exit(0);
 }//GEN-LAST:event_buttonQuitActionPerformed
 
     private void connectOSC() {
         try {
-            sendPort = Integer.parseInt(textOscSend.getText());
-            receivePort = Integer.parseInt(textOscReceive.getText());
-            OscHandler.getOscHandler().startHandshake(receivePort, sendPort);
+            OscHandler.getOscHandler().startHandshake();
         } catch (IOException ex) {
             Logger.getLogger(MainGUI.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
 private void buttonOscConnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonOscConnectActionPerformed
+    //try {
+    //    OscHandler.getOscHandler().setupOsc();
+    //} catch (IOException ex) {
+    //    Logger.getLogger(MainGUI.class.getName()).log(Level.SEVERE, null, ex);
+    // }
     connectOSC();
 }//GEN-LAST:event_buttonOscConnectActionPerformed
 
 private void buttonOscDisconnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonOscDisconnectActionPerformed
-    if (FeatureExtractionController.isExtracting()) {
-        FeatureExtractionController.stopExtracting();
+    try {
+        if (FeatureExtractionController.isExtracting()) {
+            FeatureExtractionController.stopExtracting();
+        }
+        OscHandler.getOscHandler().end();
+        OscHandler.getOscHandler().setupOsc();
+    } catch (IOException ex) {
+        Logger.getLogger(MainGUI.class.getName()).log(Level.SEVERE, null, ex);
     }
-    OscHandler.getOscHandler().end();
 }//GEN-LAST:event_buttonOscDisconnectActionPerformed
 
 private void panelMainTabsComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_panelMainTabsComponentShown
@@ -627,7 +610,7 @@ private void menuItemViewFeaturesActionPerformed(java.awt.event.ActionEvent evt)
 private void menuItemViewDataset1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemViewDataset1ActionPerformed
     LearningSystem ls = WekinatorInstance.getWekinatorInstance().getLearningSystem();
     if (ls != null && ls.getDataset() != null) {
-         new GraphDataViewFrame(ls.getDataset()).setVisible(true);
+        new GraphDataViewFrame(ls.getDataset()).setVisible(true);
 
     }
 
@@ -653,8 +636,8 @@ private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
         if (file != null) {
             try {
                 ls.getDataset().writeInstancesToArff(file);
-               // ls.writeToFile(file); //TODOTODOTODO: update last path on this.
-               // Util.setLastFile(LearningSystem.getFileExtension(), file);
+            // ls.writeToFile(file); //TODOTODOTODO: update last path on this.
+            // Util.setLastFile(LearningSystem.getFileExtension(), file);
             } catch (Exception ex) {
                 Logger.getLogger(TrainRunPanel.class.getName()).log(Level.INFO, null, ex);
                 JOptionPane.showMessageDialog(this, ex.getMessage(), "Could not save to file", JOptionPane.ERROR_MESSAGE);
@@ -680,9 +663,6 @@ private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
     private javax.swing.JMenu fileMenu;
     private javax.swing.JMenu helpMenu1;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
@@ -692,7 +672,6 @@ private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
     private javax.swing.JPanel jPanel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel labelOscStatus;
-    private javax.swing.JLabel labelOscStatus1;
     private wekinator.LearningSystemConfigurationPanel learningSystemConfigurationPanel;
     private javax.swing.JMenuItem menuAllGesture;
     private javax.swing.JMenuBar menuBar;
@@ -708,8 +687,6 @@ private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
     private javax.swing.JPanel panelTabFeatureConfiguration;
     private javax.swing.JPanel panelTabLearningSystemConfiguration;
     private javax.swing.JMenuItem preferencesMenuItem;
-    private javax.swing.JTextField textOscReceive;
-    private javax.swing.JTextField textOscSend;
     private wekinator.TrainRunPanel trainRunPanel1;
     private javax.swing.JMenu viewMenu;
     private javax.swing.JMenu wekMenu;
@@ -728,8 +705,8 @@ private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
                         FeatureConfiguration fc = FeatureConfiguration.readFromFile(WekinatorRunner.getFeatureFile());
                         featureConfigurationPanel1.setFormFromConfiguration(fc);
 
-                       // Thread.sleep(5000);
-                      //  fc.validate(); //does this do it? ABC
+                        // Thread.sleep(5000);
+                        //  fc.validate(); //does this do it? ABC
                         WekinatorInstance.getWekinatorInstance().setFeatureConfiguration(fc);
                     } catch (Exception ex) {
                         // Logger.getLogger(MainGUI.class.getName()).log(Level.SEVERE, null, "Unable to load feature configuration from file");
@@ -745,6 +722,41 @@ private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
             }
 
         }
+    }
+
+    public void showOscPanel() {
+        panelMainTabs.setSelectedComponent(panelOSC);
+    }
+
+    public void showTrainRunPanel() {
+        panelMainTabs.setSelectedComponent(trainRunPanel1);
+    }
+
+    public void showFeatureConfigurationPanel() {
+        panelMainTabs.setSelectedComponent(panelTabFeatureConfiguration);
+    }
+
+    public void showLearningSystemPanel() {
+        panelMainTabs.setSelectedComponent(panelTabLearningSystemConfiguration);
+    }
+
+    protected void updatePanels() {
+        //TODO:
+        //make sure changes upstream invalidate downstream?
+        //check each step -- that changing feat config necessitates valid update to learning system
+        //Also make sure that panel changes automatically
+
+        OscHandler h = OscHandler.getOscHandler();
+        boolean connected = (h.getConnectionState() == OscHandler.ConnectionState.CONNECTED);
+        boolean featValid = WekinatorInstance.getWekinatorInstance().getFeatureConfiguration() != null && (ChuckSystem.getChuckSystem().state == ChuckSystem.ChuckSystemState.CONNECTED_AND_VALID);
+        boolean learnValid = WekinatorInstance.getWekinatorInstance().getLearningSystem() != null && (ChuckSystem.getChuckSystem().state == ChuckSystem.ChuckSystemState.CONNECTED_AND_VALID);
+        setFeatureConfigurationPanelEnabled(connected);
+        setLearningSystemConfigurationPanelEnabled(connected && featValid);
+        setTrainRunPanelEnabled(isConnected && featValid && learnValid);
+    }
+
+    protected void updateMenus() {
+        //Enable appropriate menus: TODO
     }
 
     protected void updateGUIforOscStatus() {
@@ -767,11 +779,12 @@ private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
             buttonOscConnect.setEnabled(true);
         }
 
-        setFeatureConfigurationPanelEnabled(isConnected);
+        /*  setFeatureConfigurationPanelEnabled(isConnected);
         if (!isConnected) {
-          //  setLearningSystemConfigurationPanelEnabled(false);
+        //  setLearningSystemConfigurationPanelEnabled(false);
         //   setTrainRunPanelEnabled(false);
-        }
+        } */
+        updatePanels();
 
 
     }
@@ -788,9 +801,18 @@ private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
             ((HidSetup) evt.getOldValue()).removePropertyChangeListener(hidSetupChangeListener);
             ((HidSetup) evt.getNewValue()).addPropertyChangeListener(hidSetupChangeListener);
         } else if (evt.getPropertyName().equals(WekinatorInstance.PROP_FEATURECONFIGURATION)) {
-            boolean e = (WekinatorInstance.getWekinatorInstance().getFeatureConfiguration() != null);
-            System.out.println("enabling feat " + e);
-            menuItemViewFeatures.setEnabled(e);
+            // boolean e = (WekinatorInstance.getWekinatorInstance().getFeatureConfiguration() != null);
+            //  System.out.println("enabling feat " + e);
+            //  menuItemViewFeatures.setEnabled(e);
+            updatePanels();
+            updateMenus();
+        } else if (evt.getPropertyName().equals(WekinatorInstance.PROP_LEARNINGSYSTEM)) {
+            System.out.println("learning system changed");
+            if (WekinatorInstance.getWekinatorInstance().getLearningSystem() != null) {
+                showTrainRunPanel();
+            }
+            updatePanels();
+            updateMenus();
         }
     }
 
@@ -799,45 +821,51 @@ private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
         if (evt.getPropertyName().equals(ChuckSystem.PROP_STATE)) {
             ChuckSystem cs = ChuckSystem.getChuckSystem();
             updateGUIforChuckSystem();
+            updatePanels();
+            updateMenus();
             // panelTabLearningSystemConfiguration.setEnabled(cs.getState() == ChuckSystem.ChuckSystemState.CONNECTED_AND_VALID);
             if (evt.getOldValue() != ChuckSystem.ChuckSystemState.CONNECTED_AND_VALID && evt.getNewValue() == ChuckSystem.ChuckSystemState.CONNECTED_AND_VALID) {
-              //  learningSystemConfigurationPanel.configure(cs.getNumParams(), cs.getParamNames(), cs.isIsParamDiscrete(), WekinatorInstance.getWekinatorInstance().getFeatureConfiguration());
+                //  learningSystemConfigurationPanel.configure(cs.getNumParams(), cs.getParamNames(), cs.isIsParamDiscrete(), WekinatorInstance.getWekinatorInstance().getFeatureConfiguration());
                 //WekinatorInstance.getWekinatorInstance().setNumParams(cs.getNumParams());
                 //WekinatorInstance.getWekinatorInstance().setParamNames(
 
-                panelMainTabs.setSelectedComponent(panelTabLearningSystemConfiguration);
-                if (WekinatorRunner.getLearningSystemFile() != null) {
-                    try {
-                        LearningSystem ls = LearningSystem.readFromFile(WekinatorRunner.getLearningSystemFile());
-                       if (WekinatorInstance.getWekinatorInstance().canUse(ls))
-                        {
-                        WekinatorInstance.getWekinatorInstance().setLearningSystem(ls);
-                        
-                            learningSystemConfigurationPanel.setLearningSystem(ls);
-                            panelMainTabs.setSelectedComponent(trainRunPanel1);
-                            if (WekinatorRunner.runAutomatically) {
-                            //trainRunPanel1.
-                             //if can run:
-                             //TODO
-                                if (trainRunPanel1.canRun()) {
-                                    trainRunPanel1.startAutoRun(); //put elsewhere
-                                    if (WekinatorRunner.isMinimizeOnRun()) {
-                                         this.setState(Frame.ICONIFIED);
-                                    }
+                if (WekinatorInstance.getWekinatorInstance().getLearningSystem() == null) {
+                    panelMainTabs.setSelectedComponent(panelTabLearningSystemConfiguration);
+
+                    if (WekinatorRunner.getLearningSystemFile() != null) {
+                        try {
+                            LearningSystem ls = LearningSystem.readFromFile(WekinatorRunner.getLearningSystemFile());
+                            if (WekinatorInstance.getWekinatorInstance().canUse(ls)) {
+                                WekinatorInstance.getWekinatorInstance().setLearningSystem(ls);
+
+                                learningSystemConfigurationPanel.setLearningSystem(ls);
+                                panelMainTabs.setSelectedComponent(trainRunPanel1);
+                                if (WekinatorRunner.runAutomatically) {
+                                    //trainRunPanel1.
+                                    //if can run:
+                                    //TODO
+                                    if (trainRunPanel1.canRun()) {
+                                        trainRunPanel1.startAutoRun(); //put elsewhere
+                                        if (WekinatorRunner.isMinimizeOnRun()) {
+                                            this.setState(Frame.ICONIFIED);
+                                        }
                                     } else {
                                         System.out.println("Cannot run automatically: learning system not ready");
-                                        }
-                            
-                            }
-                        } else {
-                            //TODO: more info
-                            System.out.println("This learning system is not configured correctly");
-                        }
-                    } catch (Exception ex) {
-                                                Logger.getLogger(MainGUI.class.getName()).log(Level.SEVERE, "Could not load learning system from file");
+                                    }
 
-                        Logger.getLogger(MainGUI.class.getName()).log(Level.WARNING, null, ex);
+                                }
+                            } else {
+                                //TODO: more info
+                                System.out.println("This learning system is not configured correctly");
+                            }
+                        } catch (Exception ex) {
+                            Logger.getLogger(MainGUI.class.getName()).log(Level.SEVERE, "Could not load learning system from file");
+
+                            Logger.getLogger(MainGUI.class.getName()).log(Level.WARNING, null, ex);
+                        }
                     }
+                } else {
+                    showTrainRunPanel();
                 }
             }
         }
@@ -845,16 +873,15 @@ private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
     }
 
     private void updateGUIforChuckSystem() {
-      //  setLearningSystemConfigurationPanelEnabled(ChuckSystem.getChuckSystem().getState() == ChuckSystem.ChuckSystemState.CONNECTED_AND_VALID); //TODO ABC
-            setLearningSystemConfigurationPanelEnabled(true);
+        //  setLearningSystemConfigurationPanelEnabled(ChuckSystem.getChuckSystem().getState() == ChuckSystem.ChuckSystemState.CONNECTED_AND_VALID); //TODO ABC
+        //  setLearningSystemConfigurationPanelEnabled(true);
     }
 
     private void setFeatureConfigurationPanelEnabled(boolean enabled) {
         //panelMainTabs.setEnabledAt(panelMainTabs.indexOfComponent(panelTabFeatureConfiguration), enabled);
-         panelMainTabs.setEnabledAt(panelMainTabs.indexOfComponent(panelTabFeatureConfiguration), true);
+        panelMainTabs.setEnabledAt(panelMainTabs.indexOfComponent(panelTabFeatureConfiguration), enabled);
 
     }
-
 
     private void setLearningSystemConfigurationPanelEnabled(boolean enabled) {
         panelMainTabs.setEnabledAt(panelMainTabs.indexOfComponent(panelTabLearningSystemConfiguration), enabled);

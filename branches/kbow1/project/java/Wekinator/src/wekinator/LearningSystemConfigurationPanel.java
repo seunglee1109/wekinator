@@ -36,7 +36,7 @@ public class LearningSystemConfigurationPanel extends javax.swing.JPanel {
     protected FeatureConfiguration featureConfiguration = null;
     protected LearningSystem learningSystem = null;
     protected Logger logger = Logger.getLogger(LearningSystemConfigurationPanel.class.getName());
-
+    protected MainGUI mainGui = null;
 
     //Call this when chuck system set & reset (this panel can be persistant)
     public void configure(int numParams, String[] paramNames,
@@ -49,6 +49,9 @@ public class LearningSystemConfigurationPanel extends javax.swing.JPanel {
         this.setLearningSystem(new LearningSystem(numParams));
     }
 
+    public void setMainGUI(MainGUI m) {
+        mainGui = m;
+    }
     public LearningSystem getLearningSystem() {
         return learningSystem;
     }
@@ -354,6 +357,7 @@ public class LearningSystemConfigurationPanel extends javax.swing.JPanel {
     //} catch (ClassNotFoundException ex) {
     //    Logger.getLogger(FeatureConfigurationPanel.class.getName()).log(Level.SEVERE, null, ex);
     // }
+        mainGui.showTrainRunPanel();
 
     }//GEN-LAST:event_buttonGoActionPerformed
 

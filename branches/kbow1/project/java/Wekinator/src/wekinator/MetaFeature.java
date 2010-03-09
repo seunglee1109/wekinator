@@ -170,6 +170,11 @@ class History extends MetaFeature {
         return n;
     }
 
+    //Hack: Update list when global size is changed
+    public void updateSize() {
+        initList();
+    }
+
     private void initList() {
         while (history.size() < n) {
             history.add(0.);

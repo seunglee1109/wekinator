@@ -146,9 +146,13 @@ public class FeatureExtractionController {
         } else {
             int numTotal = fc.getNumBaseFeaturesEnabled();
             lastAllFeatures = new double[numTotal];
-            numOscFeatures = fc.getNumCustomOscFeatures();
+            if (fc.isUseCustomOscFeatures()) {
+                numOscFeatures = fc.getNumCustomOscFeatures();
+            } else {
+                numOscFeatures = 0;
+            }
             lastOscFeatures = new double[numOscFeatures];
-            numChuckFeatures = numTotal - numOscFeatures;
+            numChuckFeatures = numTotal - numOscFeatures; 
             lastChuckFeatures = new double[numChuckFeatures];
         }
     }

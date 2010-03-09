@@ -47,6 +47,7 @@ public class BuildPanel extends javax.swing.JPanel {
             datasetChanged(e);
         }
     };
+    
     ChangeListener paramsChangeListener = new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
             paramsChanged(e);

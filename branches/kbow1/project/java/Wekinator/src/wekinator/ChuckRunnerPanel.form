@@ -117,7 +117,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="labelStatus">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Status: "/>
+        <Property name="text" type="java.lang.String" value="Chuck status: "/>
       </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="buttonStop">

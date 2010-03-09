@@ -150,6 +150,8 @@ public class TrainPanel extends javax.swing.JPanel {
         }
 
         this.learningSystem = ls;
+
+        if (ls != null) {
         learningSystem.addPropertyChangeListener(learningSystemChangeListener);
         learningSystem.addLearnerChangeListener(learnerChangeListener);
 
@@ -161,6 +163,7 @@ public class TrainPanel extends javax.swing.JPanel {
         updateLearnersForNN();
         updateButtons();
         updateTrainingProgress(learningSystem.getTrainingProgress());
+        }
     }
 
     protected void updateLearnersForNN() {

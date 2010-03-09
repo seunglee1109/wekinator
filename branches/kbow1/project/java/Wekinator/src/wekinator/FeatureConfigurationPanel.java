@@ -563,9 +563,13 @@ public class FeatureConfigurationPanel extends javax.swing.JPanel {
         //This is low priority: min behavior should just destroy models if feats change AT ALL (i.e. names & nums not identical)
         //Best hting here is to compare names of features; if they match, then we're really identical.
 
+        //TODO ABC: We want to be able to re-set feature config to an identical config
+        //when chuck system needs to be reconnected!
+        //no user prompt necessary, but def must trigger chuck OSC communication AND re-enable panels when appropriate.
+
         boolean areEqual = FeatureConfiguration.equal(featureConfiguration, WekinatorInstance.getWekinatorInstance().getFeatureConfiguration());
 
-        //if (!areEqual) { //TODO: put this check back in; make sure appropriate panels still visible when they are equal and we don't change.
+        if (!areEqual && ChuckSystem.getChuckSystem().state == ChuckSystem.ChuckSystemState.CONNECTED_AND_VALID) { //TODO: put this check back in; make sure appropriate panels still visible when they are equal and we don't change.
 
             if (WekinatorInstance.getWekinatorInstance().getFeatureConfiguration() != null) {
                 int lResponse = JOptionPane.showConfirmDialog(this, "Are you sure you want to change your feature configuration?\n" + "This will destroy any existing trained models...", "", JOptionPane.YES_NO_OPTION);
@@ -573,11 +577,14 @@ public class FeatureConfigurationPanel extends javax.swing.JPanel {
                     return;
                 }
             }
+       // }
+        }
+        if (ChuckSystem.getChuckSystem().state != ChuckSystem.ChuckSystemState.CONNECTED_AND_VALID) {
                 //Then, set backup to the current configuration, and set the WekInst current to it as well
                 WekinatorInstance.getWekinatorInstance().setFeatureConfiguration(featureConfiguration);
                 labelFeatureStatus.setText("Feature configuration set; using " + featureConfiguration.getNumFeaturesEnabled() + " features.");
             
-       // }
+        }
     }//GEN-LAST:event_buttonGoActionPerformed
 
     private void buttonAddMetaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAddMetaActionPerformed
@@ -802,7 +809,7 @@ public class FeatureConfigurationPanel extends javax.swing.JPanel {
 
                 c.setVisible(true);
                 try {
-                    OscHandler.getOscHandler().startHandshake(6448, 6453);
+                    OscHandler.getOscHandler().startHandshake();
                 } catch (IOException ex) {
                     System.out.println("Handshake failed -- no chuck for you!");
                     Logger.getLogger(FeatureConfigurationPanel.class.getName()).log(Level.SEVERE, null, ex);

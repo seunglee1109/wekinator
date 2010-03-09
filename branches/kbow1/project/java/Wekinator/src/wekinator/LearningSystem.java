@@ -23,6 +23,7 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.EventListenerList;
 import org.jdesktop.swingworker.SwingWorker;
 import weka.core.Instance;
+import weka.core.Instances;
 import wekinator.util.SerializedFileUtil;
 
 /**
@@ -273,7 +274,7 @@ public class LearningSystem {
         this.trainResults[index] = newTrainResults;
         propertyChangeSupport.fireIndexedPropertyChange(PROP_TRAINRESULTS, index, oldTrainResults, newTrainResults);
     }
-    protected boolean isRunnable = true; //aa
+    protected boolean isRunnable = false;
     public static final String PROP_ISRUNNABLE = "isRunnable";
 
     /**
@@ -282,7 +283,7 @@ public class LearningSystem {
      * @return the value of isRunnable
      */
     public boolean isIsRunnable() {
-        return true;
+        return isRunnable;
     }
 
     /**
@@ -293,7 +294,6 @@ public class LearningSystem {
     protected void setIsRunnable(boolean isRunnable) {
         boolean oldIsRunnable = this.isRunnable;
         this.isRunnable = isRunnable;
-        this.isRunnable = true;
         propertyChangeSupport.firePropertyChange(PROP_ISRUNNABLE, oldIsRunnable, isRunnable);
     }
 
@@ -512,7 +512,11 @@ public class LearningSystem {
                     for (int i = 0; i < whichLearners.length; i++) {
                         if (whichLearners[i] && learners[i] != null) {
                             try {
-                                learners[i].train(dataset.getClassifiableInstances(i));
+                                Instances ii = dataset.getClassifiableInstances(i);
+                                if (ii.numInstances() == 0) {
+                                    throw new Exception("Param " + i + " has no recorded examples");
+                                }
+                                learners[i].train(ii);
                                 numTrained++;
                             } catch (InterruptedException ex) {
                                 System.out.println("I was cancelled");
@@ -628,7 +632,7 @@ public class LearningSystem {
     //should disallow this in GUI.
     protected void updateRunnable() {
         if (learners == null || learners.length == 0) {
-           // setIsRunnable(false);
+            setIsRunnable(false);
         }
 
         int numTrained = 0;
@@ -639,7 +643,7 @@ public class LearningSystem {
                 }
             }
         }
-       // setIsRunnable(numTrained > 0);
+        setIsRunnable(numTrained > 0);
     }
 
 
@@ -672,8 +676,9 @@ public class LearningSystem {
     }
     } */
     protected void updateTrainable() {
-        if (learners == null || learners.length == 0) {
+        if (learners == null || learners.length == 0 || dataset == null || datasetState != DatasetState.HAS_DATA) {
             setIsTrainable(false);
+            return;
         }
 
         int numInit = 0;
@@ -789,7 +794,7 @@ public class LearningSystem {
 
         this.learners[index] = newLearners;
         if (this.learners[index] != null) {
-            this.learners[index].addPropertyChangeListener(learnerChangeListener); //added here? YES 1st
+            this.learners[index].addPropertyChangeListener(learnerChangeListener); //added here?
         }
         //   updateInitializationState();
         updateTrainable();
@@ -923,6 +928,8 @@ public class LearningSystem {
 
         propertyChangeSupport.firePropertyChange(PROP_DATASET, oldDataset, dataset);
         updateDatasetState();
+        updateTrainable();
+        
     }
 
     public void computeTrainingAccuracyInBackground() throws Exception {
@@ -955,7 +962,7 @@ public class LearningSystem {
 
     public void computeCVAccuracyInBackground(int paramNum, int numFolds) {
         synchronized (this) {
-            if (isRunnable && !isEvaluating) {
+            if (isTrainable && !isEvaluating) {
               //  isEvaluating = true;
                 setIsEvaluating(true);
                 evaluationWorker = new EvaluationWorker();
@@ -1001,6 +1008,7 @@ public class LearningSystem {
     protected void datasetChanged(PropertyChangeEvent evt) {
         if (evt.getPropertyName().equals(SimpleDataset.PROP_HASINSTANCES)) {
             updateDatasetState();
+            updateTrainable();
         }
     }
 
@@ -1315,7 +1323,7 @@ public class LearningSystem {
                 algs[j] = null;
             }
         }
-        
+
         ls.setLearners(algs);
         int flag = i.readInt();
         if (flag == 0) {
@@ -1324,6 +1332,9 @@ public class LearningSystem {
             SimpleDataset ds = SimpleDataset.loadFromInputStream(i);
             ls.setDataset(ds);
         }
+        ls.updateDatasetState();
+        ls.updateTrainable();
+        ls.updateRunnable();
         return ls;
 
     }

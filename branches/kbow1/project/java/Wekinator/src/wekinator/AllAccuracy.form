@@ -8,7 +8,7 @@
   <Properties>
     <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
       <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-        <TitledBorder title="Compute Accuracy"/>
+        <TitledBorder title="Evaluate Accuracy"/>
       </Border>
     </Property>
   </Properties>
@@ -30,29 +30,21 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="scrollOutputPanel" alignment="0" pref="305" max="32767" attributes="1"/>
-                  <Group type="103" alignment="0" groupAlignment="0" attributes="0">
-                      <Group type="103" alignment="1" groupAlignment="1" attributes="0">
-                          <Component id="radioTraining" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="radioCV" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="comboNumFolds" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="buttonCompute" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="buttonCancel" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                      </Group>
-                      <Component id="labelFoldStatus" alignment="0" min="-2" pref="273" max="-2" attributes="0"/>
-                      <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
-                          <Component id="progressBar" alignment="0" max="32767" attributes="1"/>
-                          <Component id="labelErrorStatus" alignment="0" pref="273" max="32767" attributes="1"/>
-                      </Group>
-                      <Component id="labelModelStatus" alignment="0" min="-2" pref="287" max="-2" attributes="0"/>
-                      <Component id="labelResultsHeader" alignment="0" min="-2" pref="287" max="-2" attributes="1"/>
+                  <Component id="buttonComputeTrain" alignment="0" min="-2" pref="358" max="-2" attributes="0"/>
+                  <Component id="scrollOutputPanel" alignment="0" pref="377" max="32767" attributes="1"/>
+                  <Component id="labelFoldStatus" alignment="0" min="-2" pref="273" max="-2" attributes="0"/>
+                  <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
+                      <Component id="progressBar" alignment="0" max="32767" attributes="1"/>
+                      <Component id="labelErrorStatus" alignment="0" min="-2" pref="273" max="-2" attributes="1"/>
                   </Group>
+                  <Component id="labelModelStatus" alignment="0" min="-2" pref="287" max="-2" attributes="0"/>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Component id="buttonComputeCV" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="comboNumFolds" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <Component id="buttonCancel" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="labelResultsHeader" alignment="0" min="-2" pref="339" max="-2" attributes="1"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -61,17 +53,15 @@
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="radioCV" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="buttonComputeCV" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="comboNumFolds" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="radioTraining" min="-2" max="-2" attributes="0"/>
+              <Component id="buttonComputeTrain" min="-2" pref="29" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="buttonCompute" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="buttonCancel" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
+              <Component id="buttonCancel" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="labelModelStatus" min="-2" pref="16" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
@@ -101,30 +91,13 @@
         </Property>
       </Properties>
     </Component>
-    <Component class="javax.swing.JButton" name="buttonCompute">
+    <Component class="javax.swing.JButton" name="buttonComputeTrain">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Compute"/>
+        <Property name="text" type="java.lang.String" value="Compute accuracy of existing model on training set"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonComputeActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonComputeTrainActionPerformed"/>
       </Events>
-    </Component>
-    <Component class="javax.swing.JRadioButton" name="radioCV">
-      <Properties>
-        <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
-          <ComponentRef name="buttonGroup1"/>
-        </Property>
-        <Property name="selected" type="boolean" value="true"/>
-        <Property name="text" type="java.lang.String" value="Cross-validation using "/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JRadioButton" name="radioTraining">
-      <Properties>
-        <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
-          <ComponentRef name="buttonGroup1"/>
-        </Property>
-        <Property name="text" type="java.lang.String" value="Training accuracy"/>
-      </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="labelModelStatus">
       <Properties>
@@ -133,7 +106,7 @@
     </Component>
     <Component class="javax.swing.JButton" name="buttonCancel">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Cancel"/>
+        <Property name="text" type="java.lang.String" value="Cancel evaluation"/>
         <Property name="enabled" type="boolean" value="false"/>
       </Properties>
       <Events>
@@ -175,6 +148,14 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="0 models encountered errors"/>
       </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="buttonComputeCV">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Compute cross-validation accuracy"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonComputeCVActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

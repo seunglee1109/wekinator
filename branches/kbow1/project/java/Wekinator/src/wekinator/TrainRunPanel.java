@@ -19,6 +19,8 @@ import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import wekinator.LearningSystem.*;
 import wekinator.util.OverwritePromptingFileChooser;
 import wekinator.util.Util;
@@ -29,6 +31,7 @@ import wekinator.util.Util;
  */
 public class TrainRunPanel extends javax.swing.JPanel {
 
+   // SimpleDataset dataset = null;
     LearningSystem ls = null;
     PropertyChangeListener learningSystemChangeListener = new PropertyChangeListener() {
 
@@ -36,6 +39,23 @@ public class TrainRunPanel extends javax.swing.JPanel {
             learningSystemChange(evt);
         }
     };
+
+    PropertyChangeListener lsDatasetChangeListener = new PropertyChangeListener() {
+        public void propertyChange(PropertyChangeEvent evt) {
+            lsDatasetChanged(evt);
+        }
+    };
+
+    ChangeListener datasetChangeListener = new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+            datasetChanged(e);
+        }
+    };
+
+    private void datasetChanged(ChangeEvent e) {
+        updateForDataset();
+    }
+            
 
     /** Creates new form TrainRunPanel */
     public TrainRunPanel() {
@@ -53,6 +73,11 @@ public class TrainRunPanel extends javax.swing.JPanel {
         });
 
 
+    }
+
+    //Called when a property of the dataset has changed
+    private void updateForDataset() {
+        setButtonsEnabled();
     }
 
     public enum Panes {
@@ -116,18 +141,31 @@ public class TrainRunPanel extends javax.swing.JPanel {
 
     //Called when WekinatorInstance learning system changes
     protected void setLearningSystem(LearningSystem ls) {
+        System.out.println("TRAIN RUN PANEL LS CHANGED");
         if (this.ls != null) {
             this.ls.removePropertyChangeListener(learningSystemChangeListener);
+         //   if (dataset != null) {
+         //       dataset.removeChangeListener(datasetChangeListener);
+         //   }
         }
         this.ls = ls;
         if (this.ls != null) {
             ls.addPropertyChangeListener(learningSystemChangeListener);
-            setButtonsEnabled();
+          //  dataset = ls.getDataset();
+          //  if (dataset != null) {
+          //      dataset.addChangeListener(datasetChangeListener);
+          //      updateForDataset();
+          //  }
+        } else {
+           // dataset = null;
         }
+
         buildPanel.setLearningSystem(ls);
         trainPanel.setLearningSystem(ls);
         runPanel.setLearningSystem(ls);
-       // editPanel.setLearningSystem(ls);
+
+        
+       // editPanel.setLearningSystem(ls); //this done in edit panel itself
         setCurrentPane(Panes.COLLECT);
         setButtonsEnabled();
     }
@@ -183,9 +221,22 @@ public class TrainRunPanel extends javax.swing.JPanel {
 
     private void learningSystemChange(PropertyChangeEvent evt) {
         if (evt.getPropertyName().equals(LearningSystem.PROP_ISTRAINABLE) || evt.getPropertyName().equals(LearningSystem.PROP_ISRUNNABLE)) {
-
             setButtonsEnabled();
+        } else if (evt.getPropertyName().equals(LearningSystem.PROP_DATASET)) {
+            lsDatasetChanged(evt);
         }
+    }
+
+    private void lsDatasetChanged(PropertyChangeEvent evt) {
+    /*  if (dataset != null) {
+            dataset.removeChangeListener(datasetChangeListener);
+        }
+
+        dataset = ls.getDataset();
+        if (dataset != null) {
+            dataset.addChangeListener(datasetChangeListener);
+            updateForDataset();
+        } */
     }
 
     /** This method is called from within the constructor to
@@ -289,7 +340,7 @@ public class TrainRunPanel extends javax.swing.JPanel {
             }
         });
 
-        buttonSave.setText("Save model file");
+        buttonSave.setText("Save learning system");
         buttonSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 buttonSaveActionPerformed(evt);

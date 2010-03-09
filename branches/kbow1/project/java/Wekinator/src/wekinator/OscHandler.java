@@ -149,6 +149,7 @@ public class OscHandler {
 
     private OscHandler() {
         // h.setOSCHandler(this); //TODO: get rid of this
+        
     }
 
     /*  private OscHandler(WekaOperator w, int receivePort, int sendPort) throws SocketException, UnknownHostException {
@@ -187,16 +188,11 @@ public class OscHandler {
 
     }
 
-    public void startHandshake(int rPort, int sPort) throws IOException {
-        /*if (receiver.isListening()) {
-        receiver.close();
-        } */ //TODO??
-
-        setReceivePort(rPort);
-        setSendPort(sPort);
-
+    public void setupOsc() throws IOException {
+        setReceivePort(WekinatorInstance.recvPort);
+        setSendPort(WekinatorInstance.sendPort);
         try {
-        receiver = new OSCPortIn(receivePort);
+            receiver = new OSCPortIn(receivePort);
         } catch (Exception ex) {
            JOptionPane.showMessageDialog(null, "Could not bind to port " + receivePort + ". Please quit all other instances of Wekiantor or change the receive port.", "Could not start listening", JOptionPane.ERROR_MESSAGE);
            return;
@@ -206,13 +202,9 @@ public class OscHandler {
         // System.out.println("Java sending on " + sendPort);
 
         OSCListener listener = new OSCListener() {
-
             public void acceptMessage(java.util.Date time, OSCMessage message) {
-             //   w.receivedHandshake();
-                // oldState = ConnectionState.CONNECTED;
                 setConnectionState(ConnectionState.CONNECTED);
                 myStatusMessage = "Connected";
-            //      notifyObservers();
             }
         };
 
@@ -225,29 +217,19 @@ public class OscHandler {
         addHidSetupBegunListener();
         addHidSetupStoppedListener();
         addSendHidInitValuesListener();
-        /*  addHidSettingsNumsListener();
-        addHidSettingsAxesListener();
-        addHidSettingsHatsListener();
-        addHidSettingsButtonsListener();
-        addHidSettingsMaskListener(); */
+
         addNumParamsListener();
         addChuckSettingsListener();
-                addPlayalongMessageListener();
+        addPlayalongMessageListener();
         addHidSettingsAllListener();
         addChuckSettingsArrayListener();
-                OscController.addListeners(receiver);
+        OscController.addListeners(receiver);
+        receiver.startListening(); 
+    }
 
-        receiver.startListening();
-
-
+    public void startHandshake() throws IOException {
         sendHandshakeMessage();
-
-        //  oldState = ConnectionState.CONNECTING;
-
-
         setConnectionState(ConnectionState.CONNECTING);
-    // notifyObservers();
-
     }
 
     public String getStatusMessage() {

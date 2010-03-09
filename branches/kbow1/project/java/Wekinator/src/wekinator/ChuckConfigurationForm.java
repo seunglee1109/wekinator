@@ -16,6 +16,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import wekinator.ChuckRunner.ChuckRunnerState;
 import wekinator.util.FileChooserWithExtension;
 import wekinator.util.OverwritePromptingFileChooser;
 import wekinator.util.Util;
@@ -818,6 +819,8 @@ public class ChuckConfigurationForm extends javax.swing.JFrame {
         setConfigurationFromForm();
         try {
             configuration.validate();
+            if (ChuckRunner.getRunnerState() != ChuckRunnerState.NOT_RUNNING)
+                JOptionPane.showMessageDialog(this, "You will have to restart ChucK on the main screen before your changes take effect.", "Changed configuration while chuck running", JOptionPane.INFORMATION_MESSAGE);
             this.dispose();
         //Valid: Give configuration to parent?
         // Save configuration & note location for next time?

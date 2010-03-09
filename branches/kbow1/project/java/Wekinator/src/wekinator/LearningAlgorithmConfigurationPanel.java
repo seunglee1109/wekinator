@@ -74,7 +74,7 @@ public class LearningAlgorithmConfigurationPanel extends javax.swing.JPanel {
     protected PropertyChangeListener learningChangeListener = new PropertyChangeListener() {
 
         public void propertyChange(PropertyChangeEvent evt) {
-            learningPropertyChange(evt);
+            learningPropertyChange(evt);  //def this happens
         }
     };
     protected JCheckBox[] featureBoxes = null;
@@ -353,7 +353,8 @@ public class LearningAlgorithmConfigurationPanel extends javax.swing.JPanel {
     private void loadLearnerFromFile(File f) {
         LearningAlgorithm l = null;
         try {
-            l = (LearningAlgorithm) SerializedFileUtil.readFromFile(f);
+            l = LearningAlgorithm.readFromFile(f);
+         //   l = (LearningAlgorithm) SerializedFileUtil.readFromFile(f);
         } catch (OptionalDataException ex) {
             Logger.getLogger(LearningAlgorithmConfigurationPanel.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(this, "Invalid learning algorithm file", "Could not load algorithm from file", JOptionPane.ERROR_MESSAGE);
@@ -366,8 +367,10 @@ public class LearningAlgorithmConfigurationPanel extends javax.swing.JPanel {
         }
         if (l != null) {
             //Make sure it's the type we need
-            if (l instanceof ClassifierLearningAlgorithm) {
+            if (l instanceof ClassifierLearningAlgorithm || l instanceof HmmLearningAlgorithm) {
                 if (discrete) {
+                    fileToLoadFrom = f;
+
                     setLoadedLearningAlgorithm(l);
                     setHasUsableLoadedFile(true);
                     Util.setLastFile(LearningAlgorithm.getFileExtension(), f);
@@ -377,10 +380,11 @@ public class LearningAlgorithmConfigurationPanel extends javax.swing.JPanel {
                 }
             } else if (l instanceof NNLearningAlgorithm) {
                 if (!discrete) {
+                                        fileToLoadFrom = f;
+
                     setLoadedLearningAlgorithm(l);
                     setHasUsableLoadedFile(true);
                     Util.setLastFile(LearningAlgorithm.getFileExtension(), f);
-
                 } else {
                     JOptionPane.showMessageDialog(this, "A real-valued learning algorithm may only be loaded for a real-valued parameter", "Could not load algorithm from file", JOptionPane.ERROR_MESSAGE);
                 }
@@ -1322,8 +1326,6 @@ public class LearningAlgorithmConfigurationPanel extends javax.swing.JPanel {
         setCurrentLearningAlgorithm(selected);
         setLoadedLearningAlgorithm(null);
         setCurrentLearningAlgorithmSelected();
-
-
     }
 
     public void setDisabled(boolean b) {

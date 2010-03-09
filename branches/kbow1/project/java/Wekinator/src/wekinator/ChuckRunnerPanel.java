@@ -85,7 +85,7 @@ public class ChuckRunnerPanel extends javax.swing.JPanel {
             }
         });
 
-        labelStatus.setText("Status: ");
+        labelStatus.setText("Chuck status: ");
 
         buttonStop.setText("Stop");
         buttonStop.setEnabled(false);

@@ -16,6 +16,7 @@ import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -23,6 +24,7 @@ import wekinator.LearningAlgorithms.AdaboostM1LearningAlgorithm;
 import wekinator.LearningAlgorithms.LearningAlgorithm;
 import wekinator.LearningAlgorithms.LearningAlgorithm.TrainingState;
 import wekinator.LearningAlgorithms.NNLearningAlgorithm;
+import wekinator.util.*;
 
 /**
  *
@@ -197,35 +199,35 @@ public class LearnerEditPanel extends javax.swing.JPanel {
         labelTrainingStatus = new javax.swing.JLabel();
         accuracyPanel = new wekinator.AllAccuracy();
 
-        jPanel9.setBorder(javax.swing.BorderFactory.createTitledBorder("Model settings"));
+        jPanel9.setBorder(javax.swing.BorderFactory.createTitledBorder("Edit model settings"));
 
-        labelLearnerDescription.setText("Using kNN, 3 features");
+        labelLearnerDescription.setText("Using kNN, 3 features"); // NOI18N
 
-        jButton15.setText("Change model type or load...");
+        jButton15.setText("Change model type or load..."); // NOI18N
         jButton15.setEnabled(false);
 
-        buttonRetrain.setText("Apply these settings");
+        buttonRetrain.setText("Apply these settings"); // NOI18N
         buttonRetrain.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 buttonRetrainActionPerformed(evt);
             }
         });
 
-        buttonSaveLearner.setText("Save to file...");
+        buttonSaveLearner.setText("Save to file..."); // NOI18N
         buttonSaveLearner.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 buttonSaveLearnerActionPerformed(evt);
             }
         });
 
-        jButton1.setText("Undo changes");
+        jButton1.setText("Undo changes"); // NOI18N
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
 
-        checkNNGui.setText("View NN GUIs");
+        checkNNGui.setText("View NN GUIs"); // NOI18N
         checkNNGui.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 checkNNGuiActionPerformed(evt);
@@ -235,7 +237,7 @@ public class LearnerEditPanel extends javax.swing.JPanel {
         panelLearnerSettings.setLayout(new javax.swing.BoxLayout(panelLearnerSettings, javax.swing.BoxLayout.LINE_AXIS));
         panelLearnerSettings.add(sMOSettingsPanel1);
 
-        labelTrainingStatus.setText("jLabel1");
+        labelTrainingStatus.setText("jLabel1"); // NOI18N
 
         org.jdesktop.layout.GroupLayout jPanel9Layout = new org.jdesktop.layout.GroupLayout(jPanel9);
         jPanel9.setLayout(jPanel9Layout);
@@ -332,12 +334,25 @@ public class LearnerEditPanel extends javax.swing.JPanel {
 
     private void buttonSaveLearnerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonSaveLearnerActionPerformed
         //TODO: Show file chooser
-        File f = new File("test.out");
+        /*File f = new File("test.out");
         try {
             al.writeToFile(f);
         } catch (Exception ex) {
             //TODO: display warning popup
             Logger.getLogger(LearnerEditPanel.class.getName()).log(Level.SEVERE, null, ex);
+        } */
+            File file = Util.findSaveFile(LearningAlgorithm.getFileExtension(),
+                LearningAlgorithm.getFileTypeDescription(),
+                LearningAlgorithm.getDefaultLocation(),
+                this);
+        if (file != null) {
+            try {
+                al.writeToFile(file); //TODOTODOTODO: update last path on this.
+                Util.setLastFile(LearningAlgorithm.getFileExtension(), file);
+            } catch (Exception ex) {
+                Logger.getLogger(LearnerEditPanel.class.getName()).log(Level.INFO, null, ex);
+                JOptionPane.showMessageDialog(this, ex.getMessage(), "Could not save to file", JOptionPane.ERROR_MESSAGE);
+            }
         }
 }//GEN-LAST:event_buttonSaveLearnerActionPerformed
 

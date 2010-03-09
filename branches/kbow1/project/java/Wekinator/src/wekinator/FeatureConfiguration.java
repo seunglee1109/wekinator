@@ -994,6 +994,7 @@ public class FeatureConfiguration implements Serializable {
 
     public static FeatureConfiguration readFromInputStream(ObjectInputStream i) throws IOException, ClassNotFoundException {
         FeatureConfiguration fc = new FeatureConfiguration();
+        LinkedList<History> historyMfs =new LinkedList<History>();
         int savedVersion = 0;
 
         try {
@@ -1021,7 +1022,11 @@ public class FeatureConfiguration implements Serializable {
                         int numMeta = i.readInt();
                         for (int m = 0; m < numMeta; m++) {
                             MetaFeature.Type t = (MetaFeature.Type) i.readObject();
+
                             MetaFeature mf = MetaFeature.createForType(t, feat);
+                            if (t == MetaFeature.Type.HISTORY) {
+                                historyMfs.add((History)mf);
+                            }
                             list.add(mf);
                         }
                         feat.metaFeatures.set(d, list);
@@ -1101,7 +1106,11 @@ public class FeatureConfiguration implements Serializable {
 
         if (savedVersion >= 2) {
             int n = i.readInt();
-            History.n = n;
+            History.n = n; //doesn't work by itslef -- mfs already initialized the wrong way
+            for (History mf : historyMfs) {
+                mf.updateSize();
+            }
+
 
         }
 

@@ -29,6 +29,7 @@ public class FeatureViewer extends javax.swing.JFrame {
     public FeatureViewer() {
         initComponents();
         FeatureExtractionController.addPropertyChangeListener(new PropertyChangeListener() {
+
             public void propertyChange(PropertyChangeEvent evt) {
                 if (evt.getPropertyName().equals(FeatureExtractionController.PROP_EXTRACTING)) {
                     if (FeatureExtractionController.isExtracting()) {
@@ -39,19 +40,36 @@ public class FeatureViewer extends javax.swing.JFrame {
                 }
             }
         });
-        //TODO: add listener for learning system: when recording / running, don't enable this button.
-        //Also, update me when # or names of features change!
+        WekinatorInstance.getWekinatorInstance().addPropertyChangeListener(new PropertyChangeListener() {
+
+            public void propertyChange(PropertyChangeEvent evt) {
+                wekInstanceChanged(evt);
+            }
+        });
+    //TODO: add listener for learning system: when recording / running, don't enable this button.
+    //Also, update me when # or names of features change!
     }
 
     public void setNames(String[] names) {
         panelFeatures.removeAll();
-        viewers = new ParameterMiniViewer[names.length];
+        //viewers = new ParameterMiniViewer[names.length];
+        viewers = new ParameterMiniViewer[0]; //so don't have to synchronize for updateFeatures
+        ParameterMiniViewer[] tmps = new ParameterMiniViewer[names.length];
+
 
         for (int i = 0; i < names.length; i++) {
-            viewers[i] = new ParameterMiniViewer(names[i], 0.0);
-            viewers[i].setPreferredSize(new Dimension(409, 28));
+            tmps[i] = new ParameterMiniViewer(names[i], 0.0);
+            tmps[i].setPreferredSize(new Dimension(409, 28));
 
-            panelFeatures.add(viewers[i]);
+            panelFeatures.add(tmps[i]);
+        }
+        viewers = tmps;
+        repaint();
+    }
+
+    private void wekInstanceChanged(PropertyChangeEvent evt) {
+        if (evt.getPropertyName().equals(WekinatorInstance.PROP_FEATURECONFIGURATION)) {
+            setNames(WekinatorInstance.getWekinatorInstance().getFeatureConfiguration().getAllEnabledFeatureNames());
         }
     }
 

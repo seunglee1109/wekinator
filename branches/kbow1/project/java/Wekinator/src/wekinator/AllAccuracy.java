@@ -14,8 +14,6 @@ import java.awt.Dimension;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.text.DecimalFormat;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import wekinator.LearningAlgorithms.NNLearningAlgorithm;
 import wekinator.LearningSystem.EvalStatus;
 
@@ -52,12 +50,13 @@ public class AllAccuracy extends javax.swing.JPanel {
         this.learningSystem = ls;
         if (learningSystem != null) {
             learningSystem.addPropertyChangeListener(learningSystemChangeListener);
+                    updateEvalStatus(ls.getEvalStatus());
+                    updateParamPanelsForNumLearners();
+        updateButtons();
+
         }
 
-        updateParamPanelsForNumLearners();
-        updateButtons();
-        updateEvalStatus(ls.getEvalStatus());
-        System.out.println("null ? " + (ls == null));
+        
     }
 
     private void updateParamPanelsForNumLearners() {
@@ -97,8 +96,9 @@ public class AllAccuracy extends javax.swing.JPanel {
         }
         //} else {
            // System.out.println("NOT null at " + myParam);
-            buttonCompute.setEnabled(learningSystem != null && m == WekinatorLearningManager.Mode.NONE && learningSystem.isRunnable);
-            buttonCancel.setEnabled(m == WekinatorLearningManager.Mode.EVALUATING);
+        buttonComputeCV.setEnabled(learningSystem != null && m == WekinatorLearningManager.Mode.NONE && learningSystem.isTrainable);
+        buttonComputeTrain.setEnabled(learningSystem != null && m == WekinatorLearningManager.Mode.NONE && learningSystem.isRunnable);
+        buttonCancel.setEnabled(m == WekinatorLearningManager.Mode.EVALUATING);
         
        // }
         //TODO: add way to restrict cancellign to when it's me that is doing evaluating
@@ -156,6 +156,7 @@ public class AllAccuracy extends javax.swing.JPanel {
     }
 
     public AllAccuracy(int paramNum) {
+        System.out.println("NEW ALL ACCURACY CREATED");
             initComponents();
         myParam = paramNum;
       //  setGuiEvaluating(false);
@@ -214,7 +215,12 @@ public class AllAccuracy extends javax.swing.JPanel {
 
         } else if (evt.getPropertyName().equals(LearningSystem.PROP_ISTRAINABLE)) {
             updateButtons();
-        } /*else if (evt.getPropertyName().equals(LearningSystem.PROP_CVRESULTS)) {
+        } else if (evt.getPropertyName().equals(LearningSystem.PROP_ISRUNNABLE)) {
+            updateButtons();
+        }
+
+
+        /*else if (evt.getPropertyName().equals(LearningSystem.PROP_CVRESULTS)) {
             double[] results = learningSystem.getCvResults();
             updateResults(results, true);
            // for (int i = 0; i < numParams; i++) {
@@ -274,9 +280,7 @@ public class AllAccuracy extends javax.swing.JPanel {
 
         buttonGroup1 = new javax.swing.ButtonGroup();
         comboNumFolds = new javax.swing.JComboBox();
-        buttonCompute = new javax.swing.JButton();
-        radioCV = new javax.swing.JRadioButton();
-        radioTraining = new javax.swing.JRadioButton();
+        buttonComputeTrain = new javax.swing.JButton();
         labelModelStatus = new javax.swing.JLabel();
         buttonCancel = new javax.swing.JButton();
         progressBar = new javax.swing.JProgressBar();
@@ -286,28 +290,22 @@ public class AllAccuracy extends javax.swing.JPanel {
         parameterMiniViewer1 = new wekinator.ParameterMiniViewer();
         labelFoldStatus = new javax.swing.JLabel();
         labelErrorStatus = new javax.swing.JLabel();
+        buttonComputeCV = new javax.swing.JButton();
 
-        setBorder(javax.swing.BorderFactory.createTitledBorder("Compute Accuracy"));
+        setBorder(javax.swing.BorderFactory.createTitledBorder("Evaluate Accuracy"));
 
         comboNumFolds.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "2 folds", "5 folds", "10 folds" }));
 
-        buttonCompute.setText("Compute");
-        buttonCompute.addActionListener(new java.awt.event.ActionListener() {
+        buttonComputeTrain.setText("Compute accuracy of existing model on training set");
+        buttonComputeTrain.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonComputeActionPerformed(evt);
+                buttonComputeTrainActionPerformed(evt);
             }
         });
 
-        buttonGroup1.add(radioCV);
-        radioCV.setSelected(true);
-        radioCV.setText("Cross-validation using ");
-
-        buttonGroup1.add(radioTraining);
-        radioTraining.setText("Training accuracy");
-
         labelModelStatus.setText("Computing model 1 of 15...");
 
-        buttonCancel.setText("Cancel");
+        buttonCancel.setText("Cancel evaluation");
         buttonCancel.setEnabled(false);
         buttonCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -328,6 +326,13 @@ public class AllAccuracy extends javax.swing.JPanel {
 
         labelErrorStatus.setText("0 models encountered errors");
 
+        buttonComputeCV.setText("Compute cross-validation accuracy");
+        buttonComputeCV.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonComputeCVActionPerformed(evt);
+            }
+        });
+
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -335,38 +340,32 @@ public class AllAccuracy extends javax.swing.JPanel {
             .add(layout.createSequentialGroup()
                 .addContainerGap()
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(scrollOutputPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 305, Short.MAX_VALUE)
-                    .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                        .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                            .add(org.jdesktop.layout.GroupLayout.LEADING, radioTraining)
-                            .add(org.jdesktop.layout.GroupLayout.LEADING, layout.createSequentialGroup()
-                                .add(radioCV)
-                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                .add(comboNumFolds, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                            .add(org.jdesktop.layout.GroupLayout.LEADING, layout.createSequentialGroup()
-                                .add(buttonCompute)
-                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                .add(buttonCancel)))
-                        .add(labelFoldStatus, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 273, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING, false)
-                            .add(org.jdesktop.layout.GroupLayout.LEADING, progressBar, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .add(org.jdesktop.layout.GroupLayout.LEADING, labelErrorStatus, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 273, Short.MAX_VALUE))
-                        .add(labelModelStatus, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 287, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .add(labelResultsHeader, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 287, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+                    .add(buttonComputeTrain, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 358, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(scrollOutputPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 377, Short.MAX_VALUE)
+                    .add(labelFoldStatus, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 273, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING, false)
+                        .add(org.jdesktop.layout.GroupLayout.LEADING, progressBar, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .add(org.jdesktop.layout.GroupLayout.LEADING, labelErrorStatus, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 273, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                    .add(labelModelStatus, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 287, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(layout.createSequentialGroup()
+                        .add(buttonComputeCV)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(comboNumFolds, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                    .add(buttonCancel)
+                    .add(labelResultsHeader, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 339, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
+                .addContainerGap()
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(radioCV)
+                    .add(buttonComputeCV)
                     .add(comboNumFolds, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(radioTraining)
+                .add(buttonComputeTrain, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 29, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(buttonCompute)
-                    .add(buttonCancel))
+                .add(buttonCancel)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(labelModelStatus, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 16, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
@@ -383,9 +382,30 @@ public class AllAccuracy extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void buttonComputeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonComputeActionPerformed
+    private void buttonComputeTrainActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonComputeTrainActionPerformed
         //Determine setup
-        if (radioCV.isSelected()) {
+       int numFolds = -1;
+
+            //try {
+                if (myParam == -1 && learningSystem != null) {
+                   WekinatorLearningManager.getInstance().computeTrainingAccuracyInBackground();
+                } else if (learningSystem != null) {
+                    WekinatorLearningManager.getInstance().computeTrainingAccuracyInBackground(myParam);
+                }
+             //   setGuiEvaluating(true);
+            //} catch (Exception ex) {
+            //    Logger.getLogger(AllAccuracy.class.getName()).log(Level.SEVERE, null, ex);
+           // }
+           // setGuiEvaluating(true);
+        
+
+}//GEN-LAST:event_buttonComputeTrainActionPerformed
+
+    private void buttonCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonCancelActionPerformed
+        WekinatorLearningManager.getInstance().stopEvaluating();
+}//GEN-LAST:event_buttonCancelActionPerformed
+
+    private void buttonComputeCVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonComputeCVActionPerformed
             int numFolds = 10;
             if (comboNumFolds.getSelectedIndex() == 0) {
                 numFolds = 2;
@@ -410,28 +430,13 @@ public class AllAccuracy extends javax.swing.JPanel {
            // } catch (Exception ex) {
            //     Logger.getLogger(AllAccuracy.class.getName()).log(Level.SEVERE, null, ex);
            // }
-        } else {
-            //try {
-                if (myParam == -1 && learningSystem != null) {
-                   WekinatorLearningManager.getInstance().computeTrainingAccuracyInBackground();
-                } else if (learningSystem != null) {
-                    WekinatorLearningManager.getInstance().computeTrainingAccuracyInBackground(myParam);
-                }
-             //   setGuiEvaluating(true);
-            //} catch (Exception ex) {
-            //    Logger.getLogger(AllAccuracy.class.getName()).log(Level.SEVERE, null, ex);
-           // }
-           // setGuiEvaluating(true);
-        }
 
-}//GEN-LAST:event_buttonComputeActionPerformed
+}//GEN-LAST:event_buttonComputeCVActionPerformed
 
-    private void buttonCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonCancelActionPerformed
-        WekinatorLearningManager.getInstance().stopEvaluating();
-}//GEN-LAST:event_buttonCancelActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buttonCancel;
-    private javax.swing.JButton buttonCompute;
+    private javax.swing.JButton buttonComputeCV;
+    private javax.swing.JButton buttonComputeTrain;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JComboBox comboNumFolds;
     private javax.swing.JLabel labelErrorStatus;
@@ -441,8 +446,6 @@ public class AllAccuracy extends javax.swing.JPanel {
     private javax.swing.JPanel panelOutputs;
     private wekinator.ParameterMiniViewer parameterMiniViewer1;
     private javax.swing.JProgressBar progressBar;
-    private javax.swing.JRadioButton radioCV;
-    private javax.swing.JRadioButton radioTraining;
     private javax.swing.JScrollPane scrollOutputPanel;
     // End of variables declaration//GEN-END:variables
 }

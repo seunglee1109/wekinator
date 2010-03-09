@@ -371,7 +371,7 @@ public class WekinatorLearningManager {
     }
 
     private void resetTrainingMask(int numParams) {
-       boolean[] newMask = new boolean[WekinatorInstance.getWekinatorInstance().getNumParams()];
+       boolean[] newMask = new boolean[numParams];
        for (int i = 0; i < newMask.length; i++) {
             newMask[i] = true;
        }

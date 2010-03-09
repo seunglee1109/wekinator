@@ -307,6 +307,7 @@ public class ChuckRunner {
 
         logger.log(Level.INFO, "Attempted to kill chuck");
         setRunnerState(ChuckRunnerState.NOT_RUNNING);
+        ChuckSystem.getChuckSystem().waitForNewSettings();
     }
 
     public void restart() throws IOException {

@@ -191,7 +191,7 @@
     </Component>
     <Component class="javax.swing.JButton" name="buttonSave">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Save model file"/>
+        <Property name="text" type="java.lang.String" value="Save learning system"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonSaveActionPerformed"/>

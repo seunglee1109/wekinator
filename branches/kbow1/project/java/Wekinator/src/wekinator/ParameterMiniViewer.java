@@ -35,6 +35,7 @@ public class ParameterMiniViewer extends javax.swing.JPanel {
         initComponents();
         setValue(value);
         labelParamName.setText(name + ":");
+        
     }
 
         public void setValue(String s) {

@@ -88,6 +88,9 @@ public abstract class ClassifierLearningAlgorithm extends LearningAlgorithm {
     }
 
     public double computeCVAccuracy(int numFolds, Instances instances) throws Exception {
+        if (instances.numInstances() == 0) {
+            throw new Exception("Parameter has no recorded examples");
+        }
         if (getTrainingState() != TrainingState.TRAINING) {
              //          Thread.sleep(3000);
 
