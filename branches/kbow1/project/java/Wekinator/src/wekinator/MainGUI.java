@@ -7,6 +7,7 @@
 package wekinator;
 
 import drawing.GraphDataViewFrame;
+import java.awt.BorderLayout;
 import java.awt.Frame;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -14,6 +15,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import wekinator.ChuckRunner.ChuckRunnerState;
@@ -28,6 +31,9 @@ public class MainGUI extends javax.swing.JFrame {
 
     WekinatorInstance wek = WekinatorInstance.getWekinatorInstance();
     boolean isConnected = false;
+    public static boolean MAC_OS_X = (System.getProperty("os.name").toLowerCase().startsWith("mac os x"));
+    protected JDialog aboutBox, prefs;
+    
     PropertyChangeListener hidSetupChangeListener = new PropertyChangeListener() {
 
         public void propertyChange(PropertyChangeEvent evt) {
@@ -38,6 +44,27 @@ public class MainGUI extends javax.swing.JFrame {
     /** Creates new form Bigger1 */
     public MainGUI() {
         initComponents();
+
+        //Prefs stuff
+        // set up a simple about box
+        aboutBox = new JDialog(this, "About Wekinator");
+        aboutBox.getContentPane().setLayout(new BorderLayout());
+        aboutBox.getContentPane().add(new JLabel("Wekinator", JLabel.CENTER));
+        aboutBox.getContentPane().add(new JLabel("a project by Rebecca Fiebrink, Princeton University, 2010", JLabel.CENTER), BorderLayout.SOUTH);
+
+        aboutBox.setSize(460, 120);
+        aboutBox.setResizable(false);
+
+        // Preferences dialog lets you select the background color when displaying an image
+        prefs = new JDialog(this, "Wekinator Preferences");
+        prefs.getContentPane().setLayout(new BorderLayout());
+        prefs.getContentPane().add(new JLabel("There is nothing to prefer at this time.", JLabel.CENTER));
+        prefs.setSize(360, 120);
+        prefs.setResizable(false);
+
+        registerForMacOSXEvents();
+
+
         learningSystemConfigurationPanel.setMainGUI(this);
         //Anywhere we add a listener, also update to current property.
 
@@ -94,6 +121,50 @@ public class MainGUI extends javax.swing.JFrame {
         updatePanels();
         updateMenus();
     }
+
+     // Generic registration with the Mac OS X application menu
+    // Checks the platform, then attempts to register with the Apple EAWT
+    // See OSXAdapter.java to see how this is done without directly referencing any Apple APIs
+    public void registerForMacOSXEvents() {
+        if (MAC_OS_X) {
+            try {
+                // Generate and register the OSXAdapter, passing it a hash of all the methods we wish to
+                // use as delegates for various com.apple.eawt.ApplicationListener methods
+                OSXAdapter.setQuitHandler(this, getClass().getDeclaredMethod("quit", (Class[])null));
+                OSXAdapter.setAboutHandler(this, getClass().getDeclaredMethod("about", (Class[])null));
+                OSXAdapter.setPreferencesHandler(this, getClass().getDeclaredMethod("preferences", (Class[])null));
+              //  OSXAdapter.setFileHandler(this, getClass().getDeclaredMethod("loadImageFile", new Class[] { String.class }));
+            } catch (Exception e) {
+                System.err.println("Error while loading the OSXAdapter:");
+                e.printStackTrace();
+            }
+        }
+    }
+
+    // General info dialog; fed to the OSXAdapter as the method to call when
+    // "About OSXAdapter" is selected from the application menu
+    public void about() {
+        aboutBox.setLocation((int)this.getLocation().getX() + 22, (int)this.getLocation().getY() + 22);
+        aboutBox.setVisible(true);
+    }
+
+    // General preferences dialog; fed to the OSXAdapter as the method to call when
+    // "Preferences..." is selected from the application menu
+    public void preferences() {
+        prefs.setLocation((int)this.getLocation().getX() + 22, (int)this.getLocation().getY() + 22);
+        prefs.setVisible(true);
+    }
+
+     // General quit handler; fed to the OSXAdapter as the method to call when a system quit event occurs
+    // A quit event is triggered by Cmd-Q, selecting Quit from the application or Dock menu, or logging out
+    public boolean quit() {
+        int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to quit?", "Quit?", JOptionPane.YES_NO_OPTION);
+        if (option == JOptionPane.YES_OPTION) {
+            exit();
+        }
+        return (option == JOptionPane.YES_OPTION);
+    }
+
 
     private void runOscIfNeeded() {
         if (WekinatorRunner.chuckFile == null &&
@@ -173,9 +244,6 @@ public class MainGUI extends javax.swing.JFrame {
         learningSystemConfigurationPanel = new wekinator.LearningSystemConfigurationPanel();
         trainRunPanel1 = new wekinator.TrainRunPanel();
         menuBar = new javax.swing.JMenuBar();
-        wekMenu = new javax.swing.JMenu();
-        menuPreferences = new javax.swing.JMenuItem();
-        exitMenuItem = new javax.swing.JMenuItem();
         fileMenu = new javax.swing.JMenu();
         menuSaveLearningSystem = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
@@ -365,22 +433,6 @@ public class MainGUI extends javax.swing.JFrame {
 
         jScrollPane1.setViewportView(jPanel1);
 
-        wekMenu.setText("Wekinator");
-
-        menuPreferences.setText("Preferences");
-        menuPreferences.setEnabled(false);
-        wekMenu.add(menuPreferences);
-
-        exitMenuItem.setText("Exit");
-        exitMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                exitMenuItemActionPerformed(evt);
-            }
-        });
-        wekMenu.add(exitMenuItem);
-
-        menuBar.add(wekMenu);
-
         fileMenu.setText("File");
 
         menuSaveLearningSystem.setText("Save learning system");
@@ -553,10 +605,6 @@ private void panelMainTabsComponentShown(java.awt.event.ComponentEvent evt) {//G
 private void panelMainTabsStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_panelMainTabsStateChanged
 }//GEN-LAST:event_panelMainTabsStateChanged
 
-private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitMenuItemActionPerformed
-    exit();
-}//GEN-LAST:event_exitMenuItemActionPerformed
-
 private void exit() {
      if (FeatureExtractionController.isExtracting()) {
         FeatureExtractionController.stopExtracting();
@@ -694,7 +742,6 @@ private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:even
     private javax.swing.JButton buttonOscDisconnect;
     private wekinator.ChuckRunnerPanel chuckRunnerPanel1;
     private javax.swing.JMenuItem contentsMenuItem1;
-    private javax.swing.JMenuItem exitMenuItem;
     private wekinator.FeatureConfigurationPanel featureConfigurationPanel1;
     private javax.swing.JMenu fileMenu;
     private javax.swing.JMenu helpMenu1;
@@ -717,7 +764,6 @@ private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:even
     private javax.swing.JMenuItem menuItemViewDataset1;
     private javax.swing.JMenuItem menuItemViewFeatureViewer;
     private javax.swing.JMenuItem menuItemViewParamClipboard;
-    private javax.swing.JMenuItem menuPreferences;
     private javax.swing.JMenuItem menuSaveDataset;
     private javax.swing.JMenuItem menuSaveLearningSystem;
     private javax.swing.JTabbedPane panelMainTabs;
@@ -726,7 +772,6 @@ private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:even
     private javax.swing.JPanel panelTabLearningSystemConfiguration;
     private wekinator.TrainRunPanel trainRunPanel1;
     private javax.swing.JMenu viewMenu;
-    private javax.swing.JMenu wekMenu;
     // End of variables declaration//GEN-END:variables
 
     private void oscHandlerPropertyChange(PropertyChangeEvent evt) {
