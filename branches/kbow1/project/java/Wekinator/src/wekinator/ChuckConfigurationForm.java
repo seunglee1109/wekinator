@@ -392,7 +392,7 @@ public class ChuckConfigurationForm extends javax.swing.JFrame {
             }
         });
 
-        labelChuckExecutable.setText("/user/rebecca/stuff/core_chuck/");
+        labelChuckExecutable.setText("/Users/rebecca/PLOrk/bin/chuck");
 
         jLabel2.setText("Location of wekinator project directory:");
 
@@ -403,7 +403,7 @@ public class ChuckConfigurationForm extends javax.swing.JFrame {
             }
         });
 
-        labelCoreChuckDirectory.setText("/user/rebecca/stuff/core_chuck/");
+        labelCoreChuckDirectory.setText("/Users/rebecca/PLOrk/wekinator/project/");
 
         helpCoreChuck.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wekinator/info.png"))); // NOI18N
 
@@ -411,7 +411,7 @@ public class ChuckConfigurationForm extends javax.swing.JFrame {
         jLabel4.setText("This should be [something]/PLOrk/bin/chuck");
 
         jLabel6.setFont(new java.awt.Font("Lucida Grande", 2, 13)); // NOI18N
-        jLabel6.setText("This should be [something]/PLOrk/wekinator/");
+        jLabel6.setText("This should be [something]/PLOrk/wekinator/project");
 
         org.jdesktop.layout.GroupLayout jPanel2Layout = new org.jdesktop.layout.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -768,7 +768,8 @@ public class ChuckConfigurationForm extends javax.swing.JFrame {
         if (f != null) {
             try {
                 labelCoreChuckDirectory.setText(f.getCanonicalPath());
-                configuration.setChuckDir(f.getCanonicalPath());
+               // configuration.setChuckDir(f.getCanonicalPath());
+                configuration.setWekDir(f.getCanonicalPath());
 
             } catch (IOException ex) {
                 Logger.getLogger(ChuckConfigurationForm.class.getName()).log(Level.SEVERE, null, ex);
@@ -840,7 +841,7 @@ public class ChuckConfigurationForm extends javax.swing.JFrame {
     } */
     private File findChuckFile() {
         //Start looking in chuck dir if possible
-        File core_chuck = new File(configuration.getChuckDir());
+        File core_chuck = new File(configuration.getWekDir());
         String preferredPath = homePath;
         if (core_chuck.exists()) {
             preferredPath = core_chuck.getParent();
@@ -859,10 +860,17 @@ public class ChuckConfigurationForm extends javax.swing.JFrame {
 
     private File findCoreChuckDirectory() {
         //Start looking in chuck dir if possible
-        File core_chuck = new File(configuration.getChuckDir());
+        File wekdir = new File(configuration.getWekDir());
         String preferredPath = homePath;
-        if (core_chuck.exists()) {
-            preferredPath = core_chuck.getParent();
+        if (wekdir.exists()) {
+            preferredPath = wekdir.getAbsolutePath();
+        } else {
+            try {
+                File f = new File(Util.getCanonicalPath(new File("")));
+                preferredPath = f.getParentFile().getParentFile().getParentFile().getParentFile().getAbsolutePath();
+            } catch (Exception ex) {
+                preferredPath = Util.getCanonicalPath(new File(""));
+            }
         }
 
         JFileChooser fc = new JFileChooser(preferredPath);
@@ -954,7 +962,7 @@ public class ChuckConfigurationForm extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private void updateAllComponents() {
-        labelCoreChuckDirectory.setText(configuration.getChuckDir());
+        labelCoreChuckDirectory.setText(configuration.getWekDir());
         labelChuckExecutable.setText(configuration.getChuckExecutable());
         checkEnableCustomChuckFeature.getModel().setSelected(configuration.isCustomChuckFeatureExtractorEnabled());
 //        checkEnableOSCFeature.getModel().setSelected(configuration.isOscFeatureExtractorEnabled());

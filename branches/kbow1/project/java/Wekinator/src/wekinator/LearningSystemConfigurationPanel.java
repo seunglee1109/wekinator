@@ -154,7 +154,7 @@ public class LearningSystemConfigurationPanel extends javax.swing.JPanel {
             .add(panelSimpleTabLayout.createSequentialGroup()
                 .addContainerGap()
                 .add(jLabel1)
-                .addContainerGap(345, Short.MAX_VALUE))
+                .addContainerGap(387, Short.MAX_VALUE))
         );
         panelSimpleTabLayout.setVerticalGroup(
             panelSimpleTabLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -184,7 +184,7 @@ public class LearningSystemConfigurationPanel extends javax.swing.JPanel {
         panelAdvancedTabLayout.setHorizontalGroup(
             panelAdvancedTabLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(panelAdvancedTabLayout.createSequentialGroup()
-                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 433, Short.MAX_VALUE)
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 475, Short.MAX_VALUE)
                 .addContainerGap())
         );
         panelAdvancedTabLayout.setVerticalGroup(
@@ -224,7 +224,7 @@ public class LearningSystemConfigurationPanel extends javax.swing.JPanel {
             .add(layout.createSequentialGroup()
                 .addContainerGap()
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(paneTabSimpleAdvanced, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 460, Short.MAX_VALUE)
+                    .add(paneTabSimpleAdvanced, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 502, Short.MAX_VALUE)
                     .add(layout.createSequentialGroup()
                         .add(buttonLoad)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)

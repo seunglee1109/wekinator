@@ -194,7 +194,7 @@ public class OscHandler {
         try {
             receiver = new OSCPortIn(receivePort);
         } catch (Exception ex) {
-           JOptionPane.showMessageDialog(null, "Could not bind to port " + receivePort + ". Please quit all other instances of Wekiantor or change the receive port.", "Could not start listening", JOptionPane.ERROR_MESSAGE);
+           JOptionPane.showMessageDialog(null, "Could not bind to port " + receivePort + ". Please quit all other instances of Wekinator or change the receive port.", "Could not start listening", JOptionPane.ERROR_MESSAGE);
            return;
         }
         //  System.out.println("Java listening on " + receivePort);
@@ -916,7 +916,7 @@ public class OscHandler {
                     }
                     }
 
-                    System.out.println("received params from synth");
+                //    System.out.println("received params from synth");
                     WekinatorLearningManager.getInstance().setParams(d);
 
                 } catch (Exception ex) {

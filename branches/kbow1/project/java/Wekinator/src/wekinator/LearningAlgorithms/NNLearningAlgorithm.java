@@ -7,17 +7,12 @@ package wekinator.LearningAlgorithms;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JPanel;
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.Random;
 import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
 import weka.classifiers.functions.MultilayerPerceptron;
-import weka.core.Instance;
 import weka.core.Instances;
 import wekinator.LearningAlgorithms.LearningAlgorithm.TrainingState;
 
@@ -83,7 +78,19 @@ public class NNLearningAlgorithm extends ClassifierLearningAlgorithm {
     public double computeAccuracy(Instances instances) throws Exception {
        boolean oldUseGui = getClassifier().getGUI();
        getClassifier().setGUI(false);
-       double accuracy =  computeAccuracy(instances);
+       //double accuracy =  computeAccuracy(instances);
+       double accuracy = 0.0;
+       if (getTrainingState() == TrainingState.TRAINED) {
+         //   Thread.sleep(3000);
+
+            Evaluation eval = new Evaluation(instances);
+            eval.evaluateModel(getClassifier(), instances);
+            //  return eval.correct() / instances.numInstances(); //BAD: lowers accuracy when class missing
+            accuracy =  eval.errorRate();
+        } else {
+            throw new Exception("Cannot evaluate: Not trained");
+        }
+
        getClassifier().setGUI(oldUseGui);
        return accuracy;
     }

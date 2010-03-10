@@ -344,7 +344,7 @@ public class BuildPanel extends javax.swing.JPanel {
 
         labelPlayalongUpdate.setText("    ");
 
-        comboChooseScore.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Play score from parameter clipboard", "Play ChucK score" }));
+        comboChooseScore.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Play score from parameter clipboard" }));
 
         buttonPlayScore.setText("Start score");
         buttonPlayScore.addActionListener(new java.awt.event.ActionListener() {
@@ -688,7 +688,7 @@ public class BuildPanel extends javax.swing.JPanel {
             return;
         }
         if (p.length != paramPanels.length) {
-            System.out.println("***! plenght is " + p.length + ", paramPanels length is " + paramPanels.length);
+         //   System.out.println("***! plenght is " + p.length + ", paramPanels length is " + paramPanels.length);
             return;
         }
         for (int i = 0; i < paramPanels.length; i++) {

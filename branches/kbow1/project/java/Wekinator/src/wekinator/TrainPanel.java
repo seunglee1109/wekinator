@@ -259,7 +259,7 @@ public class TrainPanel extends javax.swing.JPanel {
         labelSelected = new javax.swing.JLabel();
         buttonUntrain = new javax.swing.JButton();
 
-        learnerMaskFrame.setTitle("Select features to use for this parameter");
+        learnerMaskFrame.setTitle("Select models to be trained");
 
         scrollPaneFeatures.setMinimumSize(new java.awt.Dimension(100, 100));
 

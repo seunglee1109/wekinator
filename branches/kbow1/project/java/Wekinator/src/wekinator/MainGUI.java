@@ -17,6 +17,7 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import wekinator.ChuckRunner.ChuckRunnerState;
+import wekinator.Plog.Msg;
 import wekinator.util.Util;
 
 /**
@@ -91,6 +92,7 @@ public class MainGUI extends javax.swing.JFrame {
         runOscIfNeeded();
         runChuckIfNeeded();
         updatePanels();
+        updateMenus();
     }
 
     private void runOscIfNeeded() {
@@ -153,18 +155,18 @@ public class MainGUI extends javax.swing.JFrame {
         buttonGroupClassifierSource = new javax.swing.ButtonGroup();
         buttonGroupSettingsSource = new javax.swing.ButtonGroup();
         buttonGroupProcessingSource = new javax.swing.ButtonGroup();
-        buttonQuit = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jPanel1 = new javax.swing.JPanel();
         panelMainTabs = new javax.swing.JTabbedPane();
         panelOSC = new javax.swing.JPanel();
+        jTabbedPane1 = new javax.swing.JTabbedPane();
+        jPanel8 = new javax.swing.JPanel();
+        chuckRunnerPanel1 = new wekinator.ChuckRunnerPanel();
         jPanel5 = new javax.swing.JPanel();
         buttonOscConnect = new javax.swing.JButton();
         buttonOscDisconnect = new javax.swing.JButton();
         labelOscStatus = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
-        jPanel8 = new javax.swing.JPanel();
-        chuckRunnerPanel1 = new wekinator.ChuckRunnerPanel();
         panelTabFeatureConfiguration = new javax.swing.JPanel();
         featureConfigurationPanel1 = new wekinator.FeatureConfigurationPanel();
         panelTabLearningSystemConfiguration = new javax.swing.JPanel();
@@ -172,20 +174,20 @@ public class MainGUI extends javax.swing.JFrame {
         trainRunPanel1 = new wekinator.TrainRunPanel();
         menuBar = new javax.swing.JMenuBar();
         wekMenu = new javax.swing.JMenu();
-        preferencesMenuItem = new javax.swing.JMenuItem();
+        menuPreferences = new javax.swing.JMenuItem();
         exitMenuItem = new javax.swing.JMenuItem();
         fileMenu = new javax.swing.JMenu();
-        menuSaveSystem = new javax.swing.JMenuItem();
+        menuSaveLearningSystem = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
-        jMenuItem3 = new javax.swing.JMenuItem();
+        menuSaveDataset = new javax.swing.JMenuItem();
         jMenuItem4 = new javax.swing.JMenuItem();
         jMenuItem1 = new javax.swing.JMenuItem();
         viewMenu = new javax.swing.JMenu();
         menuItemViewConsole = new javax.swing.JMenuItem();
-        menuItemViewFeatures = new javax.swing.JMenuItem();
+        menuItemViewFeatureViewer = new javax.swing.JMenuItem();
         menuItemViewDataset = new javax.swing.JMenuItem();
         menuItemViewDataset1 = new javax.swing.JMenuItem();
-        menuItemOtfScore = new javax.swing.JMenuItem();
+        menuItemViewParamClipboard = new javax.swing.JMenuItem();
         actionMenu = new javax.swing.JMenu();
         menuEndGesture = new javax.swing.JMenuItem();
         menuAllGesture = new javax.swing.JMenuItem();
@@ -196,17 +198,15 @@ public class MainGUI extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("The Wekinator");
         setMinimumSize(new java.awt.Dimension(300, 300));
-
-        buttonQuit.setText("Quit");
-        buttonQuit.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonQuitActionPerformed(evt);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
             }
         });
 
-        jScrollPane1.setPreferredSize(new java.awt.Dimension(500, 500));
+        jScrollPane1.setPreferredSize(new java.awt.Dimension(500, 600));
 
-        jPanel1.setPreferredSize(new java.awt.Dimension(700, 700));
+        jPanel1.setPreferredSize(new java.awt.Dimension(750, 750));
 
         panelMainTabs.setMinimumSize(new java.awt.Dimension(500, 500));
         panelMainTabs.setPreferredSize(new java.awt.Dimension(500, 500));
@@ -223,7 +223,26 @@ public class MainGUI extends javax.swing.JFrame {
 
         panelOSC.setPreferredSize(new java.awt.Dimension(500, 500));
 
-        jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder("OSC"));
+        jPanel8.setBorder(javax.swing.BorderFactory.createTitledBorder("Simple option: Run chuck backend from here"));
+
+        org.jdesktop.layout.GroupLayout jPanel8Layout = new org.jdesktop.layout.GroupLayout(jPanel8);
+        jPanel8.setLayout(jPanel8Layout);
+        jPanel8Layout.setHorizontalGroup(
+            jPanel8Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel8Layout.createSequentialGroup()
+                .add(chuckRunnerPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 434, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(351, Short.MAX_VALUE))
+        );
+        jPanel8Layout.setVerticalGroup(
+            jPanel8Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel8Layout.createSequentialGroup()
+                .add(chuckRunnerPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jTabbedPane1.addTab("Simple", jPanel8);
+
+        jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder("Advanced option: Connect to chuck backend running in terminal"));
 
         buttonOscConnect.setText("Connect");
         buttonOscConnect.addActionListener(new java.awt.event.ActionListener() {
@@ -242,7 +261,7 @@ public class MainGUI extends javax.swing.JFrame {
 
         labelOscStatus.setText("OSC Status: Not connected yet.");
 
-        jLabel1.setFont(new java.awt.Font("Lucida Grande", 2, 13)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Lucida Grande", 2, 13));
         jLabel1.setText("Manually connect only if you're running ChucK from command line");
 
         org.jdesktop.layout.GroupLayout jPanel5Layout = new org.jdesktop.layout.GroupLayout(jPanel5);
@@ -258,7 +277,7 @@ public class MainGUI extends javax.swing.JFrame {
                         .add(buttonOscDisconnect))
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel5Layout.createSequentialGroup()
                         .add(23, 23, 23)
-                        .add(labelOscStatus, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 438, Short.MAX_VALUE))
+                        .add(labelOscStatus, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 756, Short.MAX_VALUE))
                     .add(jPanel5Layout.createSequentialGroup()
                         .addContainerGap()
                         .add(jLabel1)))
@@ -268,7 +287,7 @@ public class MainGUI extends javax.swing.JFrame {
             jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel5Layout.createSequentialGroup()
                 .add(jLabel1)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 14, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 181, Short.MAX_VALUE)
                 .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(buttonOscConnect)
                     .add(buttonOscDisconnect))
@@ -277,39 +296,19 @@ public class MainGUI extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        jPanel8.setBorder(javax.swing.BorderFactory.createTitledBorder("ChucK (experimental & optional!)"));
-
-        org.jdesktop.layout.GroupLayout jPanel8Layout = new org.jdesktop.layout.GroupLayout(jPanel8);
-        jPanel8.setLayout(jPanel8Layout);
-        jPanel8Layout.setHorizontalGroup(
-            jPanel8Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanel8Layout.createSequentialGroup()
-                .add(chuckRunnerPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 806, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-        jPanel8Layout.setVerticalGroup(
-            jPanel8Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanel8Layout.createSequentialGroup()
-                .add(chuckRunnerPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+        jTabbedPane1.addTab("Advanced", jPanel5);
 
         org.jdesktop.layout.GroupLayout panelOSCLayout = new org.jdesktop.layout.GroupLayout(panelOSC);
         panelOSC.setLayout(panelOSCLayout);
         panelOSCLayout.setHorizontalGroup(
             panelOSCLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanel8, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .add(panelOSCLayout.createSequentialGroup()
-                .add(jPanel5, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(345, Short.MAX_VALUE))
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, panelOSCLayout.createSequentialGroup()
+                .addContainerGap()
+                .add(jTabbedPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 818, Short.MAX_VALUE))
         );
         panelOSCLayout.setVerticalGroup(
             panelOSCLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(panelOSCLayout.createSequentialGroup()
-                .add(jPanel8, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jPanel5, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .add(239, 239, 239))
+            .add(jTabbedPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
         );
 
         panelMainTabs.addTab("Chuck & OSC Setup", panelOSC);
@@ -318,15 +317,11 @@ public class MainGUI extends javax.swing.JFrame {
         panelTabFeatureConfiguration.setLayout(panelTabFeatureConfigurationLayout);
         panelTabFeatureConfigurationLayout.setHorizontalGroup(
             panelTabFeatureConfigurationLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(panelTabFeatureConfigurationLayout.createSequentialGroup()
-                .add(featureConfigurationPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(266, Short.MAX_VALUE))
+            .add(featureConfigurationPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
         );
         panelTabFeatureConfigurationLayout.setVerticalGroup(
             panelTabFeatureConfigurationLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(panelTabFeatureConfigurationLayout.createSequentialGroup()
-                .add(featureConfigurationPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(127, Short.MAX_VALUE))
+            .add(featureConfigurationPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
         );
 
         panelMainTabs.addTab("Features Setup", panelTabFeatureConfiguration);
@@ -335,13 +330,13 @@ public class MainGUI extends javax.swing.JFrame {
         panelTabLearningSystemConfiguration.setLayout(panelTabLearningSystemConfigurationLayout);
         panelTabLearningSystemConfigurationLayout.setHorizontalGroup(
             panelTabLearningSystemConfigurationLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, learningSystemConfigurationPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 824, Short.MAX_VALUE)
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, learningSystemConfigurationPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 717, Short.MAX_VALUE)
         );
         panelTabLearningSystemConfigurationLayout.setVerticalGroup(
             panelTabLearningSystemConfigurationLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(panelTabLearningSystemConfigurationLayout.createSequentialGroup()
                 .add(learningSystemConfigurationPanel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 551, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(91, Short.MAX_VALUE))
+                .addContainerGap(141, Short.MAX_VALUE))
         );
 
         panelMainTabs.addTab("Learning Setup", panelTabLearningSystemConfiguration);
@@ -351,20 +346,20 @@ public class MainGUI extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 857, Short.MAX_VALUE)
+            .add(0, 750, Short.MAX_VALUE)
             .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                 .add(jPanel1Layout.createSequentialGroup()
                     .addContainerGap()
-                    .add(panelMainTabs, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 845, Short.MAX_VALUE)
+                    .add(panelMainTabs, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 738, Short.MAX_VALUE)
                     .addContainerGap()))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 700, Short.MAX_VALUE)
+            .add(0, 750, Short.MAX_VALUE)
             .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                 .add(jPanel1Layout.createSequentialGroup()
                     .addContainerGap()
-                    .add(panelMainTabs, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 688, Short.MAX_VALUE)
+                    .add(panelMainTabs, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 738, Short.MAX_VALUE)
                     .addContainerGap()))
         );
 
@@ -372,8 +367,9 @@ public class MainGUI extends javax.swing.JFrame {
 
         wekMenu.setText("Wekinator");
 
-        preferencesMenuItem.setText("Preferences");
-        wekMenu.add(preferencesMenuItem);
+        menuPreferences.setText("Preferences");
+        menuPreferences.setEnabled(false);
+        wekMenu.add(menuPreferences);
 
         exitMenuItem.setText("Exit");
         exitMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -387,21 +383,26 @@ public class MainGUI extends javax.swing.JFrame {
 
         fileMenu.setText("File");
 
-        menuSaveSystem.setText("Save learning system");
-        menuSaveSystem.setEnabled(false);
-        fileMenu.add(menuSaveSystem);
+        menuSaveLearningSystem.setText("Save learning system");
+        menuSaveLearningSystem.setEnabled(false);
+        menuSaveLearningSystem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuSaveLearningSystemActionPerformed(evt);
+            }
+        });
+        fileMenu.add(menuSaveLearningSystem);
 
         jMenuItem2.setText("Save model(s)");
         jMenuItem2.setEnabled(false);
         fileMenu.add(jMenuItem2);
 
-        jMenuItem3.setText("Save dataset");
-        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+        menuSaveDataset.setText("Save dataset");
+        menuSaveDataset.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem3ActionPerformed(evt);
+                menuSaveDatasetActionPerformed(evt);
             }
         });
-        fileMenu.add(jMenuItem3);
+        fileMenu.add(menuSaveDataset);
 
         jMenuItem4.setText("Load global configuration");
         jMenuItem4.setEnabled(false);
@@ -423,14 +424,14 @@ public class MainGUI extends javax.swing.JFrame {
         });
         viewMenu.add(menuItemViewConsole);
 
-        menuItemViewFeatures.setText("Feature viewer");
-        menuItemViewFeatures.setEnabled(false);
-        menuItemViewFeatures.addActionListener(new java.awt.event.ActionListener() {
+        menuItemViewFeatureViewer.setText("Feature viewer");
+        menuItemViewFeatureViewer.setEnabled(false);
+        menuItemViewFeatureViewer.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuItemViewFeaturesActionPerformed(evt);
+                menuItemViewFeatureViewerActionPerformed(evt);
             }
         });
-        viewMenu.add(menuItemViewFeatures);
+        viewMenu.add(menuItemViewFeatureViewer);
 
         menuItemViewDataset.setText("Examples (dataset)");
         menuItemViewDataset.setEnabled(false);
@@ -442,6 +443,7 @@ public class MainGUI extends javax.swing.JFrame {
         viewMenu.add(menuItemViewDataset);
 
         menuItemViewDataset1.setText("Graphical dataset editor");
+        menuItemViewDataset1.setEnabled(false);
         menuItemViewDataset1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 menuItemViewDataset1ActionPerformed(evt);
@@ -449,20 +451,21 @@ public class MainGUI extends javax.swing.JFrame {
         });
         viewMenu.add(menuItemViewDataset1);
 
-        menuItemOtfScore.setText("Parameter clipboard");
-        menuItemOtfScore.setEnabled(false);
-        menuItemOtfScore.addActionListener(new java.awt.event.ActionListener() {
+        menuItemViewParamClipboard.setText("Parameter clipboard");
+        menuItemViewParamClipboard.setEnabled(false);
+        menuItemViewParamClipboard.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuItemOtfScoreActionPerformed(evt);
+                menuItemViewParamClipboardActionPerformed(evt);
             }
         });
-        viewMenu.add(menuItemOtfScore);
+        viewMenu.add(menuItemViewParamClipboard);
 
         menuBar.add(viewMenu);
 
         actionMenu.setText("Actions");
 
         menuEndGesture.setText("Label gesture ends");
+        menuEndGesture.setEnabled(false);
         menuEndGesture.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 menuEndGestureActionPerformed(evt);
@@ -471,11 +474,13 @@ public class MainGUI extends javax.swing.JFrame {
         actionMenu.add(menuEndGesture);
 
         menuAllGesture.setText("Label whole gestures");
+        menuAllGesture.setEnabled(false);
         actionMenu.add(menuAllGesture);
 
         menuBar.add(actionMenu);
 
         helpMenu1.setText("Help");
+        helpMenu1.setEnabled(false);
 
         contentsMenuItem1.setText("Contents");
         helpMenu1.add(contentsMenuItem1);
@@ -497,46 +502,20 @@ public class MainGUI extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(layout.createSequentialGroup()
-                        .add(33, 33, 33)
-                        .add(buttonQuit))
-                    .add(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 876, Short.MAX_VALUE)))
+                .addContainerGap()
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 768, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 536, Short.MAX_VALUE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(buttonQuit))
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 625, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-private void buttonQuitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonQuitActionPerformed
-    if (FeatureExtractionController.isExtracting()) {
-        FeatureExtractionController.stopExtracting();
-    }
-
-
-    OscHandler.getOscHandler().end();
-
-    if (ChuckRunner.getRunnerState() == ChuckRunner.ChuckRunnerState.RUNNING) {
-        try {
-            ChuckRunner.stop();
-        } catch (IOException ex) {
-        }
-    }
-    //Want to save settings here!
-    wek.saveCurrentSettings();
-
-    System.exit(0);
-}//GEN-LAST:event_buttonQuitActionPerformed
 
     private void connectOSC() {
         try {
@@ -575,8 +554,37 @@ private void panelMainTabsStateChanged(javax.swing.event.ChangeEvent evt) {//GEN
 }//GEN-LAST:event_panelMainTabsStateChanged
 
 private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitMenuItemActionPerformed
-    System.exit(0);
+    exit();
 }//GEN-LAST:event_exitMenuItemActionPerformed
+
+private void exit() {
+     if (FeatureExtractionController.isExtracting()) {
+        FeatureExtractionController.stopExtracting();
+    }
+
+
+    OscHandler.getOscHandler().end();
+
+    if (ChuckRunner.getRunnerState() == ChuckRunner.ChuckRunnerState.RUNNING) {
+        try {
+            ChuckRunner.stop();
+        } catch (IOException ex) {
+        }
+    }
+    //Want to save settings here!
+    wek.saveCurrentSettings();
+        try {
+          Plog.log(Msg.CLOSE);
+
+            Plog.close();
+        } catch (IOException ex) {
+            Logger.getLogger(MainGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    System.exit(0);
+
+}
+
 
 private void menuItemViewConsoleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemViewConsoleActionPerformed
     Console c = Console.getInstance();
@@ -592,20 +600,23 @@ private void aboutMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GE
 }//GEN-LAST:event_aboutMenuItem1ActionPerformed
 
 private void menuItemViewDatasetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemViewDatasetActionPerformed
-    WekinatorInstance.getWekinatorInstance().getLearningSystem().getDataset().showViewer();
+    if ( WekinatorInstance.getWekinatorInstance().getLearningSystem() != null
+            && WekinatorInstance.getWekinatorInstance().getLearningSystem().getDataset() != null) {
+        WekinatorInstance.getWekinatorInstance().getLearningSystem().getDataset().showViewer();
+    }
 }//GEN-LAST:event_menuItemViewDatasetActionPerformed
 
-private void menuItemOtfScoreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemOtfScoreActionPerformed
-    LearningSystem learningSystem = WekinatorInstance.getWekinatorInstance().getLearningSystem();
+private void menuItemViewParamClipboardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemViewParamClipboardActionPerformed
+   // LearningSystem learningSystem = WekinatorInstance.getWekinatorInstance().getLearningSystem();
     if (WekinatorInstance.getWekinatorInstance().getPlayalongScore() != null) {
         WekinatorInstance.getWekinatorInstance().getPlayalongScore().view();
     }
 
-}//GEN-LAST:event_menuItemOtfScoreActionPerformed
+}//GEN-LAST:event_menuItemViewParamClipboardActionPerformed
 
-private void menuItemViewFeaturesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemViewFeaturesActionPerformed
+private void menuItemViewFeatureViewerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemViewFeatureViewerActionPerformed
     FeatureExtractionController.showFeatureViewer();
-}//GEN-LAST:event_menuItemViewFeaturesActionPerformed
+}//GEN-LAST:event_menuItemViewFeatureViewerActionPerformed
 
 private void menuItemViewDataset1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemViewDataset1ActionPerformed
     LearningSystem ls = WekinatorInstance.getWekinatorInstance().getLearningSystem();
@@ -625,19 +636,19 @@ private void menuEndGestureActionPerformed(java.awt.event.ActionEvent evt) {//GE
 
 }//GEN-LAST:event_menuEndGestureActionPerformed
 
-private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+private void menuSaveDatasetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuSaveDatasetActionPerformed
     LearningSystem ls = WekinatorInstance.getWekinatorInstance().getLearningSystem();
     if (ls != null && ls.getDataset() != null) {
 
         File file = Util.findSaveFile("arff",
                 "arff file",
-                LearningSystem.getDefaultLocation(),
+                SimpleDataset.getDefaultLocation(),
                 this);
         if (file != null) {
             try {
                 ls.getDataset().writeInstancesToArff(file);
             // ls.writeToFile(file); //TODOTODOTODO: update last path on this.
-            // Util.setLastFile(LearningSystem.getFileExtension(), file);
+             Util.setLastFile(SimpleDataset.getFileExtension(), file);
             } catch (Exception ex) {
                 Logger.getLogger(TrainRunPanel.class.getName()).log(Level.INFO, null, ex);
                 JOptionPane.showMessageDialog(this, ex.getMessage(), "Could not save to file", JOptionPane.ERROR_MESSAGE);
@@ -645,7 +656,33 @@ private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
         }
     }
 
-}//GEN-LAST:event_jMenuItem3ActionPerformed
+}//GEN-LAST:event_menuSaveDatasetActionPerformed
+
+private void menuSaveLearningSystemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuSaveLearningSystemActionPerformed
+    //Save learning system
+    if (WekinatorInstance.getWekinatorInstance().getLearningSystem() == null)
+        return;
+
+    File file = Util.findSaveFile(LearningSystem.getFileExtension(),
+                LearningSystem.getFileTypeDescription(),
+                LearningSystem.getDefaultLocation(),
+                this);
+        if (file != null) {
+            try {
+                WekinatorInstance.getWekinatorInstance().getLearningSystem().writeToFile(file); //TODOTODOTODO: update last path on this.
+                Util.setLastFile(LearningSystem.getFileExtension(), file);
+            } catch (Exception ex) {
+                Logger.getLogger(TrainRunPanel.class.getName()).log(Level.INFO, null, ex);
+                JOptionPane.showMessageDialog(this, ex.getMessage(), "Could not save to file", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+
+}//GEN-LAST:event_menuSaveLearningSystemActionPerformed
+
+private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+    System.out.println("closing");
+    exit();
+}//GEN-LAST:event_formWindowClosing
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem aboutMenuItem1;
@@ -655,7 +692,6 @@ private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
     private javax.swing.ButtonGroup buttonGroupSettingsSource;
     private javax.swing.JButton buttonOscConnect;
     private javax.swing.JButton buttonOscDisconnect;
-    private javax.swing.JButton buttonQuit;
     private wekinator.ChuckRunnerPanel chuckRunnerPanel1;
     private javax.swing.JMenuItem contentsMenuItem1;
     private javax.swing.JMenuItem exitMenuItem;
@@ -665,28 +701,29 @@ private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JLabel labelOscStatus;
     private wekinator.LearningSystemConfigurationPanel learningSystemConfigurationPanel;
     private javax.swing.JMenuItem menuAllGesture;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenuItem menuEndGesture;
-    private javax.swing.JMenuItem menuItemOtfScore;
     private javax.swing.JMenuItem menuItemViewConsole;
     private javax.swing.JMenuItem menuItemViewDataset;
     private javax.swing.JMenuItem menuItemViewDataset1;
-    private javax.swing.JMenuItem menuItemViewFeatures;
-    private javax.swing.JMenuItem menuSaveSystem;
+    private javax.swing.JMenuItem menuItemViewFeatureViewer;
+    private javax.swing.JMenuItem menuItemViewParamClipboard;
+    private javax.swing.JMenuItem menuPreferences;
+    private javax.swing.JMenuItem menuSaveDataset;
+    private javax.swing.JMenuItem menuSaveLearningSystem;
     private javax.swing.JTabbedPane panelMainTabs;
     private javax.swing.JPanel panelOSC;
     private javax.swing.JPanel panelTabFeatureConfiguration;
     private javax.swing.JPanel panelTabLearningSystemConfiguration;
-    private javax.swing.JMenuItem preferencesMenuItem;
     private wekinator.TrainRunPanel trainRunPanel1;
     private javax.swing.JMenu viewMenu;
     private javax.swing.JMenu wekMenu;
@@ -757,6 +794,20 @@ private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
 
     protected void updateMenus() {
         //Enable appropriate menus: TODO
+        OscHandler h = OscHandler.getOscHandler();
+        boolean connected = (h.getConnectionState() == OscHandler.ConnectionState.CONNECTED);
+        boolean featValid = WekinatorInstance.getWekinatorInstance().getFeatureConfiguration() != null && (ChuckSystem.getChuckSystem().state == ChuckSystem.ChuckSystemState.CONNECTED_AND_VALID);
+        boolean learnValid = WekinatorInstance.getWekinatorInstance().getLearningSystem() != null && (ChuckSystem.getChuckSystem().state == ChuckSystem.ChuckSystemState.CONNECTED_AND_VALID);
+        menuSaveLearningSystem.setEnabled(WekinatorInstance.getWekinatorInstance().getLearningSystem() != null);
+        menuSaveDataset.setEnabled(WekinatorInstance.getWekinatorInstance().getLearningSystem() != null && WekinatorInstance.getWekinatorInstance().getLearningSystem().getDataset() != null);
+        menuItemViewFeatureViewer.setEnabled(featValid);
+        menuItemViewDataset.setEnabled(WekinatorInstance.getWekinatorInstance().getLearningSystem() != null && WekinatorInstance.getWekinatorInstance().getLearningSystem().getDataset() != null);
+        menuItemViewParamClipboard.setEnabled(learnValid);
+        //menuItemViewDataset1.setEnabled(WekinatorInstance.getWekinatorInstance().getLearningSystem() != null && WekinatorInstance.getWekinatorInstance().getLearningSystem().getDataset() != null);
+
+        setFeatureConfigurationPanelEnabled(connected);
+        setLearningSystemConfigurationPanelEnabled(connected && featValid);
+        setTrainRunPanelEnabled(isConnected && featValid && learnValid);
     }
 
     protected void updateGUIforOscStatus() {
@@ -785,6 +836,7 @@ private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
         //   setTrainRunPanelEnabled(false);
         } */
         updatePanels();
+        updateMenus();
 
 
     }
@@ -896,7 +948,7 @@ private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
         if (evt.getPropertyName().equals(WekinatorInstance.PROP_LEARNINGSYSTEM)) {
             boolean e = (WekinatorInstance.getWekinatorInstance().getLearningSystem() != null);
             System.out.println("enabling otf data " + e);
-            menuItemOtfScore.setEnabled(e);
+            menuItemViewParamClipboard.setEnabled(e);
             menuItemViewDataset.setEnabled(e);
 
         }

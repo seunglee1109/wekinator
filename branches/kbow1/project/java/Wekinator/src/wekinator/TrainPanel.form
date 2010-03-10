@@ -6,7 +6,7 @@
     </Component>
     <Container class="javax.swing.JFrame" name="learnerMaskFrame">
       <Properties>
-        <Property name="title" type="java.lang.String" value="Select features to use for this parameter"/>
+        <Property name="title" type="java.lang.String" value="Select models to be trained"/>
       </Properties>
 
       <Layout>

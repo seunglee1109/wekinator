@@ -7,9 +7,12 @@ package wekinator;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.logging.Level;
+import java.util.logging.Logger;
+import wekinator.Plog.Msg;
 import wekinator.util.Util;
 
 /**
@@ -25,6 +28,7 @@ public class WekinatorSettings implements Serializable {
     protected String logFile = "wekinator.log";
     protected Level logLevel = Level.WARNING;
     public static final String PROP_LOGLEVEL = "logLevel";
+    
 
     public WekinatorSettings() {
         lastLocations = new HashMap<String, String>();
@@ -42,9 +46,11 @@ public class WekinatorSettings implements Serializable {
         defaultDir = Util.getCanonicalPath(projectDir) + File.separator + "mySavedSettings";
         System.out.println("default dir is " + defaultDir);
 
+        
         } else {
             defaultDir = Util.getCanonicalPath(new File(""));
         }
+        
   }
 
     public String getDefaultSettingsDirectory() {

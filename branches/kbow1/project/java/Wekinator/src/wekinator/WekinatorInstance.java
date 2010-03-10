@@ -22,6 +22,8 @@ import java.util.logging.SimpleFormatter;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.EventListenerList;
+import wekinator.Plog.Msg;
+import wekinator.util.*;
 
 /**
  * Ideally, captures current state of the system, including all active component objects
@@ -337,7 +339,33 @@ public class WekinatorInstance {
     private WekinatorInstance() {
         FileInputStream fin = null;
         boolean useChuckFromCL = (WekinatorRunner.chuckFile != null);
+        String currentDir = Util.getCanonicalPath(new File(""));
+        if (currentDir != null) {
+        try {
+           // String currentDir = Util.getCanonicalPath(new File(""));
+            File tmpf = new File(currentDir);
+            if (tmpf != null && tmpf.getParentFile() != null && tmpf.getParentFile().getParentFile() != null) {
 
+                File projectDir = (new File(currentDir)).getParentFile().getParentFile().getParentFile();
+                Plog.setup(Util.getCanonicalPath(projectDir) + File.separator + "logging");
+                Plog.log(Msg.LOAD);
+            }
+        } catch (IOException ex) {
+            try {
+             //   String currentDir = Util.getCanonicalPath(new File(""));
+                File projectDir = (new File(currentDir)).getParentFile().getParentFile();
+            Plog.setup(Util.getCanonicalPath(projectDir) + File.separator + "logging");
+            Plog.log(Msg.LOAD);
+
+            } catch (Exception ex2) {
+               System.out.println("Couldn't log." + ex.getMessage());
+                System.exit(0);
+            }
+        }
+
+
+            
+        }
 
         try {
             fin = new FileInputStream(settingsSaveFile);

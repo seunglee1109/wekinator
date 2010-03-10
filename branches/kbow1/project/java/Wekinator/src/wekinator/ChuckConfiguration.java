@@ -16,14 +16,17 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import wekinator.util.*;
 
 /**
+ * //PROBLEM: this is still serializable!
  *
  * @author rebecca
  */
 public class ChuckConfiguration implements Serializable {
 
-    private String chuckDirectory = "No directory set";
+  //  private String chuckDirectory = "No directory set";
+    private String wekDir = "No directory set";
     private String chuckExecutable = "/usr/bin/chuck";
     private boolean customChuckFeatureExtractorEnabled = false;
     private String customChuckFeatureExtractorFilename = "No file selected";
@@ -162,6 +165,18 @@ public class ChuckConfiguration implements Serializable {
 
     public ChuckConfiguration() {
         isOscSynthParamDiscrete = new boolean[0];
+        try {
+        File f = new File(Util.getCanonicalPath(new File("")));
+         String preferredPath = f.getParentFile().getParentFile().getParentFile().getAbsolutePath();
+         File f2 = new File(preferredPath);
+         if (f2.exists()) {
+            wekDir = Util.getCanonicalPath(f2);
+         }
+
+
+        } catch (Exception ex) {
+
+        }
     }
 
     /**
@@ -201,27 +216,27 @@ public class ChuckConfiguration implements Serializable {
         //Check for legal chuck directory
         String s;
         String[] ss;
-        if (chuckDirectory.contains(File.separator)) {
-            ss = chuckDirectory.split(File.separator);
+        if (wekDir.contains(File.separator)) {
+            ss = wekDir.split(File.separator);
             if (ss.length > 0) {
                 s = ss[ss.length - 1];
             } else {
                 s = "";
             }
         } else {
-            s = chuckDirectory;
+            s = wekDir;
         }
 
-        File f = new File(chuckDirectory);
-        String coreString = chuckDirectory + File.separator + "core_chuck" + File.separator; //TODO: make work for windows
+        File f = new File(wekDir);
+        String coreString = wekDir + File.separator + "chuck" + File.separator + "core_chuck" + File.separator; //TODO: make work for windows
         File f2 = new File(coreString);
 
-        if (!s.equals("chuck")) {
-            errorString += "Chuck directory must refer to location of \"chuck/\" within wekinator project directory\n";
+        if (!s.equals("wekinator") && !s.equals("project")) {
+            errorString += "Wekinator directory must refer to a directory called \"wekinator/\"\n";
         } else if (!f.exists() || !f.isDirectory()) {
-            errorString += "Chuck directory does not exist or is not a directory\n";
+            errorString += "Wekinator directory does not exist or is not a directory\n";
         } else if (!f2.exists() || !f2.isDirectory()) {
-            errorString += "Chuck directory must be the chuck wekinator directory, containing sub directory core_chuck.\n";
+            errorString += "Wekinator directory must be the wekinator directory that you downloaded, containing subdirectories chuck, java, etc.\n";
         }
 
         //Check for legal chuck executable
@@ -302,7 +317,8 @@ public class ChuckConfiguration implements Serializable {
     }
 
     public void setEqualTo(ChuckConfiguration c) {
-        chuckDirectory = c.chuckDirectory;
+        //chuckDirectory = c.chuckDirectory;
+        wekDir = c.wekDir;
         customChuckFeatureExtractorEnabled = c.customChuckFeatureExtractorEnabled;
         customChuckFeatureExtractorFilename = c.customChuckFeatureExtractorFilename;
         numCustomChuckFeaturesExtracted = c.numCustomChuckFeaturesExtracted;
@@ -350,13 +366,22 @@ public class ChuckConfiguration implements Serializable {
     }
 
     public String getChuckDir() {
-        return chuckDirectory;
+        //return chuckDirectory;
+        return wekDir + File.separator + "chuck";
     }
 
-    public void setChuckDir(String chuckDir) {
+    public String getWekDir() {
+        return wekDir;
+    }
+
+ /*   public void setChuckDir(String chuckDir) {
         this.chuckDirectory = chuckDir;
         setUsable(false);
 
+    } */
+    public void setWekDir(String wdir) {
+        this.wekDir = wdir;
+        setUsable(false);
     }
 
     public boolean isCustomChuckFeatureExtractorEnabled() {
