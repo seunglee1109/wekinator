@@ -390,6 +390,7 @@ public class WekinatorLearningManager {
                 wekinatorInstancePropChange(evt);
             }
         });
+        Plog.setWekinatorLearningManager(this);
 
         KeyEventPostProcessor processor = new KeyEventPostProcessor() {
 

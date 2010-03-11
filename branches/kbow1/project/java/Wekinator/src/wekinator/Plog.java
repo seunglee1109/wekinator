@@ -27,6 +27,8 @@ import wekinator.WekinatorLearningManager.Mode;
  * @author rebecca
  */
 public class Plog {
+    protected static final Plog ref = new Plog();
+
     static FileWriter fw = null;
     static PrintWriter p = null;
     static FileWriter rfw = null;
@@ -38,19 +40,15 @@ public class Plog {
     public static boolean isLogging = true;
     static int lsNum = 0;
     static int fcNum = 0;
-    protected static Plog ref = new Plog();
 
     private Plog() {
-        WekinatorLearningManager.getInstance().addPropertyChangeListener(new PropertyChangeListener() {
-
-            public void propertyChange(PropertyChangeEvent evt) {
-                lmChanged(evt);
-            }
-        });
+        
     }
+     
 
-    protected void lmChanged(PropertyChangeEvent evt) {
-       /* if (evt.getPropertyName().equals(WekinatorLearningManager.PROP_MODE)) {
+    protected static void lmChanged(PropertyChangeEvent evt) {
+        System.out.println("plog got prop change");
+        /* if (evt.getPropertyName().equals(WekinatorLearningManager.PROP_MODE)) {
             WekinatorLearningManager.Mode oldmode = (WekinatorLearningManager.Mode)evt.getOldValue();
                         WekinatorLearningManager.Mode newMode = (WekinatorLearningManager.Mode)evt.getNewValue();
             if (newMode == Mode.RUNNING && oldmode != Mode.RUNNING) {
@@ -156,8 +154,18 @@ public class Plog {
 
     };
 
+    public static void setWekinatorLearningManager(WekinatorLearningManager lm) {
+        lm.addPropertyChangeListener(new PropertyChangeListener() {
+            public void propertyChange(PropertyChangeEvent evt) {
+                lmChanged(evt);
+            }
+        });
+    }
+
     public static void setup(String parentDir) throws IOException {
-            filename = parentDir + File.separator + "log.txt";
+            
+    
+        filename = parentDir + File.separator + "log.txt";
             rfilename = parentDir + File.separator + "run.txt";
             logDir = parentDir + File.separator;
             fw = new FileWriter(filename, true);
@@ -166,6 +174,7 @@ public class Plog {
             r = new PrintWriter(rfw);
             log(Msg.NEW_SESSION);
             resetRun();
+            
     }
 
     public static void startPlog() {
@@ -198,6 +207,7 @@ public class Plog {
 
     public static void log(Msg which, String m) {
 
+
         p.println(ts() + "," +  which.ordinal() + "," + which + "," + m);
     }
 
@@ -222,28 +232,28 @@ public class Plog {
     }
 
     public static void trainStarted(boolean[] trainMask) {
-        String s = "MASK=(";
+      /*  String s = "MASK=(";
         for (int i = 0; i < trainMask.length; i++) {
             s += trainMask[i] + ",";
         }
         s += ")";
-        log(Msg.TRAIN_STARTED, s);
+        log(Msg.TRAIN_STARTED, s); */
     }
 
     public static void trainCompleted() {
-        //save ls and dataset so I can compute train error later and eval against other learners
+       /* //save ls and dataset so I can compute train error later and eval against other learners
         lsNum++;
         log(Msg.TRAIN_FINISHED, "" + lsNum);
-        saveLearningSystem(lsNum, WekinatorInstance.getWekinatorInstance().getLearningSystem());
+        saveLearningSystem(lsNum, WekinatorInstance.getWekinatorInstance().getLearningSystem()); */
     }
 
     protected static void saveLearningSystem(int num, LearningSystem ls) {
-       File f = new File(logDir + "ls" + num + ".log");
+      /* File f = new File(logDir + "ls" + num + ".log");
         try {
             ls.writeToFile(f);
         } catch (IOException ex) {
             log(Msg.ERROR, "Couldn't write ls number " + num + " to file: " + ex.getMessage());
-        }
+        } */
     }
 
     public static void paramClipboardUsed() {
