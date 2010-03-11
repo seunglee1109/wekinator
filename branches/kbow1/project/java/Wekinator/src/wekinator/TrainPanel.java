@@ -175,6 +175,10 @@ public class TrainPanel extends javax.swing.JPanel {
         }
     }
 
+    public boolean isUseNNGui() {
+        return checkNNGui.isSelected();
+    }
+
     protected void updateGuiForEnabled() {
         boolean[] mask = WekinatorLearningManager.getInstance().getTrainingMask();
         if (mask == null || mask.length == 0) {

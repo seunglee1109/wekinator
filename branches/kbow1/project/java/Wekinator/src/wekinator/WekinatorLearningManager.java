@@ -287,7 +287,9 @@ public class WekinatorLearningManager {
     public void updateFeatures(double[] features) {
         if (mode == Mode.RUNNING) {
             try {
-                setOutputs(WekinatorInstance.getWekinatorInstance().getLearningSystem().classify(features));
+                double[] os = WekinatorInstance.getWekinatorInstance().getLearningSystem().classify(features);
+                setOutputs(os);
+                Plog.runStep(features, os);
 
                 //TODO RAF important TODO TODO TODO: issue of displaying output for dist features
                 OscHandler.getOscHandler().sendParamsToSynth(outputs);

@@ -259,6 +259,7 @@ public class MainGUI extends javax.swing.JFrame {
         actionMenu = new javax.swing.JMenu();
         menuEndGesture = new javax.swing.JMenuItem();
         menuAllGesture = new javax.swing.JMenuItem();
+        jMenuItem3 = new javax.swing.JMenuItem();
         helpMenu1 = new javax.swing.JMenu();
         contentsMenuItem1 = new javax.swing.JMenuItem();
         aboutMenuItem1 = new javax.swing.JMenuItem();
@@ -529,6 +530,14 @@ public class MainGUI extends javax.swing.JFrame {
         menuAllGesture.setEnabled(false);
         actionMenu.add(menuAllGesture);
 
+        jMenuItem3.setText("Reset log");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
+        actionMenu.add(jMenuItem3);
+
         menuBar.add(actionMenu);
 
         helpMenu1.setText("Help");
@@ -732,6 +741,10 @@ private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:even
     exit();
 }//GEN-LAST:event_formWindowClosing
 
+private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+    Plog.startPlog();
+}//GEN-LAST:event_jMenuItem3ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem aboutMenuItem1;
     private javax.swing.JMenu actionMenu;
@@ -748,6 +761,7 @@ private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:even
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel5;

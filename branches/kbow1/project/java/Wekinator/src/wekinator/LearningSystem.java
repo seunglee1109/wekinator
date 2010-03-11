@@ -194,7 +194,7 @@ public class LearningSystem {
         if (evt.getPropertyName().equals("state")) {
             if (trainingWorker.getState() == SwingWorker.StateValue.DONE) {
                 //SwingWorker.StateValue.
-                System.out.println("should be setting training to false here");
+                    System.out.println("should be setting training to false here");
                 setIsTraining(false);
             }
         } // else if = progress: save this for when extracted to learning manager.
