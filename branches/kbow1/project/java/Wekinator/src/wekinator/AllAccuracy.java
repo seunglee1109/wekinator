@@ -16,6 +16,7 @@ import java.beans.PropertyChangeListener;
 import java.text.DecimalFormat;
 import wekinator.LearningAlgorithms.NNLearningAlgorithm;
 import wekinator.LearningSystem.EvalStatus;
+import wekinator.Plog.Msg;
 
 /**
  *
@@ -296,7 +297,7 @@ public class AllAccuracy extends javax.swing.JPanel {
 
         comboNumFolds.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "2 folds", "5 folds", "10 folds" }));
 
-        buttonComputeTrain.setText("Compute accuracy of existing model on training set");
+        buttonComputeTrain.setText("Compute accuracy of trained model on training set");
         buttonComputeTrain.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 buttonComputeTrainActionPerformed(evt);
@@ -403,6 +404,7 @@ public class AllAccuracy extends javax.swing.JPanel {
 
     private void buttonCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonCancelActionPerformed
         WekinatorLearningManager.getInstance().stopEvaluating();
+        Plog.log(Msg.BUTTON_EVAL_CANCELLED);
 }//GEN-LAST:event_buttonCancelActionPerformed
 
     private void buttonComputeCVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonComputeCVActionPerformed

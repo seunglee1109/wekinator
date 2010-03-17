@@ -575,11 +575,16 @@ public class FeatureConfigurationPanel extends javax.swing.JPanel {
                 int lResponse = JOptionPane.showConfirmDialog(this, "Are you sure you want to change your feature configuration?\n" + "This will destroy any existing trained models...", "", JOptionPane.YES_NO_OPTION);
                 if (lResponse != JOptionPane.YES_OPTION) {
                     return;
+                } else {
+
+                WekinatorInstance.getWekinatorInstance().setFeatureConfiguration(featureConfiguration);
+                labelFeatureStatus.setText("Feature configuration set; using " + featureConfiguration.getNumFeaturesEnabled() + " features.");
+                return;
                 }
             }
        // }
         }
-        if (ChuckSystem.getChuckSystem().state != ChuckSystem.ChuckSystemState.CONNECTED_AND_VALID) {
+        else if (ChuckSystem.getChuckSystem().state != ChuckSystem.ChuckSystemState.CONNECTED_AND_VALID) {
                 //Then, set backup to the current configuration, and set the WekInst current to it as well
                 WekinatorInstance.getWekinatorInstance().setFeatureConfiguration(featureConfiguration);
                 labelFeatureStatus.setText("Feature configuration set; using " + featureConfiguration.getNumFeaturesEnabled() + " features.");

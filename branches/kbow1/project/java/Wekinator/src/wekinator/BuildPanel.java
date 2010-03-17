@@ -15,6 +15,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import wekinator.Plog.Msg;
 import wekinator.WekinatorLearningManager.Mode;
 
 /**
@@ -168,7 +169,6 @@ public class BuildPanel extends javax.swing.JPanel {
         buttonAddClipboard1 = new javax.swing.JButton();
         jPanel6 = new javax.swing.JPanel();
         buttonRecord = new javax.swing.JButton();
-        checkOSCRecord = new javax.swing.JCheckBox();
         jPanel7 = new javax.swing.JPanel();
         labelNumExamples = new javax.swing.JLabel();
         jButton8 = new javax.swing.JButton();
@@ -273,29 +273,17 @@ public class BuildPanel extends javax.swing.JPanel {
             }
         });
 
-        checkOSCRecord.setFont(new java.awt.Font("Lucida Grande", 2, 13));
-        checkOSCRecord.setText("Advanced: Enable OSC record control");
-        checkOSCRecord.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                checkOSCRecordActionPerformed(evt);
-            }
-        });
-
         org.jdesktop.layout.GroupLayout jPanel6Layout = new org.jdesktop.layout.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(org.jdesktop.layout.GroupLayout.TRAILING, buttonRecord, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 464, Short.MAX_VALUE)
-            .add(jPanel6Layout.createSequentialGroup()
-                .add(checkOSCRecord)
-                .addContainerGap())
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel6Layout.createSequentialGroup()
                 .add(buttonRecord, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 66, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(checkOSCRecord))
+                .add(29, 29, 29))
         );
 
         jPanel7.setBorder(javax.swing.BorderFactory.createTitledBorder("Manage recorded examples"));
@@ -427,7 +415,8 @@ public class BuildPanel extends javax.swing.JPanel {
     private void buttonAddClipboardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAddClipboardActionPerformed
         if (WekinatorInstance.getWekinatorInstance().getPlayalongScore() != null)
             WekinatorInstance.getWekinatorInstance().getPlayalongScore().addParams(getParams(), 1.0);
-        
+
+        Plog.log(Msg.PARAM_CLIPBOARD_ADDED_IN_PANEL);
 }//GEN-LAST:event_buttonAddClipboardActionPerformed
 
     private void buttonRecordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonRecordActionPerformed
@@ -442,6 +431,7 @@ public class BuildPanel extends javax.swing.JPanel {
         if (WekinatorInstance.getWekinatorInstance().getPlayalongScore() != null) {
            WekinatorInstance.getWekinatorInstance().getPlayalongScore().view();
         }
+        Plog.log(Msg.PARAM_CLIPBOARD_VIEWED);
     }//GEN-LAST:event_buttonAddClipboard1ActionPerformed
 
     private void comboSynthActionPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_comboSynthActionPropertyChange
@@ -475,15 +465,18 @@ public class BuildPanel extends javax.swing.JPanel {
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
         learningSystem.getDataset().showViewer();
+        Plog.log(Msg.DATA_VIEWER_OPENED);
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void buttonSynthPlayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonSynthPlayActionPerformed
        OscHandler.getOscHandler().startSound();
        OscHandler.getOscHandler().sendParamsToSynth(getParams());
+       Plog.log(Msg.BUTTON_PLAY_HIT);
     }//GEN-LAST:event_buttonSynthPlayActionPerformed
 
     private void buttonForgetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonForgetActionPerformed
         learningSystem.getDataset().deleteAll();
+        Plog.log(Msg.DATASET_CLEARED);
     }//GEN-LAST:event_buttonForgetActionPerformed
 
     private void buttonPlayScoreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonPlayScoreActionPerformed
@@ -491,19 +484,17 @@ public class BuildPanel extends javax.swing.JPanel {
         
         if (isPlayalongJava) {
             stopPlayalongJava();
+            Plog.log(Msg.BUTTON_PLAYALONG_STOP);
         } else if (isPlayalongChuck) {
             stopPlayalongChuck();
         } else if (useJavaScore) {
             startPlayalongJava();
+                        Plog.log(Msg.BUTTON_PLAYALONG_START);
+
         } else {
             startPlayalongChuck();
         }        
     }//GEN-LAST:event_buttonPlayScoreActionPerformed
-
-    private void checkOSCRecordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkOSCRecordActionPerformed
-        OscController.setRecordControllable(checkOSCRecord.getModel().isSelected());
-    
-}//GEN-LAST:event_checkOSCRecordActionPerformed
 
     private void startPlayalongJava() {
         if (WekinatorInstance.getWekinatorInstance().getPlayalongScore() != null) {
@@ -571,7 +562,6 @@ public class BuildPanel extends javax.swing.JPanel {
     private javax.swing.JButton buttonPlayScore;
     private javax.swing.JButton buttonRecord;
     private javax.swing.JButton buttonSynthPlay;
-    private javax.swing.JCheckBox checkOSCRecord;
     private javax.swing.JComboBox comboChooseScore;
     private javax.swing.JComboBox comboSynthAction;
     private javax.swing.JButton jButton1;

@@ -24,6 +24,7 @@ import javax.swing.event.EventListenerList;
 import org.jdesktop.swingworker.SwingWorker;
 import weka.core.Instance;
 import weka.core.Instances;
+import wekinator.Plog.Msg;
 import wekinator.util.SerializedFileUtil;
 
 /**
@@ -34,8 +35,8 @@ public class LearningSystem {
 
     private ChangeEvent changeEvent = null;
     protected EventListenerList listenerList = new EventListenerList();
-   // protected EventListenerList cvListenerList = new EventListenerList();
-   // protected EventListenerList trListenerList = new EventListenerList();
+    // protected EventListenerList cvListenerList = new EventListenerList();
+    // protected EventListenerList trListenerList = new EventListenerList();
     protected boolean[] paramMask;
     protected double[] outputs;
     protected boolean[] paramUsingDistribution;
@@ -112,15 +113,12 @@ public class LearningSystem {
             trainingWorkerChanged(evt);
         }
     };
-
-        protected PropertyChangeListener evalWorkerListener = new PropertyChangeListener() {
+    protected PropertyChangeListener evalWorkerListener = new PropertyChangeListener() {
 
         public void propertyChange(PropertyChangeEvent evt) {
             evalWorkerChanged(evt);
         }
     };
-
-
     protected PropertyChangeListener datasetListener = new PropertyChangeListener() {
 
         public void propertyChange(PropertyChangeEvent evt) {
@@ -163,7 +161,7 @@ public class LearningSystem {
         propertyChangeSupport.firePropertyChange(PROP_ISTRAINING, oldIsTraining, isTraining);
     }
 
-        /**
+    /**
      * Set the value of isTraining
      *
      * @param isTraining new value of isTraining
@@ -194,7 +192,7 @@ public class LearningSystem {
         if (evt.getPropertyName().equals("state")) {
             if (trainingWorker.getState() == SwingWorker.StateValue.DONE) {
                 //SwingWorker.StateValue.
-                    System.out.println("should be setting training to false here");
+                System.out.println("should be setting training to false here");
                 setIsTraining(false);
             }
         } // else if = progress: save this for when extracted to learning manager.
@@ -205,7 +203,7 @@ public class LearningSystem {
         if (evt.getPropertyName().equals("state")) {
             if (evaluationWorker.getState() == SwingWorker.StateValue.DONE) {
                 //System.out.println("should be setting eval to false here");
-               // isEvaluating = false;
+                // isEvaluating = false;
                 setIsEvaluating(false);
             }
         } // else if = progress: save this for when extracted to learning manager.
@@ -929,7 +927,7 @@ public class LearningSystem {
         propertyChangeSupport.firePropertyChange(PROP_DATASET, oldDataset, dataset);
         updateDatasetState();
         updateTrainable();
-        
+
     }
 
     public void computeTrainingAccuracyInBackground() throws Exception {
@@ -938,7 +936,7 @@ public class LearningSystem {
 
     public void computeTrainingAccuracyInBackground(int paramNum) {
         synchronized (this) {
-            if (isRunnable && ! isEvaluating) {
+            if (isRunnable && !isEvaluating) {
                 //    setEvaluationState(evaluationState.EVALUTATING);
                 //isEvaluating = true;
                 setIsEvaluating(true);
@@ -948,22 +946,24 @@ public class LearningSystem {
                 learnerToEvaluate = paramNum;
                 evaluationType = EvaluationType.TRAINING;
                 evaluationWorker.execute();
+                Plog.log(Msg.EVAL_START_TRAIN, paramNum + "");
+
             } else {
-             //   throw new Exception("Cannot evaluate; either already evaluating, or not trained");
+                //   throw new Exception("Cannot evaluate; either already evaluating, or not trained");
                 System.out.println("Cannot evaluate");
-                //TODO: popup
+            //TODO: popup
             }
         }
     }
 
-    public void computeCVAccuracyInBackground(int numFolds)  {
+    public void computeCVAccuracyInBackground(int numFolds) {
         computeCVAccuracyInBackground(-1, numFolds);
     }
 
     public void computeCVAccuracyInBackground(int paramNum, int numFolds) {
         synchronized (this) {
             if (isTrainable && !isEvaluating) {
-              //  isEvaluating = true;
+                //  isEvaluating = true;
                 setIsEvaluating(true);
                 evaluationWorker = new EvaluationWorker();
                 evaluationWorker.addPropertyChangeListener(evalWorkerListener);
@@ -973,10 +973,11 @@ public class LearningSystem {
                 this.numFolds = numFolds;
                 evaluationType = EvaluationType.CV;
                 evaluationWorker.execute();
+                Plog.log(Msg.EVAL_START_CV, paramNum + "," + numFolds);
             } else {
                 //throw new Exception("Cannot evaluate; either already evaluating, or not trained");
                 System.out.println("Error: Cannot evaluate");
-                //TODO: popup box
+            //TODO: popup box
             }
         }
     }
@@ -1122,30 +1123,29 @@ public class LearningSystem {
         }
     }
 
-  /*  protected void fireCVDone() {
-        Object[] listeners = cvListenerList.getListenerList();
-        for (int i = listeners.length - 2; i >= 0; i -= 2) {
-            if (listeners[i] == ChangeListener.class) {
-                if (changeEvent == null) {
-                    changeEvent = new ChangeEvent(this);
-                }
-                ((ChangeListener) listeners[i + 1]).stateChanged(changeEvent);
-            }
-        }
+    /*  protected void fireCVDone() {
+    Object[] listeners = cvListenerList.getListenerList();
+    for (int i = listeners.length - 2; i >= 0; i -= 2) {
+    if (listeners[i] == ChangeListener.class) {
+    if (changeEvent == null) {
+    changeEvent = new ChangeEvent(this);
+    }
+    ((ChangeListener) listeners[i + 1]).stateChanged(changeEvent);
+    }
+    }
     } */
 
-   /* protected void fireTrainEvalDone() {
-        Object[] listeners = trListenerList.getListenerList();
-        for (int i = listeners.length - 2; i >= 0; i -= 2) {
-            if (listeners[i] == ChangeListener.class) {
-                if (changeEvent == null) {
-                    changeEvent = new ChangeEvent(this);
-                }
-                ((ChangeListener) listeners[i + 1]).stateChanged(changeEvent);
-            }
-        }
+    /* protected void fireTrainEvalDone() {
+    Object[] listeners = trListenerList.getListenerList();
+    for (int i = listeners.length - 2; i >= 0; i -= 2) {
+    if (listeners[i] == ChangeListener.class) {
+    if (changeEvent == null) {
+    changeEvent = new ChangeEvent(this);
+    }
+    ((ChangeListener) listeners[i + 1]).stateChanged(changeEvent);
+    }
+    }
     } */
-
     protected class EvaluationWorker extends SwingWorker<Integer, Void> {
 
         @Override
@@ -1171,8 +1171,8 @@ public class LearningSystem {
                             }
                             numDone++;
                         } catch (InterruptedException ex) {
-                                System.out.println("I was cancelled");
-                                return new Integer(0);
+                            System.out.println("I was cancelled");
+                            return new Integer(0);
                         } catch (Exception ex) {
                             numErrs++; //TODO: popup box
                             if (evaluationType == EvaluationType.CV) {
@@ -1187,7 +1187,7 @@ public class LearningSystem {
                     return new Integer(0);
                 } else {
                     setEvalStatus(new EvalStatus(learnerToEvaluate, 1, 0, 0, (evaluationType == EvaluationType.CV), false));
-                   // setEvalStatus(new EvalStatus);
+                    // setEvalStatus(new EvalStatus);
                     double d;
                     try {
                         if (evaluationType == EvaluationType.CV) {
@@ -1200,8 +1200,8 @@ public class LearningSystem {
                         }
                         setEvalStatus(new EvalStatus(learnerToEvaluate, 1, 1, 0, (evaluationType == EvaluationType.CV), false));
                     } catch (InterruptedException ex) {
-                                System.out.println("I was cancelled");
-                                return new Integer(0);
+                        System.out.println("I was cancelled");
+                        return new Integer(0);
                     } catch (Exception ex) {
                         System.out.println("ERROR encountered here" + ex.getMessage());
                         setEvalStatus(new EvalStatus(learnerToEvaluate, 1, 0, 1, (evaluationType == EvaluationType.CV), false));
@@ -1210,7 +1210,7 @@ public class LearningSystem {
                         } else {
                             setTrainResults(learnerToEvaluate, 0);
                         }
-                    //TODO: popup error box
+                        //TODO: popup error box
                         System.out.println("error encountered");
                     }
                     return new Integer(0);
@@ -1225,11 +1225,11 @@ public class LearningSystem {
         protected void done() {
             if (isCancelled()) {
                 //new EvalStatus(
-                        EvalStatus t = new EvalStatus(evalStatus.myParam, evalStatus.numModelsToEval, evalStatus.numModelsDone, evalStatus.numModelsWithErrors, evalStatus.isCV, true);
-                        setEvalStatus(t);
-                        System.out.println("I was cancelled");
-                        System.out.println("State is " + getState());
-                    }
+                EvalStatus t = new EvalStatus(evalStatus.myParam, evalStatus.numModelsToEval, evalStatus.numModelsDone, evalStatus.numModelsWithErrors, evalStatus.isCV, true);
+                setEvalStatus(t);
+                System.out.println("I was cancelled");
+                System.out.println("State is " + getState());
+            }
 
         }
     }
@@ -1289,7 +1289,7 @@ public class LearningSystem {
         o.writeInt(numParams);
         o.writeObject(paramUsingDistribution);
         o.writeObject(numMaxValsForParameter);
-     //   o.writeObject(learners);
+        //   o.writeObject(learners);
         for (int i = 0; i < learners.length; i++) {
             if (learners[i] != null) {
                 o.writeInt(1);
@@ -1313,7 +1313,7 @@ public class LearningSystem {
         ls.paramUsingDistribution = (boolean[]) i.readObject(); //TODO: may have to init this bit by bit...
         int[] numMax = (int[]) i.readObject();
         ls.setNumMaxValsForParameter(numMax);
-       // LearningAlgorithm[] algs = (LearningAlgorithm[]) i.readObject();
+        // LearningAlgorithm[] algs = (LearningAlgorithm[]) i.readObject();
         LearningAlgorithm[] algs = new LearningAlgorithm[numParams];
         for (int j = 0; j < numParams; j++) {
             int hasLearner = i.readInt();

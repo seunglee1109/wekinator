@@ -44,7 +44,6 @@ public class ChuckRunner {
     }
 
     public enum ChuckRunnerState {
-
         NOT_RUNNING,
         TRYING_TO_RUN,
         RUNNING
@@ -276,9 +275,11 @@ public class ChuckRunner {
         if (numErrLines != 0) {
             logger.log(Level.SEVERE, "Errors encountered running chuck: " + lastErrorMessages);
             setRunnerState(ChuckRunnerState.TRYING_TO_RUN);
+            Plog.log(Plog.Msg.ERROR, "Error running chuck: " + lastErrorMessages);
         } else {
             System.out.println("A miracle! Chuck runs.");
             setRunnerState(ChuckRunnerState.RUNNING);
+            Plog.chuckRunSuccessful(configuration);
         }
     }
 

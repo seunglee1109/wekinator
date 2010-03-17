@@ -63,7 +63,7 @@ public class MainGUI extends javax.swing.JFrame {
         prefs.setResizable(false);
 
         registerForMacOSXEvents();
-
+        WekinatorInstance.getWekinatorInstance().setupPlog();
 
         learningSystemConfigurationPanel.setMainGUI(this);
         //Anywhere we add a listener, also update to current property.
@@ -260,6 +260,8 @@ public class MainGUI extends javax.swing.JFrame {
         menuEndGesture = new javax.swing.JMenuItem();
         menuAllGesture = new javax.swing.JMenuItem();
         jMenuItem3 = new javax.swing.JMenuItem();
+        jMenuItem5 = new javax.swing.JMenuItem();
+        checkPerformanceMode = new javax.swing.JCheckBoxMenuItem();
         helpMenu1 = new javax.swing.JMenu();
         contentsMenuItem1 = new javax.swing.JMenuItem();
         aboutMenuItem1 = new javax.swing.JMenuItem();
@@ -538,6 +540,22 @@ public class MainGUI extends javax.swing.JFrame {
         });
         actionMenu.add(jMenuItem3);
 
+        jMenuItem5.setText("Flush log file");
+        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem5ActionPerformed(evt);
+            }
+        });
+        actionMenu.add(jMenuItem5);
+
+        checkPerformanceMode.setText("Performance mode");
+        checkPerformanceMode.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                checkPerformanceModeActionPerformed(evt);
+            }
+        });
+        actionMenu.add(checkPerformanceMode);
+
         menuBar.add(actionMenu);
 
         helpMenu1.setText("Help");
@@ -742,8 +760,32 @@ private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:even
 }//GEN-LAST:event_formWindowClosing
 
 private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
-    Plog.startPlog();
+    int lResponse = JOptionPane.showConfirmDialog(this, "Are you sure you want to reset the log?\n"
+            + "Please do this ONLY at the very beginning of Part A / Part B of your PLOrk assignment.\n" 
+            + "If you do it later, it will erase needed logging info.", "", JOptionPane.YES_NO_OPTION);
+                if (lResponse == JOptionPane.YES_OPTION) {
+                    Plog.startPlog();
+                }
+
+    
 }//GEN-LAST:event_jMenuItem3ActionPerformed
+
+private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+    Plog.flush();
+}//GEN-LAST:event_jMenuItem5ActionPerformed
+
+private void checkPerformanceModeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkPerformanceModeActionPerformed
+    if (checkPerformanceMode.isSelected()) {
+        int lResponse = JOptionPane.showConfirmDialog(this, "Are you sure you want set to performance mode?\n"
+            + "This will turn off some logging, so please don't do this while working on your plork assignment.\n", "", JOptionPane.YES_NO_OPTION);
+                if (lResponse == JOptionPane.YES_OPTION) {
+                    Plog.performanceMode = true;
+                }
+
+    } else {
+        Plog.performanceMode = false;
+    }
+}//GEN-LAST:event_checkPerformanceModeActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem aboutMenuItem1;
@@ -753,6 +795,7 @@ private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
     private javax.swing.ButtonGroup buttonGroupSettingsSource;
     private javax.swing.JButton buttonOscConnect;
     private javax.swing.JButton buttonOscDisconnect;
+    private javax.swing.JCheckBoxMenuItem checkPerformanceMode;
     private wekinator.ChuckRunnerPanel chuckRunnerPanel1;
     private javax.swing.JMenuItem contentsMenuItem1;
     private wekinator.FeatureConfigurationPanel featureConfigurationPanel1;
@@ -763,6 +806,7 @@ private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel8;

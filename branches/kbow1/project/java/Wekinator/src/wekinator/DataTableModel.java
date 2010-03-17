@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.table.AbstractTableModel;
+import wekinator.Plog.*;
 
 /**
  *
@@ -208,6 +209,7 @@ public class DataTableModel extends AbstractTableModel {
         }
 
         // data[row][col] = value;
+        Plog.log(Msg.DATA_VIEWER_DATA_EDITED, "row=" + row + ",col=" + col);
         fireTableCellUpdated(row, col);
     }
 

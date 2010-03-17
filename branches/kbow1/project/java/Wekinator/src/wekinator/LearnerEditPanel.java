@@ -24,6 +24,7 @@ import wekinator.LearningAlgorithms.AdaboostM1LearningAlgorithm;
 import wekinator.LearningAlgorithms.LearningAlgorithm;
 import wekinator.LearningAlgorithms.LearningAlgorithm.TrainingState;
 import wekinator.LearningAlgorithms.NNLearningAlgorithm;
+import wekinator.Plog.Msg;
 import wekinator.util.*;
 
 /**
@@ -326,6 +327,7 @@ public class LearnerEditPanel extends javax.swing.JPanel {
             if (al instanceof NNLearningAlgorithm) {
                 ((NNLearningAlgorithm) al).setUseGui(checkNNGui.isSelected());
             }
+            Plog.log(Msg.LEARNER_SETTINGS_EDITED, "" + paramNum);
           //  WekinatorLearningManager.getInstance().startTraining(paramNum);
         } catch (Exception ex) {
             Logger.getLogger(LearnerEditPanel.class.getName()).log(Level.SEVERE, null, ex);

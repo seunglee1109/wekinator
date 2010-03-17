@@ -15,6 +15,7 @@ import java.io.IOException;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.TableColumn;
+import wekinator.Plog.Msg;
 
 /**
  *
@@ -119,17 +120,21 @@ public class DataViewer extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void buttonDoneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonDoneActionPerformed
+        Plog.log(Msg.DATA_VIEWER_DONE);
         this.dispose();
 
     }//GEN-LAST:event_buttonDoneActionPerformed
 
     private void buttonDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonDeleteActionPerformed
+        int rs[] = table.getSelectedRows();
         model.deleteRows(table.getSelectedRows());
+        Plog.log(Msg.DATA_VIWER_DELETE_SELECTED, "numDel=" + rs.length);
         table.repaint();
 }//GEN-LAST:event_buttonDeleteActionPerformed
 
     private void buttonAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAddActionPerformed
         model.addRow();
+        Plog.log(Msg.DATA_VIEWER_ADD_ROW);
 }//GEN-LAST:event_buttonAddActionPerformed
 
     private void buttonListenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonListenActionPerformed
@@ -152,6 +157,7 @@ public class DataViewer extends javax.swing.JFrame {
 
         OscHandler.getOscHandler().startSound();
         OscHandler.getOscHandler().sendParamsToSynth(d);
+        Plog.log(Msg.DATA_VIEWER_LISTEN);
 }//GEN-LAST:event_buttonListenActionPerformed
 
     private void buttonListen1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonListen1ActionPerformed

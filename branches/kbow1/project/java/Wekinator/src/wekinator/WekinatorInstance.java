@@ -101,6 +101,24 @@ public class WekinatorInstance {
         if (evt.getPropertyName().equals(ChuckSystem.PROP_STATE)) {
             if (evt.getOldValue() != ChuckSystem.ChuckSystemState.CONNECTED_AND_VALID && evt.getNewValue() == ChuckSystem.ChuckSystemState.CONNECTED_AND_VALID) {
                 this.setNumParams(cs.getNumParams());
+                if (learningSystem != null) {
+                    if (learningSystem.getNumParams() != cs.getNumParams()) {
+                        setLearningSystem(null);
+                    } else {
+                        if (learningSystem.getDataset() != null) {
+                            for (int i = 0; i < learningSystem.getNumParams(); i++) {
+                                  if (learningSystem.getDataset().isParameterDiscrete(i) != cs.isIsParamDiscrete(i)) {
+                                      setLearningSystem(null);
+                                      break;
+                                  }
+                            }
+                        } else {
+                            setLearningSystem(null); //hack: don't want to do this; better to store in learning system cont/disc params
+                        }
+
+                    }
+
+                }
             }
         }
     }
@@ -336,11 +354,9 @@ public class WekinatorInstance {
         this.configuration = configuration;
     }
 
-    private WekinatorInstance() {
-        FileInputStream fin = null;
-        boolean useChuckFromCL = (WekinatorRunner.chuckFile != null);
-        String currentDir = Util.getCanonicalPath(new File(""));
-        if (currentDir != null) {
+    public void setupPlog() {
+         String currentDir = Util.getCanonicalPath(new File(""));
+                if (currentDir != null) {
         try {
            // String currentDir = Util.getCanonicalPath(new File(""));
             File tmpf = new File(currentDir);
@@ -364,8 +380,15 @@ public class WekinatorInstance {
         }
 
 
-            
+
         }
+    }
+
+    private WekinatorInstance() {
+        FileInputStream fin = null;
+        boolean useChuckFromCL = (WekinatorRunner.chuckFile != null);
+        String currentDir = Util.getCanonicalPath(new File(""));
+
 
         try {
             fin = new FileInputStream(settingsSaveFile);

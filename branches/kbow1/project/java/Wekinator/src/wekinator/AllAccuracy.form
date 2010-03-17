@@ -93,7 +93,7 @@
     </Component>
     <Component class="javax.swing.JButton" name="buttonComputeTrain">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Compute accuracy of existing model on training set"/>
+        <Property name="text" type="java.lang.String" value="Compute accuracy of trained model on training set"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonComputeTrainActionPerformed"/>
