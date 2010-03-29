@@ -801,6 +801,37 @@ public class LearningSystem {
         fireLearnerChanged();
     }
 
+   public LearningSystem(int numParams, boolean[] paramUsingDistribution, int[] maxValPerParam) {
+        this.numParams = numParams;
+        learners = new LearningAlgorithm[numParams];
+        //  learnerEnabled = new boolean[numParams];
+        paramUsingDistribution = new boolean[numParams];
+        cvResults = new double[numParams];
+        trainResults = new double[numParams];
+
+        //tmp
+        //ChuckSystem cs = ChuckSystem.getChuckSystem();
+
+        numMaxValsForParameter = maxValPerParam;
+       /* for (int i = 0; i < numParams; i++) {
+            
+                this.paramUsingDistribution[i] = paramUsingDistribution[i];
+           
+        }
+ */
+           this.paramUsingDistribution = paramUsingDistribution; //TODO: check!
+        outputs = new double[numParams];
+        setOutputsArray(paramUsingDistribution, numMaxValsForParameter);
+        paramMask = new boolean[numParams];
+        for (int i = 0; i < numParams; i++) {
+            //  learnerEnabled[i] = true;
+            paramMask[i] = true;
+        }
+
+    //  setScore(new PlayalongScore(numParams));
+    }
+
+
     public LearningSystem(int numParams) {
         this.numParams = numParams;
         learners = new LearningAlgorithm[numParams];
@@ -1309,11 +1340,17 @@ public class LearningSystem {
     public static LearningSystem loadFromInputStream(ObjectInputStream i) throws IOException, ClassNotFoundException {
         LearningSystem ls = null;
         int numParams = i.readInt();
-        ls = new LearningSystem(numParams);
-        ls.paramUsingDistribution = (boolean[]) i.readObject(); //TODO: may have to init this bit by bit...
+       // ls = new LearningSystem(numParams);
+//        ls.paramUsingDistribution = (boolean[]) i.readObject(); //TODO: may have to init this bit by bit...
+        boolean[] paramUsingDistribution = (boolean[]) i.readObject(); //TODO: may have to init this bit by bit...
+
         int[] numMax = (int[]) i.readObject();
-        ls.setNumMaxValsForParameter(numMax);
+       // ls.setNumMaxValsForParameter(numMax);
         // LearningAlgorithm[] algs = (LearningAlgorithm[]) i.readObject();
+
+        ls = new LearningSystem(numParams, paramUsingDistribution, numMax);
+
+
         LearningAlgorithm[] algs = new LearningAlgorithm[numParams];
         for (int j = 0; j < numParams; j++) {
             int hasLearner = i.readInt();
