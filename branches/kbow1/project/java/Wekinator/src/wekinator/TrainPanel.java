@@ -758,7 +758,9 @@ public class TrainPanel extends javax.swing.JPanel {
 
     private void buttonCancelTrainActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonCancelTrainActionPerformed
        WekinatorLearningManager.getInstance().stopTraining();
-       Plog.trainCancelled();
+       if (WekinatorRunner.isLogging()) {
+           Plog.trainCancelled();
+       }
 }//GEN-LAST:event_buttonCancelTrainActionPerformed
 
     private void jCheckBox7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox7ActionPerformed
@@ -855,23 +857,33 @@ public class TrainPanel extends javax.swing.JPanel {
     private void buttonSelectModelsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonSelectModelsActionPerformed
         learnerMaskFrame.setVisible(true);
         learnerMaskFrame.toFront();
-        Plog.log(Msg.BUTTON_TRAIN_MODEL_SELECT);
+        if (WekinatorRunner.isLogging()) {
+            Plog.log(Msg.BUTTON_TRAIN_MODEL_SELECT);
+        }
     }//GEN-LAST:event_buttonSelectModelsActionPerformed
 
     private void checkNNGuiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkNNGuiActionPerformed
         updateLearnersForNN();
-        Plog.log(Msg.NN_GUI_PREF_SET, "set=" + checkNNGui.isSelected());
+        if (WekinatorRunner.isLogging()) {
+            Plog.log(Msg.NN_GUI_PREF_SET, "set=" + checkNNGui.isSelected());
+        }
     }//GEN-LAST:event_checkNNGuiActionPerformed
 
     private void buttonTrainActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonTrainActionPerformed
         //  learningSystem.setLearnersEnabled(learnerSelected);
         WekinatorLearningManager.getInstance().startTraining();
-        Plog.log(Msg.BUTTON_TRAIN_HIT);
+        if (WekinatorRunner.isLogging()) {
+            Plog.log(Msg.BUTTON_TRAIN_HIT);
+        }
     }//GEN-LAST:event_buttonTrainActionPerformed
 
     private void buttonUntrainActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonUntrainActionPerformed
         learningSystem.forget();
-        Plog.log(Msg.BUTTON_UNTRAIN);
+        if (WekinatorRunner.isLogging()) {
+            if (WekinatorRunner.isLogging()) {
+                Plog.log(Msg.BUTTON_UNTRAIN);
+            }
+        }
 }//GEN-LAST:event_buttonUntrainActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buttonCancel;

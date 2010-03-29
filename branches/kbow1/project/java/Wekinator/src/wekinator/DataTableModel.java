@@ -209,7 +209,9 @@ public class DataTableModel extends AbstractTableModel {
         }
 
         // data[row][col] = value;
-        Plog.log(Msg.DATA_VIEWER_DATA_EDITED, "row=" + row + ",col=" + col);
+        if (WekinatorRunner.isLogging()) {
+            Plog.log(Msg.DATA_VIEWER_DATA_EDITED, "row=" + row + ",col=" + col);
+        }
         fireTableCellUpdated(row, col);
     }
 

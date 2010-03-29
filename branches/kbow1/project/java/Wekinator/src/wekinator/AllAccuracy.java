@@ -404,7 +404,9 @@ public class AllAccuracy extends javax.swing.JPanel {
 
     private void buttonCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonCancelActionPerformed
         WekinatorLearningManager.getInstance().stopEvaluating();
-        Plog.log(Msg.BUTTON_EVAL_CANCELLED);
+        if (WekinatorRunner.isLogging()) {
+            Plog.log(Msg.BUTTON_EVAL_CANCELLED);
+        }
 }//GEN-LAST:event_buttonCancelActionPerformed
 
     private void buttonComputeCVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonComputeCVActionPerformed

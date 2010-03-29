@@ -402,7 +402,12 @@ public class TrainRunPanel extends javax.swing.JPanel {
             try {
                 ls.writeToFile(file); //TODOTODOTODO: update last path on this.
                 Util.setLastFile(LearningSystem.getFileExtension(), file);
-                Plog.log(Msg.BUTTON_LS_SAVE_HIT);
+                            if (WekinatorRunner.isLogging()) {
+
+                if (WekinatorRunner.isLogging()) {
+                    Plog.log(Msg.BUTTON_LS_SAVE_HIT);
+                }
+                            }
             } catch (Exception ex) {
                 Logger.getLogger(TrainRunPanel.class.getName()).log(Level.INFO, null, ex);
                 JOptionPane.showMessageDialog(this, ex.getMessage(), "Could not save to file", JOptionPane.ERROR_MESSAGE);

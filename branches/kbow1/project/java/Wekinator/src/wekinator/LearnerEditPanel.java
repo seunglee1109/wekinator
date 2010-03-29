@@ -49,6 +49,7 @@ public class LearnerEditPanel extends javax.swing.JPanel {
         }
     };
     protected PropertyChangeListener learningAlgChangeListener = new PropertyChangeListener() {
+
         public void propertyChange(PropertyChangeEvent evt) {
             learningAlgorithmPropertyChanged(evt);
         }
@@ -144,28 +145,28 @@ public class LearnerEditPanel extends javax.swing.JPanel {
 
         al = newal;
         updateGuiForAlgorithm();
-    
+
     }
 
     private void updateForTrainingStatus() {
-           TrainingState state = al.getTrainingState();
-            if (state == TrainingState.TRAINING) {
-                buttonRetrain.setEnabled(false);
-                labelTrainingStatus.setText("Training...");
+        TrainingState state = al.getTrainingState();
+        if (state == TrainingState.TRAINING) {
+            buttonRetrain.setEnabled(false);
+            labelTrainingStatus.setText("Training...");
 
+        } else {
+            buttonRetrain.setEnabled(true);
+            if (state == TrainingState.NOT_TRAINED) {
+                labelTrainingStatus.setText("Not trained");
+            } else if (state == TrainingState.TRAINED) {
+                labelTrainingStatus.setText("Trained");
+            //}// else if (state == TrainingState.ERROR) {
+            //    labelTrainingStatus.setText("Encountered error while training");
             } else {
-                buttonRetrain.setEnabled(true);
-                if (state == TrainingState.NOT_TRAINED) {
-                    labelTrainingStatus.setText("Not trained");
-                } else if (state == TrainingState.TRAINED) {
-                    labelTrainingStatus.setText("Trained");
-                //}// else if (state == TrainingState.ERROR) {
-                //    labelTrainingStatus.setText("Encountered error while training");
-                } else {
-                    labelTrainingStatus.setText("Unknown training status.");
-                }
-
+                labelTrainingStatus.setText("Unknown training status.");
             }
+
+        }
 
     }
 
@@ -327,8 +328,10 @@ public class LearnerEditPanel extends javax.swing.JPanel {
             if (al instanceof NNLearningAlgorithm) {
                 ((NNLearningAlgorithm) al).setUseGui(checkNNGui.isSelected());
             }
-            Plog.log(Msg.LEARNER_SETTINGS_EDITED, "" + paramNum);
-          //  WekinatorLearningManager.getInstance().startTraining(paramNum);
+            if (WekinatorRunner.isLogging()) {
+                Plog.log(Msg.LEARNER_SETTINGS_EDITED, "" + paramNum);
+            }
+        //  WekinatorLearningManager.getInstance().startTraining(paramNum);
         } catch (Exception ex) {
             Logger.getLogger(LearnerEditPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -338,12 +341,12 @@ public class LearnerEditPanel extends javax.swing.JPanel {
         //TODO: Show file chooser
         /*File f = new File("test.out");
         try {
-            al.writeToFile(f);
+        al.writeToFile(f);
         } catch (Exception ex) {
-            //TODO: display warning popup
-            Logger.getLogger(LearnerEditPanel.class.getName()).log(Level.SEVERE, null, ex);
+        //TODO: display warning popup
+        Logger.getLogger(LearnerEditPanel.class.getName()).log(Level.SEVERE, null, ex);
         } */
-            File file = Util.findSaveFile(LearningAlgorithm.getFileExtension(),
+        File file = Util.findSaveFile(LearningAlgorithm.getFileExtension(),
                 LearningAlgorithm.getFileTypeDescription(),
                 LearningAlgorithm.getDefaultLocation(),
                 this);

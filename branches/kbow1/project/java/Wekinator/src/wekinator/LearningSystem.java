@@ -977,7 +977,9 @@ public class LearningSystem {
                 learnerToEvaluate = paramNum;
                 evaluationType = EvaluationType.TRAINING;
                 evaluationWorker.execute();
-                Plog.log(Msg.EVAL_START_TRAIN, paramNum + "");
+                if (WekinatorRunner.isLogging()) {
+                    Plog.log(Msg.EVAL_START_TRAIN, paramNum + "");
+                }
 
             } else {
                 //   throw new Exception("Cannot evaluate; either already evaluating, or not trained");
@@ -1004,7 +1006,9 @@ public class LearningSystem {
                 this.numFolds = numFolds;
                 evaluationType = EvaluationType.CV;
                 evaluationWorker.execute();
-                Plog.log(Msg.EVAL_START_CV, paramNum + "," + numFolds);
+                if (WekinatorRunner.isLogging()) {
+                    Plog.log(Msg.EVAL_START_CV, paramNum + "," + numFolds);
+                }
             } else {
                 //throw new Exception("Cannot evaluate; either already evaluating, or not trained");
                 System.out.println("Error: Cannot evaluate");

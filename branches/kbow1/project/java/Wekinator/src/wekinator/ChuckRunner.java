@@ -40,10 +40,10 @@ public class ChuckRunner {
     protected static Logger logger = Logger.getLogger(ChuckRunner.class.getName());
 
     private ChuckRunner() {
-
     }
 
     public enum ChuckRunnerState {
+
         NOT_RUNNING,
         TRYING_TO_RUN,
         RUNNING
@@ -70,7 +70,6 @@ public class ChuckRunner {
     public static void removePropertyChangeListener(PropertyChangeListener listener) {
         ref.propertyChangeSupport.removePropertyChangeListener(listener);
     }
-
 
     /**
      * Get the value of runnerState
@@ -119,7 +118,7 @@ public class ChuckRunner {
         try {
             Thread.sleep(1000);
         } catch (InterruptedException ex) {
-           ChuckRunner.logger.log(Level.SEVERE, null, ex);
+            ChuckRunner.logger.log(Level.SEVERE, null, ex);
         }
 
         LinkedList<String[]> cmds = new LinkedList<String[]>();
@@ -192,7 +191,7 @@ public class ChuckRunner {
         if (configuration.isIsPlayalongLearningEnabled()) {
             s[2] = configuration.getPlayalongLearningFile();
         } else {
-            s[2] = configuration.getChuckDir() + File.separator + "score_players" + File.separator + "icmc_melody.ck";
+            s[2] = configuration.getChuckDir() + File.separator + "score_players" + File.separator + "no_score.ck";
         }
         cmds.add(s);
 
@@ -275,11 +274,15 @@ public class ChuckRunner {
         if (numErrLines != 0) {
             logger.log(Level.SEVERE, "Errors encountered running chuck: " + lastErrorMessages);
             setRunnerState(ChuckRunnerState.TRYING_TO_RUN);
-            Plog.log(Plog.Msg.ERROR, "Error running chuck: " + lastErrorMessages);
+            if (WekinatorRunner.isLogging()) {
+                Plog.log(Plog.Msg.ERROR, "Error running chuck: " + lastErrorMessages);
+            }
         } else {
             System.out.println("A miracle! Chuck runs.");
             setRunnerState(ChuckRunnerState.RUNNING);
-            Plog.chuckRunSuccessful(configuration);
+            if (WekinatorRunner.isLogging()) {
+                Plog.chuckRunSuccessful(configuration);
+            }
         }
     }
 
@@ -321,7 +324,7 @@ public class ChuckRunner {
         throw new CloneNotSupportedException();
     }
 
-     public static void exportConfigurationToChuckFile(ChuckConfiguration configuration, File file) throws IOException {
+    public static void exportConfigurationToChuckFile(ChuckConfiguration configuration, File file) throws IOException {
         //Open output stream
         BufferedWriter w = null;
         w = new BufferedWriter(new FileWriter(file));
@@ -351,7 +354,7 @@ public class ChuckRunner {
         if (configuration.isIsPlayalongLearningEnabled()) {
             w.write("Machine.add(\"" + configuration.getPlayalongLearningFile() + "\");\n");
         } else {
-            w.write("Machine.add(\"" + configuration.getChuckDir() + File.separator + "score_players" + File.separator + "icmc_melody.ck" + "\");\n");
+            w.write("Machine.add(\"" + configuration.getChuckDir() + File.separator + "score_players" + File.separator + "no_score.ck" + "\");\n");
         }
 
         if (configuration.isUseOscSynth()) {
@@ -368,7 +371,6 @@ public class ChuckRunner {
 
         w.close();
     }
-    
 }
 
 class LoggerThread implements Runnable {
@@ -392,7 +394,7 @@ class LoggerThread implements Runnable {
 
                 if (b == -1) {
                     stop = true;
-                   // System.out.println("made it to end of stream");
+                // System.out.println("made it to end of stream");
                 } else {
                     //TODO: send to console in reasonable way
                     System.out.print((char) b);
@@ -403,5 +405,5 @@ class LoggerThread implements Runnable {
                 Logger.getLogger(LoggerThread.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-    }    
+    }
 }

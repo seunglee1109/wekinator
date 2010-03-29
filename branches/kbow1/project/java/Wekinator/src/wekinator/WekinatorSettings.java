@@ -7,12 +7,9 @@ package wekinator;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.File;
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.logging.Level;
-import java.util.logging.Logger;
-import wekinator.Plog.Msg;
 import wekinator.util.Util;
 
 /**

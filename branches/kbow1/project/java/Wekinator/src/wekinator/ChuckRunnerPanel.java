@@ -54,7 +54,6 @@ public class ChuckRunnerPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
         labelAboutConfiguration = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         buttonRun = new javax.swing.JButton();
@@ -66,12 +65,11 @@ public class ChuckRunnerPanel extends javax.swing.JPanel {
         labelSynth = new javax.swing.JLabel();
         labelFeatures = new javax.swing.JLabel();
         labelPlayalong = new javax.swing.JLabel();
-
-        jLabel1.setText("ChucK configuration");
+        jLabel1 = new javax.swing.JLabel();
 
         labelAboutConfiguration.setText("Edit");
 
-        jButton1.setText("Edit...");
+        jButton1.setText("Edit ChucK configuration...");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -99,52 +97,59 @@ public class ChuckRunnerPanel extends javax.swing.JPanel {
 
         labelAboutConfiguration2.setText("Custom features:");
 
-        labelAboutConfiguration4.setText("Playalong:");
+        labelAboutConfiguration4.setText("Score player:");
 
         labelSynth.setText("jLabel2");
+        labelSynth.setMaximumSize(new java.awt.Dimension(200, 16));
 
-        labelFeatures.setText("labelFeatures");
+        labelFeatures.setText("10 features from custom_centroid.ck. 5 features from OSC.");
+        labelFeatures.setMaximumSize(new java.awt.Dimension(200, 16));
 
-        labelPlayalong.setText("labelFeatures");
+        labelPlayalong.setText("a_long_score_player_name.ck.");
+
+        jLabel1.setText("Current configuration:");
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
-                .addContainerGap()
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jButton1)
+                    .add(jLabel1)
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
+                        .add(23, 23, 23)
+                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(layout.createSequentialGroup()
+                                .add(labelAboutConfiguration1)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                .add(labelSynth, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 442, Short.MAX_VALUE))
+                            .add(labelAboutConfiguration)
+                            .add(layout.createSequentialGroup()
+                                .add(labelAboutConfiguration2)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                .add(labelFeatures, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .add(layout.createSequentialGroup()
+                                .add(labelAboutConfiguration4)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                .add(labelPlayalong, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 401, Short.MAX_VALUE))))
                     .add(layout.createSequentialGroup()
+                        .addContainerGap()
                         .add(buttonRun)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                         .add(buttonStop))
                     .add(layout.createSequentialGroup()
-                        .add(jLabel1)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(jButton1))
-                    .add(labelStatus)
-                    .add(layout.createSequentialGroup()
-                        .add(labelAboutConfiguration1)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(labelSynth, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 437, Short.MAX_VALUE))
-                    .add(labelAboutConfiguration)
-                    .add(layout.createSequentialGroup()
-                        .add(labelAboutConfiguration2)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(labelFeatures, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 368, Short.MAX_VALUE))
-                    .add(layout.createSequentialGroup()
-                        .add(labelAboutConfiguration4)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(labelPlayalong, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 412, Short.MAX_VALUE)))
+                        .addContainerGap()
+                        .add(labelStatus)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(layout.createSequentialGroup()
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(jLabel1)
-                    .add(jButton1))
+                .add(jButton1)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jLabel1)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(labelAboutConfiguration)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
@@ -159,13 +164,12 @@ public class ChuckRunnerPanel extends javax.swing.JPanel {
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(labelAboutConfiguration4)
                     .add(labelPlayalong, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 16, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 53, Short.MAX_VALUE)
-                .add(labelStatus, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 31, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 43, Short.MAX_VALUE)
+                .add(labelStatus, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 19, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(buttonRun)
-                    .add(buttonStop))
-                .addContainerGap())
+                    .add(buttonStop)))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -319,7 +323,7 @@ public class ChuckRunnerPanel extends javax.swing.JPanel {
             s = " not enabled ";
         }
         labelPlayalong.setText(s);
-
+        
     }
 
     private String getLastPart(String filename) {

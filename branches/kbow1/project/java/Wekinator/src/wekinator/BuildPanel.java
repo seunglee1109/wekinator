@@ -32,24 +32,25 @@ public class BuildPanel extends javax.swing.JPanel {
     boolean isPlayalongChuck = false;
     LearningSystem learningSystem = null;
     PropertyChangeListener scoreChangeListener = new PropertyChangeListener() {
+
         public void propertyChange(PropertyChangeEvent evt) {
             scorePropertyChanged(evt);
         }
     };
-
     PropertyChangeListener lsDatasetChangeListener = new PropertyChangeListener() {
+
         public void propertyChange(PropertyChangeEvent evt) {
             lsDatasetChanged(evt);
         }
     };
-
     ChangeListener datasetChangeListener = new ChangeListener() {
+
         public void stateChanged(ChangeEvent e) {
             datasetChanged(e);
         }
     };
-    
     ChangeListener paramsChangeListener = new ChangeListener() {
+
         public void stateChanged(ChangeEvent e) {
             paramsChanged(e);
         }
@@ -63,13 +64,14 @@ public class BuildPanel extends javax.swing.JPanel {
             public void propertyChange(PropertyChangeEvent evt) {
                 learningManagerChange(evt);
             }
-        }); 
+        });
 
-       WekinatorInstance.getWekinatorInstance().addPropertyChangeListener(new PropertyChangeListener() {
+        WekinatorInstance.getWekinatorInstance().addPropertyChangeListener(new PropertyChangeListener() {
+
             public void propertyChange(PropertyChangeEvent evt) {
                 wekinatorInstanceChange(evt);
             }
-        }); 
+        });
 
         updateScoreListener(null, WekinatorInstance.getWekinatorInstance().getPlayalongScore());
     }
@@ -84,12 +86,12 @@ public class BuildPanel extends javax.swing.JPanel {
         }
 
     }
-        private void wekinatorInstanceChange(PropertyChangeEvent evt) {
-                if (evt.getPropertyName().equals(WekinatorInstance.PROP_PLAYALONGSCORE)) {
-                    updateScoreListener((PlayalongScore) evt.getOldValue(), (PlayalongScore)evt.getNewValue());
-                }
-            }
 
+    private void wekinatorInstanceChange(PropertyChangeEvent evt) {
+        if (evt.getPropertyName().equals(WekinatorInstance.PROP_PLAYALONGSCORE)) {
+            updateScoreListener((PlayalongScore) evt.getOldValue(), (PlayalongScore) evt.getNewValue());
+        }
+    }
 
     void setLearningSystem(LearningSystem ls) {
         if (learningSystem == ls) {
@@ -106,8 +108,8 @@ public class BuildPanel extends javax.swing.JPanel {
                 dataset.removeChangeListener(datasetChangeListener);
             }
 
-           // WekinatorInstance.getWekinatorInstance().getPlayalongScore().removePropertyChangeListener(scoreChangeListener);
-           learningSystem.removePropertyChangeListener(lsDatasetChangeListener);
+            // WekinatorInstance.getWekinatorInstance().getPlayalongScore().removePropertyChangeListener(scoreChangeListener);
+            learningSystem.removePropertyChangeListener(lsDatasetChangeListener);
         }
 
 
@@ -127,7 +129,7 @@ public class BuildPanel extends javax.swing.JPanel {
             updateForDataset();
         }
 
-     //   learningSystem.getScore().addPropertyChangeListener(scoreChangeListener);
+        //   learningSystem.getScore().addPropertyChangeListener(scoreChangeListener);
         ls.addPropertyChangeListener(lsDatasetChangeListener); //TODO: why a dataset listener on ls ? w/ no dataset prop name check?
 
         for (int i = 0; i < numParams; i++) {
@@ -408,15 +410,16 @@ public class BuildPanel extends javax.swing.JPanel {
     }
 
     private void comboSynthActionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboSynthActionActionPerformed
-
-
 }//GEN-LAST:event_comboSynthActionActionPerformed
 
     private void buttonAddClipboardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAddClipboardActionPerformed
-        if (WekinatorInstance.getWekinatorInstance().getPlayalongScore() != null)
+        if (WekinatorInstance.getWekinatorInstance().getPlayalongScore() != null) {
             WekinatorInstance.getWekinatorInstance().getPlayalongScore().addParams(getParams(), 1.0);
+        }
 
-        Plog.log(Msg.PARAM_CLIPBOARD_ADDED_IN_PANEL);
+        if (WekinatorRunner.isLogging()) {
+            Plog.log(Msg.PARAM_CLIPBOARD_ADDED_IN_PANEL);
+        }
 }//GEN-LAST:event_buttonAddClipboardActionPerformed
 
     private void buttonRecordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonRecordActionPerformed
@@ -429,9 +432,11 @@ public class BuildPanel extends javax.swing.JPanel {
 
     private void buttonAddClipboard1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAddClipboard1ActionPerformed
         if (WekinatorInstance.getWekinatorInstance().getPlayalongScore() != null) {
-           WekinatorInstance.getWekinatorInstance().getPlayalongScore().view();
+            WekinatorInstance.getWekinatorInstance().getPlayalongScore().view();
         }
-        Plog.log(Msg.PARAM_CLIPBOARD_VIEWED);
+        if (WekinatorRunner.isLogging()) {
+            Plog.log(Msg.PARAM_CLIPBOARD_VIEWED);
+        }
     }//GEN-LAST:event_buttonAddClipboard1ActionPerformed
 
     private void comboSynthActionPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_comboSynthActionPropertyChange
@@ -444,18 +449,18 @@ public class BuildPanel extends javax.swing.JPanel {
         //as changing combo...
         Object o = evt.getItem();
         if (evt.getStateChange() == ItemEvent.SELECTED) {
-           
+
             buttonSynthPlay.setVisible(o == comboSynthAction.getItemAt(2));
-            
+
             if (o == comboSynthAction.getItemAt(0)) {
-                 startSynthListenToMe();
+                startSynthListenToMe();
             } else if (o == comboSynthAction.getItemAt(1)) {
                 startMeListenToSynth();
 
             }
         } else if (evt.getStateChange() == ItemEvent.DESELECTED) {
-             if (o == comboSynthAction.getItemAt(0)) {
-                 stopSynthListenToMe();
+            if (o == comboSynthAction.getItemAt(0)) {
+                stopSynthListenToMe();
             } else if (o == comboSynthAction.getItemAt(1)) {
                 stopMeListenToSynth();
 
@@ -465,54 +470,65 @@ public class BuildPanel extends javax.swing.JPanel {
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
         learningSystem.getDataset().showViewer();
-        Plog.log(Msg.DATA_VIEWER_OPENED);
+        if (WekinatorRunner.isLogging()) {
+            Plog.log(Msg.DATA_VIEWER_OPENED);
+        }
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void buttonSynthPlayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonSynthPlayActionPerformed
-       OscHandler.getOscHandler().startSound();
-       OscHandler.getOscHandler().sendParamsToSynth(getParams());
-       Plog.log(Msg.BUTTON_PLAY_HIT);
+        OscHandler.getOscHandler().startSound();
+        OscHandler.getOscHandler().sendParamsToSynth(getParams());
+        if (WekinatorRunner.isLogging()) {
+            Plog.log(Msg.BUTTON_PLAY_HIT);
+        }
     }//GEN-LAST:event_buttonSynthPlayActionPerformed
 
     private void buttonForgetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonForgetActionPerformed
         learningSystem.getDataset().deleteAll();
-        Plog.log(Msg.DATASET_CLEARED);
+        if (WekinatorRunner.isLogging()) {
+            Plog.log(Msg.DATASET_CLEARED);
+        }
     }//GEN-LAST:event_buttonForgetActionPerformed
 
     private void buttonPlayScoreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonPlayScoreActionPerformed
         boolean useJavaScore = (comboChooseScore.getSelectedIndex() == 0);
-        
+
         if (isPlayalongJava) {
             stopPlayalongJava();
-            Plog.log(Msg.BUTTON_PLAYALONG_STOP);
+            if (WekinatorRunner.isLogging()) {
+                Plog.log(Msg.BUTTON_PLAYALONG_STOP);
+            }
         } else if (isPlayalongChuck) {
             stopPlayalongChuck();
         } else if (useJavaScore) {
             startPlayalongJava();
-                        Plog.log(Msg.BUTTON_PLAYALONG_START);
+            if (WekinatorRunner.isLogging()) {
+                Plog.log(Msg.BUTTON_PLAYALONG_START);
+            }
 
         } else {
             startPlayalongChuck();
-        }        
+        }
     }//GEN-LAST:event_buttonPlayScoreActionPerformed
 
     private void startPlayalongJava() {
         if (WekinatorInstance.getWekinatorInstance().getPlayalongScore() != null) {
-                  WekinatorInstance.getWekinatorInstance().getPlayalongScore().play();
-                 }
+            WekinatorInstance.getWekinatorInstance().getPlayalongScore().play();
+        }
     }
 
     private void startPlayalongChuck() {
         OscHandler.getOscHandler().setBuildPanel(this); //TODO total hack get rid of this
         OscHandler.getOscHandler().playScore();
-            setButtonPlayalong(true); //TODO: enable this to happen somewhere else? have playalong state somewhere outside gui!
-         isPlayalongChuck = true;
-         startMeListenToSynth();
+        setButtonPlayalong(true); //TODO: enable this to happen somewhere else? have playalong state somewhere outside gui!
+        isPlayalongChuck = true;
+        startMeListenToSynth();
     }
 
     private void stopPlayalongJava() {
-        if (WekinatorInstance.getWekinatorInstance().getPlayalongScore() != null)
-        WekinatorInstance.getWekinatorInstance().getPlayalongScore().stop();
+        if (WekinatorInstance.getWekinatorInstance().getPlayalongScore() != null) {
+            WekinatorInstance.getWekinatorInstance().getPlayalongScore().stop();
+        }
     }
 
     private void stopPlayalongChuck() {
@@ -522,12 +538,11 @@ public class BuildPanel extends javax.swing.JPanel {
         stopMeListenToSynth();
     }
 
-      
     private void startRecording() {
         try {
             //Error here?
-       WekinatorLearningManager.getInstance().startDatasetCreation();
-       WekinatorLearningManager.getInstance().setParamsAndMask(getParams(), getMask());
+            WekinatorLearningManager.getInstance().startDatasetCreation();
+            WekinatorLearningManager.getInstance().setParamsAndMask(getParams(), getMask());
         } catch (Exception ex) {
             System.out.println("log this bp: can't start dataset creation");
         }
@@ -547,7 +562,7 @@ public class BuildPanel extends javax.swing.JPanel {
 
     public boolean[] getMask() {
         boolean[] m = new boolean[numParams];
-       // System.out.println("mask:"); //inf loop here!
+        // System.out.println("mask:"); //inf loop here!
         for (int i = 0; i < paramPanels.length; i++) {
             m[i] = paramPanels[i].getUse();
             System.out.println(m[i]);
@@ -598,7 +613,7 @@ public class BuildPanel extends javax.swing.JPanel {
     }
 
     private void updateForDataset() {
-                int numData = dataset.getNumDatapoints();
+        int numData = dataset.getNumDatapoints();
         labelNumExamples.setText(numData + " examples recorded");
         buttonForget.setEnabled(numData != 0);
     }
@@ -606,10 +621,7 @@ public class BuildPanel extends javax.swing.JPanel {
     protected void updateButtons() {
         Mode m = WekinatorLearningManager.getInstance().getMode();
 
-        buttonRecord.setEnabled(learningSystem != null
-                && m != Mode.EVALUATING
-                && m != Mode.RUNNING
-                && m != Mode.TRAINING);
+        buttonRecord.setEnabled(learningSystem != null && m != Mode.EVALUATING && m != Mode.RUNNING && m != Mode.TRAINING);
 
         setButtonRecording(m == Mode.DATASET_CREATION);
 
@@ -619,23 +631,23 @@ public class BuildPanel extends javax.swing.JPanel {
         if (evt.getPropertyName().equals(WekinatorLearningManager.PROP_MODE)) {
             WekinatorLearningManager.Mode m = WekinatorLearningManager.getInstance().getMode();
             updateButtons();
-           // setButtonRecording(m == Mode.DATASET_CREATION);
-           // setButtonRecordingEnable(m != Mode.RUNNING && m != Mode.TRAINING && m != Mode.EVALUATING);
+        // setButtonRecording(m == Mode.DATASET_CREATION);
+        // setButtonRecordingEnable(m != Mode.RUNNING && m != Mode.TRAINING && m != Mode.EVALUATING);
 
         } else if (evt.getPropertyName().equals(WekinatorLearningManager.PROP_PARAMS)) {
-         //   if (comboSynthAction.getSelectedIndex() == 1) {
-                //Listen
-                setParams(WekinatorLearningManager.getInstance().getParams());
-            //Send out via osc
-            //TODO
-          //  }
+            //   if (comboSynthAction.getSelectedIndex() == 1) {
+            //Listen
+            setParams(WekinatorLearningManager.getInstance().getParams());
+        //Send out via osc
+        //TODO
+        //  }
         }
     }
 
     private void setButtonPlayalong(boolean y) {
         if (y) {
             buttonPlayScore.setText("Stop playing score");
-           // buttonRecord.setBackground(Color.RED); : TODO: overide LAF
+        // buttonRecord.setBackground(Color.RED); : TODO: overide LAF
         } else {
             buttonPlayScore.setText("Start playing score");
         }
@@ -654,17 +666,17 @@ public class BuildPanel extends javax.swing.JPanel {
     //The user has entered in new parameter values in the minipanes
     //This is coming from minipanels ONLY
     private void paramsChanged(ChangeEvent e) {
-         double[] p = getParams();
-           boolean[] b = getMask();
+        double[] p = getParams();
+        boolean[] b = getMask();
         if (comboSynthAction.getSelectedIndex() == 0) {
             //Listen
-            
+
             //Send out via osc
 
             OscHandler.getOscHandler().sendParamsToSynth(getParams());
             System.out.println("Sending params...");
         }
-           //Propogate changes to LM
+        //Propogate changes to LM
         WekinatorLearningManager.getInstance().setParamsAndMask(p, b);
     }
 
@@ -678,7 +690,7 @@ public class BuildPanel extends javax.swing.JPanel {
             return;
         }
         if (p.length != paramPanels.length) {
-         //   System.out.println("***! plenght is " + p.length + ", paramPanels length is " + paramPanels.length);
+            //   System.out.println("***! plenght is " + p.length + ", paramPanels length is " + paramPanels.length);
             return;
         }
         for (int i = 0; i < paramPanels.length; i++) {
@@ -686,19 +698,19 @@ public class BuildPanel extends javax.swing.JPanel {
                 System.out.println("***! paramPanels[" + i + "] is null");
                 return;
             }
-          /*  if (p[i] == null) {
-                System.out.println("***! p[" + i + "] is null");
+            /*  if (p[i] == null) {
+            System.out.println("***! p[" + i + "] is null");
             } */
             paramPanels[i].setValue(p[i]); //TODO TODO TODO: Getting null pointer exception here after learning manager change (post learningmanager.SetParams(...))
         }
     }
 
     private void scorePropertyChanged(PropertyChangeEvent evt) {
-            if (evt.getPropertyName().equals(PlayalongScore.PROP_ISPLAYING)) {
-                boolean playing = WekinatorInstance.getWekinatorInstance().getPlayalongScore().isPlaying();
-                     setButtonPlayalong(playing);
-                     isPlayalongJava = playing;
-           
-            }
+        if (evt.getPropertyName().equals(PlayalongScore.PROP_ISPLAYING)) {
+            boolean playing = WekinatorInstance.getWekinatorInstance().getPlayalongScore().isPlaying();
+            setButtonPlayalong(playing);
+            isPlayalongJava = playing;
+
+        }
     }
 }

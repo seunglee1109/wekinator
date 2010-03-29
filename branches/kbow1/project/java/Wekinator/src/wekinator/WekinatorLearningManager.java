@@ -289,7 +289,9 @@ public class WekinatorLearningManager {
             try {
                 double[] os = WekinatorInstance.getWekinatorInstance().getLearningSystem().classify(features);
                 setOutputs(os);
-                Plog.runStep(features, os);
+                if (WekinatorRunner.isLogging()) {
+                    Plog.runStep(features, os);
+                }
 
                 //TODO RAF important TODO TODO TODO: issue of displaying output for dist features
                 OscHandler.getOscHandler().sendParamsToSynth(outputs);
@@ -390,7 +392,9 @@ public class WekinatorLearningManager {
                 wekinatorInstancePropChange(evt);
             }
         });
-        Plog.setWekinatorLearningManager(this);
+        if (WekinatorRunner.isLogging()) {
+            Plog.setWekinatorLearningManager(this);
+        }
 
         KeyEventPostProcessor processor = new KeyEventPostProcessor() {
 

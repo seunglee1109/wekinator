@@ -63,7 +63,9 @@ public class MainGUI extends javax.swing.JFrame {
         prefs.setResizable(false);
 
         registerForMacOSXEvents();
-        WekinatorInstance.getWekinatorInstance().setupPlog();
+        if (WekinatorRunner.isLogging()) {
+            WekinatorInstance.getWekinatorInstance().setupPlog();
+        }
 
         learningSystemConfigurationPanel.setMainGUI(this);
         //Anywhere we add a listener, also update to current property.
@@ -301,8 +303,8 @@ public class MainGUI extends javax.swing.JFrame {
         jPanel8Layout.setHorizontalGroup(
             jPanel8Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel8Layout.createSequentialGroup()
-                .add(chuckRunnerPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 434, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(351, Short.MAX_VALUE))
+                .add(chuckRunnerPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 377, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(147, Short.MAX_VALUE))
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -348,7 +350,7 @@ public class MainGUI extends javax.swing.JFrame {
                         .add(buttonOscDisconnect))
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel5Layout.createSequentialGroup()
                         .add(23, 23, 23)
-                        .add(labelOscStatus, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 756, Short.MAX_VALUE))
+                        .add(labelOscStatus, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 495, Short.MAX_VALUE))
                     .add(jPanel5Layout.createSequentialGroup()
                         .addContainerGap()
                         .add(jLabel1)))
@@ -649,9 +651,10 @@ private void exit() {
     //Want to save settings here!
     wek.saveCurrentSettings();
         try {
-          Plog.log(Msg.CLOSE);
-
+          if (WekinatorRunner.isLogging()) {
+              Plog.log(Msg.CLOSE);
             Plog.close();
+          }
         } catch (IOException ex) {
             Logger.getLogger(MainGUI.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -764,14 +767,18 @@ private void menuResetLogActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
             + "Please do this ONLY at the very beginning of Part A / Part B of your PLOrk assignment.\n" 
             + "If you do it later, it will erase needed logging info.", "", JOptionPane.YES_NO_OPTION);
                 if (lResponse == JOptionPane.YES_OPTION) {
-                    Plog.startPlog();
+                    if (WekinatorRunner.isLogging()) {
+                        Plog.startPlog();
+                    }
                 }
 
     
 }//GEN-LAST:event_menuResetLogActionPerformed
 
 private void menuFlushLogActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuFlushLogActionPerformed
-    Plog.flush();
+    if (WekinatorRunner.isLogging()) {
+        Plog.flush();
+    }
 }//GEN-LAST:event_menuFlushLogActionPerformed
 
 private void menuPerformanceModeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuPerformanceModeActionPerformed
@@ -779,11 +786,15 @@ private void menuPerformanceModeActionPerformed(java.awt.event.ActionEvent evt) 
         int lResponse = JOptionPane.showConfirmDialog(this, "Are you sure you want set to performance mode?\n"
             + "This will turn off some logging, so please don't do this while working on your plork assignment.\n", "", JOptionPane.YES_NO_OPTION);
                 if (lResponse == JOptionPane.YES_OPTION) {
-                    Plog.performanceMode = true;
+                    if (WekinatorRunner.isLogging()) {
+                        Plog.performanceMode = true;
+                    }
                 }
 
     } else {
-        Plog.performanceMode = false;
+        if (WekinatorRunner.isLogging()) {
+            Plog.performanceMode = false;
+        }
     }
 }//GEN-LAST:event_menuPerformanceModeActionPerformed
 
