@@ -98,18 +98,17 @@ public class RunPanel extends javax.swing.JPanel {
     private void initComponents() {
 
         jPanel5 = new javax.swing.JPanel();
-        jButton11 = new javax.swing.JButton();
+        buttonAddToClipboard = new javax.swing.JButton();
         scrollOutputPanel = new javax.swing.JScrollPane();
         panelOutputs = new javax.swing.JPanel();
         buttonRun = new javax.swing.JButton();
 
         jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder("Generated parameters"));
 
-        jButton11.setText("add to clipboard");
-        jButton11.setEnabled(false);
-        jButton11.addActionListener(new java.awt.event.ActionListener() {
+        buttonAddToClipboard.setText("add to clipboard");
+        buttonAddToClipboard.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton11ActionPerformed(evt);
+                buttonAddToClipboardActionPerformed(evt);
             }
         });
 
@@ -121,7 +120,7 @@ public class RunPanel extends javax.swing.JPanel {
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel5Layout.createSequentialGroup()
-                .add(jButton11)
+                .add(buttonAddToClipboard)
                 .addContainerGap(153, Short.MAX_VALUE))
             .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                 .add(org.jdesktop.layout.GroupLayout.TRAILING, scrollOutputPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE))
@@ -130,7 +129,7 @@ public class RunPanel extends javax.swing.JPanel {
             jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel5Layout.createSequentialGroup()
                 .addContainerGap(256, Short.MAX_VALUE)
-                .add(jButton11))
+                .add(buttonAddToClipboard))
             .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                 .add(jPanel5Layout.createSequentialGroup()
                     .add(scrollOutputPanel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 246, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
@@ -160,13 +159,13 @@ public class RunPanel extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed
+    private void buttonAddToClipboardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAddToClipboardActionPerformed
         if (WekinatorInstance.getWekinatorInstance().getPlayalongScore() == null) {
             WekinatorInstance.getWekinatorInstance().setPlayalongScore(new PlayalongScore(WekinatorInstance.getWekinatorInstance().getLearningSystem().getNumParams()));
         }
-            WekinatorInstance.getWekinatorInstance().getPlayalongScore().addParams(WekinatorLearningManager.getInstance().getOutputs(), 1.0);
+        WekinatorInstance.getWekinatorInstance().getPlayalongScore().addParams(WekinatorLearningManager.getInstance().getOutputs(), 1.0);
         
-}//GEN-LAST:event_jButton11ActionPerformed
+}//GEN-LAST:event_buttonAddToClipboardActionPerformed
 
     private void buttonRunActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonRunActionPerformed
                 if (!isRunning) {
@@ -225,8 +224,8 @@ public class RunPanel extends javax.swing.JPanel {
         }
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton buttonAddToClipboard;
     private javax.swing.JButton buttonRun;
-    private javax.swing.JButton jButton11;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel panelOutputs;
     private javax.swing.JScrollPane scrollOutputPanel;

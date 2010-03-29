@@ -260,8 +260,10 @@ public class Plog {
     }
 
     public static void log(Msg which, String m) {
-
-
+        if (p == null) {
+            System.out.println("ERROR: logging with null log!");
+            return;
+        }
         p.println(ts() + "," + which.ordinal() + "," + which + "," + m);
     }
 

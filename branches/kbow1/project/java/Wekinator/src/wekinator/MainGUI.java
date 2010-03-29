@@ -65,6 +65,10 @@ public class MainGUI extends javax.swing.JFrame {
         registerForMacOSXEvents();
         if (WekinatorRunner.isLogging()) {
             WekinatorInstance.getWekinatorInstance().setupPlog();
+        } else {
+            menuResetLog.setEnabled(false);
+            menuFlushLog.setEnabled(false);
+            menuPerformanceMode.setEnabled(false);
         }
 
         learningSystemConfigurationPanel.setMainGUI(this);

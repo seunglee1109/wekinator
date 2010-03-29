@@ -131,7 +131,11 @@ public class PlayalongScore implements Serializable {
     public void addParams(double[] p, double time) {
         synchronized(lock1) {
             if (p != null && p.length == numParams && time > 0) {
-                paramLists.add(p);
+                double[] newp = new double[p.length];
+                for (int i = 0; i < p.length; i++) {
+                    newp[i] = p[i];
+                }
+                paramLists.add(newp);
                 secondLists.add(time);
                 fireStateChanged();
             }

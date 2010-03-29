@@ -263,7 +263,6 @@ public class TrainRunPanel extends javax.swing.JPanel {
         toggleRun = new javax.swing.JToggleButton();
         toggleConfigure = new javax.swing.JToggleButton();
         buttonShh = new javax.swing.JButton();
-        buttonSave = new javax.swing.JButton();
 
         jLabel3.setText("jLabel3");
 
@@ -341,13 +340,6 @@ public class TrainRunPanel extends javax.swing.JPanel {
             }
         });
 
-        buttonSave.setText("Save learning system");
-        buttonSave.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonSaveActionPerformed(evt);
-            }
-        });
-
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -356,7 +348,6 @@ public class TrainRunPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(buttonShh)
-                    .add(buttonSave)
                     .add(menuPanel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(layoutPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE))
@@ -367,15 +358,13 @@ public class TrainRunPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(layout.createSequentialGroup()
-                        .add(layoutPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 712, Short.MAX_VALUE)
-                        .addContainerGap())
+                        .add(layoutPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 638, Short.MAX_VALUE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED))
                     .add(layout.createSequentialGroup()
                         .add(menuPanel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(buttonShh)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(buttonSave)
-                        .add(310, 310, 310))))
+                        .add(buttonShh)))
+                .add(6, 6, 6))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -390,30 +379,6 @@ public class TrainRunPanel extends javax.swing.JPanel {
         OscHandler.getOscHandler().startSound();
 
     }
-
-    private void buttonSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonSaveActionPerformed
-
-
-        File file = Util.findSaveFile(LearningSystem.getFileExtension(),
-                LearningSystem.getFileTypeDescription(),
-                LearningSystem.getDefaultLocation(),
-                this);
-        if (file != null) {
-            try {
-                ls.writeToFile(file); //TODOTODOTODO: update last path on this.
-                Util.setLastFile(LearningSystem.getFileExtension(), file);
-                            if (WekinatorRunner.isLogging()) {
-
-                if (WekinatorRunner.isLogging()) {
-                    Plog.log(Msg.BUTTON_LS_SAVE_HIT);
-                }
-                            }
-            } catch (Exception ex) {
-                Logger.getLogger(TrainRunPanel.class.getName()).log(Level.INFO, null, ex);
-                JOptionPane.showMessageDialog(this, ex.getMessage(), "Could not save to file", JOptionPane.ERROR_MESSAGE);
-            }
-        }
-}//GEN-LAST:event_buttonSaveActionPerformed
 
     private void toggleCollectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_toggleCollectActionPerformed
         if (toggleCollect.isSelected()) {
@@ -477,7 +442,6 @@ public class TrainRunPanel extends javax.swing.JPanel {
     private wekinator.BuildPanel buildPanel;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.ButtonGroup buttonGroup2;
-    private javax.swing.JButton buttonSave;
     private javax.swing.JButton buttonShh;
     private wekinator.EditPanel editPanel;
     private javax.swing.JLabel jLabel3;
