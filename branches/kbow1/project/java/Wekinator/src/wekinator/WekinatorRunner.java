@@ -33,7 +33,18 @@ public class WekinatorRunner {
     protected static OptionSpec<Void> run;
     protected static OptionSpec<Void> connect;
     protected static OptionSpec<Void> min;
+    protected static OptionSpec<Void> isp;
+    protected static boolean isLogging = false;
+    protected static boolean isPlork = false;
     private static final WekinatorRunner ref = new WekinatorRunner();
+
+    public static boolean isLogging() {
+        return isLogging;
+    }
+
+    public static boolean isPlork() {
+        return isPlork;
+    }
 
     public static boolean isMinimizeOnRun() {
         return minimizeOnRun;
@@ -97,6 +108,7 @@ public class WekinatorRunner {
         run = parser.accepts("run", "start running on load (no argument necessary)"); //run automatically
         connect = parser.accepts("connect", "start OSC connection on load (used only when running chuck separately");
         min = parser.accepts("min", "minimize after running (no argument; used only with --run)");
+        isp = parser.accepts("p", "plork student special build with logging (no argument necessary)");
     }
 
     private static File getFeatureFile(String filename) {
@@ -219,6 +231,12 @@ public class WekinatorRunner {
                 connectAutomatically = true;
                 System.out.println("Automatically connecting");
             }
+
+            if (options.has(isp)) {
+                isPlork = true;
+                isLogging = true;
+                System.out.println("Running plork student special build");
+            } 
 
             //Now run!
 

@@ -254,14 +254,14 @@ public class MainGUI extends javax.swing.JFrame {
         menuItemViewConsole = new javax.swing.JMenuItem();
         menuItemViewFeatureViewer = new javax.swing.JMenuItem();
         menuItemViewDataset = new javax.swing.JMenuItem();
-        menuItemViewDataset1 = new javax.swing.JMenuItem();
+        menuItemViewGraphDataset = new javax.swing.JMenuItem();
         menuItemViewParamClipboard = new javax.swing.JMenuItem();
         actionMenu = new javax.swing.JMenu();
         menuEndGesture = new javax.swing.JMenuItem();
         menuAllGesture = new javax.swing.JMenuItem();
-        jMenuItem3 = new javax.swing.JMenuItem();
-        jMenuItem5 = new javax.swing.JMenuItem();
-        checkPerformanceMode = new javax.swing.JCheckBoxMenuItem();
+        menuResetLog = new javax.swing.JMenuItem();
+        menuFlushLog = new javax.swing.JMenuItem();
+        menuPerformanceMode = new javax.swing.JCheckBoxMenuItem();
         helpMenu1 = new javax.swing.JMenu();
         contentsMenuItem1 = new javax.swing.JMenuItem();
         aboutMenuItem1 = new javax.swing.JMenuItem();
@@ -497,14 +497,14 @@ public class MainGUI extends javax.swing.JFrame {
         });
         viewMenu.add(menuItemViewDataset);
 
-        menuItemViewDataset1.setText("Graphical dataset editor");
-        menuItemViewDataset1.setEnabled(false);
-        menuItemViewDataset1.addActionListener(new java.awt.event.ActionListener() {
+        menuItemViewGraphDataset.setText("Graphical dataset editor");
+        menuItemViewGraphDataset.setEnabled(false);
+        menuItemViewGraphDataset.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuItemViewDataset1ActionPerformed(evt);
+                menuItemViewGraphDatasetActionPerformed(evt);
             }
         });
-        viewMenu.add(menuItemViewDataset1);
+        viewMenu.add(menuItemViewGraphDataset);
 
         menuItemViewParamClipboard.setText("Parameter clipboard");
         menuItemViewParamClipboard.setEnabled(false);
@@ -532,29 +532,29 @@ public class MainGUI extends javax.swing.JFrame {
         menuAllGesture.setEnabled(false);
         actionMenu.add(menuAllGesture);
 
-        jMenuItem3.setText("Reset log");
-        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+        menuResetLog.setText("Reset log");
+        menuResetLog.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem3ActionPerformed(evt);
+                menuResetLogActionPerformed(evt);
             }
         });
-        actionMenu.add(jMenuItem3);
+        actionMenu.add(menuResetLog);
 
-        jMenuItem5.setText("Flush log file");
-        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+        menuFlushLog.setText("Flush log file");
+        menuFlushLog.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem5ActionPerformed(evt);
+                menuFlushLogActionPerformed(evt);
             }
         });
-        actionMenu.add(jMenuItem5);
+        actionMenu.add(menuFlushLog);
 
-        checkPerformanceMode.setText("Performance mode");
-        checkPerformanceMode.addActionListener(new java.awt.event.ActionListener() {
+        menuPerformanceMode.setText("Performance mode");
+        menuPerformanceMode.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                checkPerformanceModeActionPerformed(evt);
+                menuPerformanceModeActionPerformed(evt);
             }
         });
-        actionMenu.add(checkPerformanceMode);
+        actionMenu.add(menuPerformanceMode);
 
         menuBar.add(actionMenu);
 
@@ -693,14 +693,14 @@ private void menuItemViewFeatureViewerActionPerformed(java.awt.event.ActionEvent
     FeatureExtractionController.showFeatureViewer();
 }//GEN-LAST:event_menuItemViewFeatureViewerActionPerformed
 
-private void menuItemViewDataset1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemViewDataset1ActionPerformed
+private void menuItemViewGraphDatasetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemViewGraphDatasetActionPerformed
     LearningSystem ls = WekinatorInstance.getWekinatorInstance().getLearningSystem();
     if (ls != null && ls.getDataset() != null) {
         new GraphDataViewFrame(ls.getDataset()).setVisible(true);
 
     }
 
-}//GEN-LAST:event_menuItemViewDataset1ActionPerformed
+}//GEN-LAST:event_menuItemViewGraphDatasetActionPerformed
 
 private void menuEndGestureActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuEndGestureActionPerformed
     boolean[] mask = trainRunPanel1.getMask();
@@ -759,7 +759,7 @@ private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:even
     exit();
 }//GEN-LAST:event_formWindowClosing
 
-private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+private void menuResetLogActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuResetLogActionPerformed
     int lResponse = JOptionPane.showConfirmDialog(this, "Are you sure you want to reset the log?\n"
             + "Please do this ONLY at the very beginning of Part A / Part B of your PLOrk assignment.\n" 
             + "If you do it later, it will erase needed logging info.", "", JOptionPane.YES_NO_OPTION);
@@ -768,14 +768,14 @@ private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
                 }
 
     
-}//GEN-LAST:event_jMenuItem3ActionPerformed
+}//GEN-LAST:event_menuResetLogActionPerformed
 
-private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+private void menuFlushLogActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuFlushLogActionPerformed
     Plog.flush();
-}//GEN-LAST:event_jMenuItem5ActionPerformed
+}//GEN-LAST:event_menuFlushLogActionPerformed
 
-private void checkPerformanceModeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkPerformanceModeActionPerformed
-    if (checkPerformanceMode.isSelected()) {
+private void menuPerformanceModeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuPerformanceModeActionPerformed
+    if (menuPerformanceMode.isSelected()) {
         int lResponse = JOptionPane.showConfirmDialog(this, "Are you sure you want set to performance mode?\n"
             + "This will turn off some logging, so please don't do this while working on your plork assignment.\n", "", JOptionPane.YES_NO_OPTION);
                 if (lResponse == JOptionPane.YES_OPTION) {
@@ -785,7 +785,7 @@ private void checkPerformanceModeActionPerformed(java.awt.event.ActionEvent evt)
     } else {
         Plog.performanceMode = false;
     }
-}//GEN-LAST:event_checkPerformanceModeActionPerformed
+}//GEN-LAST:event_menuPerformanceModeActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem aboutMenuItem1;
@@ -795,7 +795,6 @@ private void checkPerformanceModeActionPerformed(java.awt.event.ActionEvent evt)
     private javax.swing.ButtonGroup buttonGroupSettingsSource;
     private javax.swing.JButton buttonOscConnect;
     private javax.swing.JButton buttonOscDisconnect;
-    private javax.swing.JCheckBoxMenuItem checkPerformanceMode;
     private wekinator.ChuckRunnerPanel chuckRunnerPanel1;
     private javax.swing.JMenuItem contentsMenuItem1;
     private wekinator.FeatureConfigurationPanel featureConfigurationPanel1;
@@ -804,9 +803,7 @@ private void checkPerformanceModeActionPerformed(java.awt.event.ActionEvent evt)
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
-    private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel8;
@@ -817,11 +814,14 @@ private void checkPerformanceModeActionPerformed(java.awt.event.ActionEvent evt)
     private javax.swing.JMenuItem menuAllGesture;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenuItem menuEndGesture;
+    private javax.swing.JMenuItem menuFlushLog;
     private javax.swing.JMenuItem menuItemViewConsole;
     private javax.swing.JMenuItem menuItemViewDataset;
-    private javax.swing.JMenuItem menuItemViewDataset1;
     private javax.swing.JMenuItem menuItemViewFeatureViewer;
+    private javax.swing.JMenuItem menuItemViewGraphDataset;
     private javax.swing.JMenuItem menuItemViewParamClipboard;
+    private javax.swing.JCheckBoxMenuItem menuPerformanceMode;
+    private javax.swing.JMenuItem menuResetLog;
     private javax.swing.JMenuItem menuSaveDataset;
     private javax.swing.JMenuItem menuSaveLearningSystem;
     private javax.swing.JTabbedPane panelMainTabs;
@@ -906,7 +906,22 @@ private void checkPerformanceModeActionPerformed(java.awt.event.ActionEvent evt)
         menuItemViewFeatureViewer.setEnabled(featValid);
         menuItemViewDataset.setEnabled(WekinatorInstance.getWekinatorInstance().getLearningSystem() != null && WekinatorInstance.getWekinatorInstance().getLearningSystem().getDataset() != null);
         menuItemViewParamClipboard.setEnabled(learnValid);
-        //menuItemViewDataset1.setEnabled(WekinatorInstance.getWekinatorInstance().getLearningSystem() != null && WekinatorInstance.getWekinatorInstance().getLearningSystem().getDataset() != null);
+        
+        if (!WekinatorRunner.isPlork()) {
+            menuEndGesture.setEnabled(WekinatorInstance.getWekinatorInstance().getLearningSystem() != null && WekinatorInstance.getWekinatorInstance().getLearningSystem().getDataset() != null);
+            menuAllGesture.setEnabled(WekinatorInstance.getWekinatorInstance().getLearningSystem() != null && WekinatorInstance.getWekinatorInstance().getLearningSystem().getDataset() != null);
+        } else {
+             menuEndGesture.setEnabled(false);
+             menuAllGesture.setEnabled(false);
+        }
+
+
+        //Disable for plork build:
+        if (! WekinatorRunner.isPlork) {
+            menuItemViewGraphDataset.setEnabled(WekinatorInstance.getWekinatorInstance().getLearningSystem() != null && WekinatorInstance.getWekinatorInstance().getLearningSystem().getDataset() != null);
+        } else {
+           menuItemViewGraphDataset.setEnabled(false);
+        }
 
         setFeatureConfigurationPanelEnabled(connected);
         setLearningSystemConfigurationPanelEnabled(connected && featValid);
