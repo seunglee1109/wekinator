@@ -268,6 +268,7 @@ public class MainGUI extends javax.swing.JFrame {
         menuResetLog = new javax.swing.JMenuItem();
         menuFlushLog = new javax.swing.JMenuItem();
         menuPerformanceMode = new javax.swing.JCheckBoxMenuItem();
+        menuEnableOscControl = new javax.swing.JCheckBoxMenuItem();
         helpMenu1 = new javax.swing.JMenu();
         contentsMenuItem1 = new javax.swing.JMenuItem();
         aboutMenuItem1 = new javax.swing.JMenuItem();
@@ -562,6 +563,14 @@ public class MainGUI extends javax.swing.JFrame {
         });
         actionMenu.add(menuPerformanceMode);
 
+        menuEnableOscControl.setText("Enable OSC control of GUI");
+        menuEnableOscControl.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuEnableOscControlActionPerformed(evt);
+            }
+        });
+        actionMenu.add(menuEnableOscControl);
+
         menuBar.add(actionMenu);
 
         helpMenu1.setText("Help");
@@ -802,6 +811,10 @@ private void menuPerformanceModeActionPerformed(java.awt.event.ActionEvent evt) 
     }
 }//GEN-LAST:event_menuPerformanceModeActionPerformed
 
+private void menuEnableOscControlActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuEnableOscControlActionPerformed
+    OscController.setOscControllable(menuEnableOscControl.isSelected());
+}//GEN-LAST:event_menuEnableOscControlActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem aboutMenuItem1;
     private javax.swing.JMenu actionMenu;
@@ -828,6 +841,7 @@ private void menuPerformanceModeActionPerformed(java.awt.event.ActionEvent evt) 
     private wekinator.LearningSystemConfigurationPanel learningSystemConfigurationPanel;
     private javax.swing.JMenuItem menuAllGesture;
     private javax.swing.JMenuBar menuBar;
+    private javax.swing.JCheckBoxMenuItem menuEnableOscControl;
     private javax.swing.JMenuItem menuEndGesture;
     private javax.swing.JMenuItem menuFlushLog;
     private javax.swing.JMenuItem menuItemViewConsole;
