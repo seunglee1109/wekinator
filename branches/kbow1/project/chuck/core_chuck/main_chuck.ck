@@ -175,7 +175,8 @@ spork ~oscUseFeatureListWait();
 //spork ~oscStopWait();
 // Don't do this until feature extractors set up! spork ~extractFeatures();
 
-
+//chuck can init handshake too!
+receivedHello();
 
 	spork ~oscHidSetupWait();
 	spork ~oscHidSetupStopWait();
