@@ -13,7 +13,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -21,7 +20,7 @@ import java.util.logging.Logger;
  *
  * @author rebecca
  */
-public class HidSetup implements Serializable {
+public class HidSetup {
 
     private int numAxes = 0;
     private int numHats = 0;
@@ -240,34 +239,7 @@ public class HidSetup implements Serializable {
         fout.close();
     }
 
-    public boolean writeToFileOld(File f) {
-        FileOutputStream outstream = null;
-        ObjectOutputStream objout = null;
-        boolean success = false;
-        try {
-            outstream = new FileOutputStream(f);
-            objout = new ObjectOutputStream(outstream);
-            objout.writeObject(this);
-            success = true;
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(HidSetup.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(HidSetup.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            try {
-                if (objout != null) {
-                    objout.close();
-                }
-                if (outstream != null) {
-                    outstream.close();
-                }
-            } catch (IOException ex) {
-                Logger.getLogger(HidSetup.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        return success;
-    }
-
+    
     public static HidSetup readFromFile(File f) throws FileNotFoundException, IOException, ClassNotFoundException {
       FileInputStream fin = new FileInputStream(f);
         ObjectInputStream in = new ObjectInputStream(fin);
@@ -275,36 +247,6 @@ public class HidSetup implements Serializable {
         in.close();
         fin.close();
         return h;
-    }
-
-    public static HidSetup readFromFileOld(File f) {
-        FileInputStream instream = null;
-        ObjectInputStream objin = null;
-        HidSetup setup = null;
-        try {
-            instream = new FileInputStream(f);
-            objin = new ObjectInputStream(instream);
-            setup = (HidSetup) objin.readObject();
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(HidSetup.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(HidSetup.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(HidSetup.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            try {
-                if (objin != null) {
-                    objin.close();
-                }
-                if (instream != null) {
-                    instream.close();
-                }
-            } catch (IOException ex) {
-                Logger.getLogger(HidSetup.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
-        }
-        return setup;
     }
 
     public String print(int a[]) {

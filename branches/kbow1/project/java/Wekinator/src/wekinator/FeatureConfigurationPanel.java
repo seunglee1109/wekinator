@@ -733,14 +733,40 @@ public class FeatureConfigurationPanel extends javax.swing.JPanel {
             if (hidSetup != null) {
                 featureConfiguration.setHidSetup(hidSetup);
             }
-            featureConfiguration.setAudioExtractionRate(Integer.parseInt(textAudioRate.getText()));
-            featureConfiguration.setFftSize(Integer.parseInt(textFftSize.getText()));
-            featureConfiguration.setFftWindowSize(Integer.parseInt(textWindowSize.getText()));
-            //featureConfiguration.setHidSetup not necessary: would've done this regardless
-            featureConfiguration.setMotionSensorExtractionRate(Integer.parseInt(textMotionExtractionRate.getText()));
-            featureConfiguration.setNumCustomChuckFeatures(Integer.parseInt(textNumCustomChuckFeatures.getText()));
+            try {
+                featureConfiguration.setAudioExtractionRate(Integer.parseInt(textAudioRate.getText()));
+            } catch (Exception ex) {
+                featureConfiguration.setAudioExtractionRate(100);
+            }
+            try {
+                featureConfiguration.setFftSize(Integer.parseInt(textFftSize.getText()));
+            } catch (Exception ex) {
+                 featureConfiguration.setFftSize(1024);
+            }
 
-            featureConfiguration.setNumCustomOscFeatures(Integer.parseInt(textNumCustomOSCFeatures.getText()));
+            try {
+                featureConfiguration.setFftWindowSize(Integer.parseInt(textWindowSize.getText()));
+            } catch (Exception ex) {
+                featureConfiguration.setFftWindowSize(256);
+            }
+            //featureConfiguration.setHidSetup not necessary: would've done this regardless
+            try {
+                featureConfiguration.setMotionSensorExtractionRate(Integer.parseInt(textMotionExtractionRate.getText()));
+            } catch (Exception ex) {
+                featureConfiguration.setMotionSensorExtractionRate(100);
+            }
+
+            try {
+                featureConfiguration.setNumCustomChuckFeatures(Integer.parseInt(textNumCustomChuckFeatures.getText()));
+            } catch (Exception ex) {
+               featureConfiguration.setNumCustomChuckFeatures(0);
+            }
+
+            try {
+                featureConfiguration.setNumCustomOscFeatures(Integer.parseInt(textNumCustomOSCFeatures.getText()));
+            } catch (Exception ex) {
+                featureConfiguration.setNumCustomOscFeatures(0);
+            }
             if (radioWebcamEdge.getModel().isSelected()) {
                 featureConfiguration.setProcessingExtractorType(FeatureConfiguration.ProcessingExractorType.DOWNSAMPLED_100);
             } else if (radioWebcamColor.getModel().isSelected()) {

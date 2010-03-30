@@ -7,15 +7,9 @@ package wekinator.LearningAlgorithms;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JPanel;
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import weka.classifiers.Classifier;
-import weka.core.Instance;
-import weka.core.Instances;
 import wekinator.LearningAlgorithms.LearningAlgorithm.TrainingState;
 
 /**

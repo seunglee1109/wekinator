@@ -1279,38 +1279,6 @@ public class LearningSystem {
         return l;
     }
 
-    public static LearningSystem readFromFileOld(File f) throws Exception {
-        final LearningSystem ls = (LearningSystem) SerializedFileUtil.readFromFile(f);
-        ls.listenerList = new EventListenerList();
-        //System.out.println("Dataset state is " + ls.datasetState);
-
-        LearningAlgorithm[] algs = ls.getLearners();
-
-        ls.learnerChangeListener = new PropertyChangeListener() {
-
-            public void propertyChange(PropertyChangeEvent evt) {
-                ls.learnerPropertyChanged(evt);
-            }
-        };
-        ls.datasetListener = new PropertyChangeListener() {
-
-            public void propertyChange(PropertyChangeEvent evt) {
-                ls.datasetChanged(evt);
-            }
-        };
-
-        //TODO: what about score player?
-
-        ls.setLearners(algs); //re-adds property change listeners!
-
-        return ls;
-    }
-
-    public void writeToFileOld(File f) throws Exception {
-        System.out.println("Dataset state is " + datasetState);
-        SerializedFileUtil.writeToFile(f, this);
-    }
-
     public void writeToFile(File f) throws IOException {
         FileOutputStream fout = new FileOutputStream(f);
         ObjectOutputStream o = new ObjectOutputStream(fout);

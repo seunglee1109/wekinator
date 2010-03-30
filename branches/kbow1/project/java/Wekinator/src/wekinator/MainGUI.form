@@ -333,8 +333,8 @@
                             <DimensionLayout dim="0">
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" alignment="0" attributes="0">
-                                      <Component id="chuckRunnerPanel1" min="-2" pref="377" max="-2" attributes="0"/>
-                                      <EmptySpace pref="408" max="32767" attributes="0"/>
+                                      <Component id="chuckRunnerPanel1" min="-2" pref="520" max="-2" attributes="0"/>
+                                      <EmptySpace pref="265" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
                             </DimensionLayout>

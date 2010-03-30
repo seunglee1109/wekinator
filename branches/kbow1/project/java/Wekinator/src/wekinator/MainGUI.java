@@ -307,14 +307,14 @@ public class MainGUI extends javax.swing.JFrame {
         jPanel8Layout.setHorizontalGroup(
             jPanel8Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel8Layout.createSequentialGroup()
-                .add(chuckRunnerPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 377, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(147, Short.MAX_VALUE))
+                .add(chuckRunnerPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 520, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(265, Short.MAX_VALUE))
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel8Layout.createSequentialGroup()
                 .add(chuckRunnerPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(12, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Simple", jPanel8);
@@ -354,7 +354,7 @@ public class MainGUI extends javax.swing.JFrame {
                         .add(buttonOscDisconnect))
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel5Layout.createSequentialGroup()
                         .add(23, 23, 23)
-                        .add(labelOscStatus, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 495, Short.MAX_VALUE))
+                        .add(labelOscStatus, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 756, Short.MAX_VALUE))
                     .add(jPanel5Layout.createSequentialGroup()
                         .addContainerGap()
                         .add(jLabel1)))
@@ -930,8 +930,6 @@ private void menuPerformanceModeActionPerformed(java.awt.event.ActionEvent evt) 
              menuAllGesture.setEnabled(false);
         }
 
-
-        //Disable for plork build:
         if (! WekinatorRunner.isPlork) {
             menuItemViewGraphDataset.setEnabled(WekinatorInstance.getWekinatorInstance().getLearningSystem() != null && WekinatorInstance.getWekinatorInstance().getLearningSystem().getDataset() != null);
         } else {

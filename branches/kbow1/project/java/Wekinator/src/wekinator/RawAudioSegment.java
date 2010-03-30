@@ -4,13 +4,12 @@
 
 package wekinator;
 
-import java.io.Serializable;
 
 /**
  *
  * @author rebecca
  */
-public class RawAudioSegment implements Serializable {
+public class RawAudioSegment {
     private int numSamples;
     private double numSeconds;
     private double samplesPerSecond;

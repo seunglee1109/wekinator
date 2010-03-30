@@ -12,7 +12,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -36,7 +35,7 @@ import weka.core.converters.ArffSaver;
  *
  * @author Rebecca Fiebrink
  */
-public class SimpleDataset implements Serializable {
+public class SimpleDataset {
 
 
     protected EventListenerList listenerList = new EventListenerList();

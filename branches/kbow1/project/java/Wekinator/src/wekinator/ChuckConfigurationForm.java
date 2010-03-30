@@ -725,8 +725,6 @@ public class ChuckConfigurationForm extends javax.swing.JFrame {
     private void setConfigurationFromForm() {
         //Want chuck dir:
         configuration.setChuckExecutable(labelChuckExecutable.getText());
-
-
         configuration.setCustomChuckFeatureExtractorEnabled(checkEnableCustomChuckFeature.getModel().isSelected());
         configuration.setCustomChuckFeatureExtractorFilename(labelCustomFeatureExtractor.getText());
 
@@ -735,6 +733,7 @@ public class ChuckConfigurationForm extends javax.swing.JFrame {
             configuration.setOscFeatureExtractorEnabled(false);
         } else {
             configuration.setOscFeatureExtractorEnabled(checkEnableOSCFeature.getModel().isSelected());
+            System.out.println("Is osc feat enabled? " + configuration.isOscFeatureExtractorEnabled());
             try {
                 int i = Integer.parseInt(textNumOscFeatures.getText());
                 configuration.setNumOSCFeaturesExtracted(i);
@@ -779,7 +778,7 @@ public class ChuckConfigurationForm extends javax.swing.JFrame {
                 textSynthMaxParamVals.setText("0");
             }
 
-            boolean isDist = (comboUseDist.getSelectedIndex() == 1);
+            boolean isDist = (false); //blotar only
             System.out.println("isDist ? " + isDist); //TODO: fix in future!
 
             boolean isDistArray[] = new boolean[configuration.getNumOscSynthParams()];
@@ -816,7 +815,7 @@ public class ChuckConfigurationForm extends javax.swing.JFrame {
                 textSynthMaxParamVals.setText("0");
             }
 
-            boolean isDist = (false);
+            boolean isDist = (comboUseDist.getSelectedIndex() == 1);
             System.out.println("isDist ? " + isDist); //TODO: fix in future!
 
             boolean isDistArray[] = new boolean[configuration.getNumOscSynthParams()];
@@ -864,7 +863,7 @@ public class ChuckConfigurationForm extends javax.swing.JFrame {
         if (file != null) {
             try {
                 //configuration = ChuckConfiguration.loadFromFile(file); //this is where it goes wrong...  TODO
-                configuration.loadFromFile(file);
+                configuration = ChuckConfiguration.readFromFile(file);
                 updateAllComponents();
             } catch (Exception ex) {
                 //TODO: handle:
@@ -1214,8 +1213,6 @@ public class ChuckConfigurationForm extends javax.swing.JFrame {
         //OSC feature: not for plork build
         checkEnableOSCFeature.getModel().setSelected(configuration.isOscFeatureExtractorEnabled());
         textNumOscFeatures.setText(Integer.toString(configuration.getNumOSCFeaturesExtracted()));
-
-
 
         if (configuration.isUseChuckSynthClass()) {
             buttonGroup1.setSelected(radioUseChuckSynth.getModel(), true);

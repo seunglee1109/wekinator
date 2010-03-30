@@ -31,7 +31,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.event.ChangeListener;
 import wekinator.LearningAlgorithms.HmmLearningAlgorithm;
-import wekinator.util.SerializedFileUtil;
 import wekinator.util.Util;
 
 /**
@@ -841,7 +840,7 @@ public class LearningAlgorithmConfigurationPanel extends javax.swing.JPanel {
         labelLearnerStatus.setText("Adaboost.M1, not yet trained, using 6 features");
         labelLearnerStatus.setEnabled(false);
 
-        comboSelectClassifier.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "AdaBoostM.1", "Decision Tree", "K-Nearest Neighbor", "Support Vector Machine" }));
+        comboSelectClassifier.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "AdaBoostM.1", "Decision Tree", "K-Nearest Neighbor", "Support Vector Machine", "HMM" }));
         comboSelectClassifier.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 comboSelectClassifierActionPerformed(evt);
@@ -849,7 +848,6 @@ public class LearningAlgorithmConfigurationPanel extends javax.swing.JPanel {
         });
 
         buttonLoadFile.setText("Choose file...");
-        buttonLoadFile.setEnabled(false);
         buttonLoadFile.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 buttonLoadFileActionPerformed(evt);

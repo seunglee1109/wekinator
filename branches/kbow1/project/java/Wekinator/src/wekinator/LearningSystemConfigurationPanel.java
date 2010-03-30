@@ -357,6 +357,17 @@ public class LearningSystemConfigurationPanel extends javax.swing.JPanel {
     //} catch (ClassNotFoundException ex) {
     //    Logger.getLogger(FeatureConfigurationPanel.class.getName()).log(Level.SEVERE, null, ex);
     // }
+        
+        if (WekinatorLearningManager.getInstance().getMode() == WekinatorLearningManager.Mode.RUNNING) {
+            WekinatorLearningManager.getInstance().stopRunning();
+                OscHandler.getOscHandler().stopSound();
+        } else if (WekinatorLearningManager.getInstance().getMode() == WekinatorLearningManager.Mode.EVALUATING) {
+            WekinatorLearningManager.getInstance().stopEvaluating();
+
+        } else if (WekinatorLearningManager.getInstance().getMode() == WekinatorLearningManager.Mode.TRAINING) {
+            WekinatorLearningManager.getInstance().stopTraining();
+        }
+
         mainGui.showTrainRunPanel();
 
     }//GEN-LAST:event_buttonGoActionPerformed

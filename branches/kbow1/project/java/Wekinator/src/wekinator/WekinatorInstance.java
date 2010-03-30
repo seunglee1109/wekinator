@@ -391,9 +391,10 @@ public class WekinatorInstance {
 
 
         try {
-            fin = new FileInputStream(settingsSaveFile);
-            ObjectInputStream sin = new ObjectInputStream(fin);
-            settings = (WekinatorSettings) sin.readObject();
+           // fin = new FileInputStream(settingsSaveFile);
+           // ObjectInputStream sin = new ObjectInputStream(fin);
+            settings = WekinatorSettings.readFromFile(new File(settingsSaveFile));
+          
             settings.addPropertyChangeListener(new PropertyChangeListener() {
 
                 public void propertyChange(PropertyChangeEvent evt) {
@@ -406,8 +407,7 @@ public class WekinatorInstance {
                 configuration = ChuckConfiguration.readFromFile(new File(cLoc));
                 System.out.println("read chuck config from " + cLoc);
             }
-            sin.close();
-            fin.close();
+            
             System.out.println("Loaded user settings");
         } catch (Exception ex) {
             System.out.println("No user settings found");
@@ -416,11 +416,7 @@ public class WekinatorInstance {
             FileOutputStream fout = null;
             boolean fail = false;
             try {
-                fout = new FileOutputStream(settingsSaveFile);
-                ObjectOutputStream out = new ObjectOutputStream(fout);
-                out.writeObject(settings);
-                out.close();
-                fout.close();
+                settings.writeToFile(new File(settingsSaveFile));
                 System.out.println("Wrote to settings file");
             } catch (IOException ex1) {
                 fail = true;
@@ -450,7 +446,7 @@ public class WekinatorInstance {
             try {
                 configuration = ChuckConfiguration.readFromFile(WekinatorRunner.getChuckConfigFile());
                 Logger.getLogger(WekinatorInstance.class.getName()).log(Level.INFO, null, "Loaded chuck configuration file successfully");
-            } catch (IOException ex) {
+            } catch (Exception ex) {
                 configuration = new ChuckConfiguration();
                 Logger.getLogger(WekinatorInstance.class.getName()).log(Level.SEVERE, null, "Could not load chuck configuration from specified file");
                 Logger.getLogger(WekinatorInstance.class.getName()).log(Level.SEVERE, null, ex);
@@ -533,11 +529,8 @@ public class WekinatorInstance {
         FileOutputStream fout = null;
         boolean fail = false;
         try {
-            fout = new FileOutputStream(settingsSaveFile);
-            ObjectOutputStream out = new ObjectOutputStream(fout);
-            out.writeObject(settings);
-            out.close();
-            fout.close();
+            settings.writeToFile(new File(settingsSaveFile));
+          
             System.out.println("Wrote to settings file");
         } catch (IOException ex1) {
             fail = true;

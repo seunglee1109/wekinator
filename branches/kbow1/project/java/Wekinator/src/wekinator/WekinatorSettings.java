@@ -7,7 +7,12 @@ package wekinator;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.File;
-import java.io.Serializable;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.HashMap;
 import java.util.logging.Level;
 import wekinator.util.Util;
@@ -17,7 +22,9 @@ import wekinator.util.Util;
  *
  * @author rebecca
  */
-public class WekinatorSettings implements Serializable {
+public class WekinatorSettings {
+
+
     //This should persist between sessions
 
     protected HashMap<String, String> lastLocations = null;
@@ -119,4 +126,36 @@ public class WekinatorSettings implements Serializable {
         this.logFile = logFile;
     }
 
+     public void writeToFile(File f) throws IOException {
+        FileOutputStream fout = new FileOutputStream(f);
+        ObjectOutputStream out = new ObjectOutputStream(fout);
+        this.writeToOutputStream(out);
+        out.close();
+        fout.close();
+    }
+
+    protected void writeToOutputStream(ObjectOutputStream out) throws IOException {
+        out.writeObject(lastLocations);
+        out.writeObject(defaultDir);
+        out.writeObject(logFile);
+    }
+
+    public static WekinatorSettings readFromFile(File f) throws FileNotFoundException, IOException, ClassNotFoundException {
+        FileInputStream fin = new FileInputStream(f);
+        ObjectInputStream in = new ObjectInputStream(fin);
+        WekinatorSettings ws = WekinatorSettings.readFromIntputStream(in);
+
+
+        in.close();
+        fin.close();
+        return ws;
+    }
+
+    private static WekinatorSettings readFromIntputStream(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        WekinatorSettings ws = new WekinatorSettings();
+        ws.lastLocations = (HashMap<String, String>)in.readObject();
+        ws.defaultDir = (String)in.readObject();
+        ws.setLogFile((String)in.readObject());
+        return ws;
+    }
 }

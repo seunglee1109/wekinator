@@ -8,24 +8,19 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.Serializable;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import wekinator.util.*;
 
 /**
- * //PROBLEM: this is still serializable!
  *
  * @author rebecca
  */
-public class ChuckConfiguration implements Serializable {
+public class ChuckConfiguration {
 
-  //  private String chuckDirectory = "No directory set";
+    //  private String chuckDirectory = "No directory set";
     private String wekDir = "No directory set";
     private String chuckExecutable = "/usr/bin/chuck";
     private boolean customChuckFeatureExtractorEnabled = false;
@@ -42,7 +37,12 @@ public class ChuckConfiguration implements Serializable {
     private boolean oscUseDistribution[] = new boolean[0];
     protected boolean usable = false;
     public static final String PROP_USABLE = "usable";
-
+    private int oscSynthReceivePort = 12000; //Matches defaults in chuck code
+    private int oscSynthSendPort = 6448; //Matches defaults in chuck code
+    private boolean isPlayalongLearningEnabled = false;
+    private String playalongLearningFile = "No file selected";
+    private String locationToSaveMyself = "myConfiguration.chuckconfiguration";
+    private int numOscSynthMaxParamVals = 2;
 
     public static String getFileExtension() {
         return "wckconf";
@@ -53,58 +53,86 @@ public class ChuckConfiguration implements Serializable {
     }
 
     public static String getDefaultLocation() {
-       // String dir = WekinatorInstance.getWekinatorInstance().getSettings().getDefaultSettingsDirectory();
+        // String dir = WekinatorInstance.getWekinatorInstance().getSettings().getDefaultSettingsDirectory();
         return "chuckConfigurations";
-        //return dir + File.separator + "hidConfigurations";
+    //return dir + File.separator + "hidConfigurations";
     }
-    
-   public static ChuckConfiguration readFromFile(File f) throws IOException {
-        FileInputStream fin = null;
-        ChuckConfiguration c;
-        try {
-            fin = new FileInputStream(f);
-            ObjectInputStream sin = new ObjectInputStream(fin);
-            c = (ChuckConfiguration) sin.readObject();
-            sin.close();
-            fin.close();
-        } catch (Exception ex) {
-            throw new IOException("Could not load configuration from file\n");
-        } finally {
-            try {
-                if (fin != null) {
-                    fin.close();
-                }
-            } catch (IOException ex) {
-                Logger.getLogger(ChuckConfiguration.class.getName()).log(Level.INFO, null, ex);
-            }
-        }
+
+    public static ChuckConfiguration readFromInputStream(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        ChuckConfiguration c = new ChuckConfiguration();
+        in.readInt(); //version number
+        c.setWekDir((String) in.readObject());
+        c.setChuckExecutable((String) in.readObject());
+        c.setCustomChuckFeatureExtractorEnabled(in.readBoolean());
+        c.setCustomChuckFeatureExtractorFilename((String) in.readObject());
+        c.setNumCustomChuckFeaturesExtracted(in.readInt());
+        c.setOscFeatureExtractorEnabled(in.readBoolean());
+        c.setNumOSCFeaturesExtracted(in.readInt());
+        c.setOscFeatureExtractorSendPort(in.readInt());
+        c.setUseChuckSynthClass(in.readBoolean());
+        c.setChuckSynthFilename((String) in.readObject());
+        c.setUseOscSynth(in.readBoolean());
+        c.setNumOscSynthParams(in.readInt());
+        c.setIsOscSynthParamDiscrete((boolean[]) in.readObject());
+        c.setOscUseDistribution((boolean[]) in.readObject());
+
+        boolean usable = in.readBoolean();
+        c.setOscSynthReceivePort(in.readInt());
+        c.setOscSynthSendPort(in.readInt());
+        c.setIsPlayalongLearningEnabled(in.readBoolean());
+        c.setPlayalongLearningFile((String) in.readObject());
+        c.setLocationToSaveMyself((String) in.readObject());
+        c.setNumOscSynthMaxParamVals(in.readInt());
+        c.setUsable(usable);
         return c;
     }
 
-   public void writeToFile(File f) throws IOException {
-        FileOutputStream fout = null;
-        boolean fail = false;
-        try {
-            fout = new FileOutputStream(f);
-            ObjectOutputStream out = new ObjectOutputStream(fout);
-            out.writeObject(this);
-            out.close();
-            fout.close();
-        } catch (IOException ex) {
-            fail = true;
-        } finally {
-            try {
-                if (fout != null) {
-                    fout.close();
-                }
-            } catch (IOException ex) {
-                Logger.getLogger(ChuckConfiguration.class.getName()).log(Level.INFO, null, ex);
-            }
-        }
-        if (fail) {
-            throw new IOException("Could not write to file " + f.getCanonicalPath());
-        }
-    } 
+    public static ChuckConfiguration readFromFile(File f) throws IOException, ClassNotFoundException {
+        FileInputStream fin = null;
+        ChuckConfiguration c;
+
+        fin = new FileInputStream(f);
+        ObjectInputStream sin = new ObjectInputStream(fin);
+        c = ChuckConfiguration.readFromInputStream(sin);
+
+        sin.close();
+        fin.close();
+
+        return c;
+    }
+
+    public void writeToFile(File f) throws IOException {
+        FileOutputStream fout = new FileOutputStream(f);
+        ObjectOutputStream out = new ObjectOutputStream(fout);
+        this.writeToOutputStream(out);
+        out.close();
+        fout.close();
+    }
+
+    protected void writeToOutputStream(ObjectOutputStream out) throws IOException {
+        out.writeInt(1); //version number
+        out.writeObject(wekDir);
+        out.writeObject(chuckExecutable);
+        out.writeBoolean(customChuckFeatureExtractorEnabled);
+        out.writeObject(customChuckFeatureExtractorFilename);
+        out.writeInt(numCustomChuckFeaturesExtracted);
+        out.writeBoolean(oscFeatureExtractorEnabled);
+        out.writeInt(numOSCFeaturesExtracted);
+        out.writeInt(oscFeatureExtractorSendPort);
+        out.writeBoolean(useChuckSynthClass);
+        out.writeObject(chuckSynthFilename);
+        out.writeBoolean(useOscSynth);
+        out.writeInt(numOscSynthParams);
+        out.writeObject(isOscSynthParamDiscrete);
+        out.writeObject(oscUseDistribution);
+        out.writeBoolean(usable);
+        out.writeInt(oscSynthReceivePort);
+        out.writeInt(oscSynthSendPort);
+        out.writeBoolean(isPlayalongLearningEnabled);
+        out.writeObject(playalongLearningFile);
+        out.writeObject(locationToSaveMyself);
+        out.writeInt(numOscSynthMaxParamVals);
+    }
 
     /**
      * Get the value of usable
@@ -155,57 +183,31 @@ public class ChuckConfiguration implements Serializable {
             this.oscUseDistribution[i] = oscUseDistribution[i];
         }
     }
-    private int oscSynthReceivePort = 12000; //Matches defaults in chuck code
-    private int oscSynthSendPort = 6448; //Matches defaults in chuck code
-    private boolean isPlayalongLearningEnabled = false;
-    private String playalongLearningFile = "No file selected";
-    private String locationToSaveMyself = "myConfiguration.chuckconfiguration";
-    private int numOscSynthMaxParamVals = 2;
-    // private boolean oscSynthUseDistribution = false;
 
+    // private boolean oscSynthUseDistribution = false;
     public ChuckConfiguration() {
         isOscSynthParamDiscrete = new boolean[0];
         try {
-        File f = new File(Util.getCanonicalPath(new File("")));
-         String preferredPath = f.getParentFile().getParentFile().getParentFile().getAbsolutePath();
-         File f2 = new File(preferredPath);
-         if (f2.exists()) {
-            wekDir = Util.getCanonicalPath(f2);
-         }
+            File f = new File(Util.getCanonicalPath(new File("")));
+            String preferredPath = f.getParentFile().getParentFile().getParentFile().getAbsolutePath();
+            File f2 = new File(preferredPath);
+            if (f2.exists()) {
+                wekDir = Util.getCanonicalPath(f2);
+            }
 
 
         } catch (Exception ex) {
-
         }
     }
 
-    /**
-     * TODO: Get around fact that we have to copy here... want 1 version that just loads serialized obj
-     *  from file, another that doesn't destroy object reference (this one)
-     * @param settingsFile
-     * @throws java.io.FileNotFoundException
-     * @throws java.io.IOException
-     * @throws java.lang.ClassNotFoundException
-     */
-    public void loadFromFile(File settingsFile) throws FileNotFoundException, IOException, ClassNotFoundException {
-        FileInputStream fin = new FileInputStream(settingsFile);
-        ObjectInputStream sin = new ObjectInputStream(fin);
-        ChuckConfiguration c = (ChuckConfiguration) sin.readObject();
-        sin.close();
-        fin.close();
-
-        setEqualTo(c);
-    }
-
-   /* public void writeToFile(File settingsFile) throws FileNotFoundException, IOException {
-        FileOutputStream fout = new FileOutputStream(settingsFile);
-        ObjectOutputStream out = new ObjectOutputStream(fout);
-        locationToSaveMyself = settingsFile.getCanonicalPath();
-        out.writeObject(this);
-        out.close();
-        fout.close();
+    /* public void writeToFile(File settingsFile) throws FileNotFoundException, IOException {
+    FileOutputStream fout = new FileOutputStream(settingsFile);
+    ObjectOutputStream out = new ObjectOutputStream(fout);
+    locationToSaveMyself = settingsFile.getCanonicalPath();
+    out.writeObject(this);
+    out.close();
+    fout.close();
     } */
-
     public ChuckConfiguration(ChuckConfiguration c) {
         setEqualTo(c);
     }
@@ -232,7 +234,7 @@ public class ChuckConfiguration implements Serializable {
         File f2 = new File(coreString);
 
         if (!s.equals("wekinator") && !s.equals("project")) {
-            errorString += "Wekinator directory must refer to a directory called \"wekinator/\"\n";
+            errorString += "Wekinator project directory must refer to a directory called \"project/\"\n";
         } else if (!f.exists() || !f.isDirectory()) {
             errorString += "Wekinator directory does not exist or is not a directory\n";
         } else if (!f2.exists() || !f2.isDirectory()) {
@@ -295,7 +297,7 @@ public class ChuckConfiguration implements Serializable {
         if (errorString.length() != 0) {
             throw new Exception(errorString);
         }
-        
+
         setUsable(true);
     }
 
@@ -374,9 +376,9 @@ public class ChuckConfiguration implements Serializable {
         return wekDir;
     }
 
- /*   public void setChuckDir(String chuckDir) {
-        this.chuckDirectory = chuckDir;
-        setUsable(false);
+    /*   public void setChuckDir(String chuckDir) {
+    this.chuckDirectory = chuckDir;
+    setUsable(false);
 
     } */
     public void setWekDir(String wdir) {

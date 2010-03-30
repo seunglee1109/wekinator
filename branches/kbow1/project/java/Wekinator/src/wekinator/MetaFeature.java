@@ -4,7 +4,6 @@
  */
 package wekinator;
 
-import java.io.Serializable;
 import java.util.LinkedList;
 import wekinator.FeatureConfiguration.Feature;
 
@@ -12,7 +11,7 @@ import wekinator.FeatureConfiguration.Feature;
  *
  * @author rebecca
  */
-public abstract class MetaFeature implements Serializable {
+public abstract class MetaFeature {
 
     protected Feature myFeature = null;
     protected String myName = "DefaultMetaFeature";

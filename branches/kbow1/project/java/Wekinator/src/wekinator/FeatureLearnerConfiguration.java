@@ -7,7 +7,6 @@ package wekinator;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -18,7 +17,7 @@ import java.util.logging.Logger;
  *
  * @author rebecca
  */
-public class FeatureLearnerConfiguration implements Serializable {
+public class FeatureLearnerConfiguration {
 
     protected int numLearners = 0;
     protected int numFeatures = 0;

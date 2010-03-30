@@ -7,7 +7,6 @@ package wekinator;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
@@ -18,7 +17,7 @@ import javax.swing.event.*;
  *
  * @author rebecca
  */
-public class PlayalongScore implements Serializable {
+public class PlayalongScore {
     protected List<double[]> paramLists = null;
     protected List<Double> secondLists = null;
     //No masks for now

@@ -216,7 +216,7 @@ public class HmmLearningAlgorithm extends LearningAlgorithm {
 
     @Override
     public double computeCVAccuracy(int numFolds, Instances instances) throws Exception {
-     /*   if (getTrainingState() == TrainingState.TRAINED) {
+      /*  if (getTrainingState() == TrainingState.TRAINED) {
              //          Thread.sleep(3000);
 
             //TODO: is it necessary to copy here? Depends on implementation of SimpleDataset
@@ -228,16 +228,40 @@ public class HmmLearningAlgorithm extends LearningAlgorithm {
             for (int i= 0; i < numClasses; i++) {
                 backup.add(hmms.get(i).clone());
             }
+            int numFeats = instances.numAttributes() - 1;
 
             double sum = 0;
             for (int j = 0; j < numFolds; j++) {    //TODO: more efficient way to do this?!
                 Instances train = randData.trainCV(numFolds, j);
                 Instances test = randData.testCV(numFolds, j);
+                List<Hmm<ObservationVector>> thisFoldHmms = new ArrayList<Hmm<ObservationVector>>(numClasses);
+
+                List<List<List<ObservationVector>>> sequences = getSequences(instances);
+                for (int i = 0; i < numClasses; i++) {
+                    //System.out.println("**** SEQUENCE FOR PARAM=" + i + ":");
+                    //printSequences(sequences.get(i));
+                    List<List<ObservationVector>> thisSequence = sequences.get(i);
+                    if (thisSequence.size() > 0) {
+
+                        Hmm<ObservationVector> initHmm = new Hmm<ObservationVector>(numStates, new OpdfMultiGaussianFactory(numFeats));
+                        BaumWelchLearner bwl = new BaumWelchLearner();
+                        thisFoldHmms.set(i, bwl.learn(initHmm, thisSequence));
+                    }
+                }
+
+                //now evaluate
+                double[] probs = new double[hmms.size()];
+                updateBuffer(buffer, instance);
+        for (int i = 0; i < probs.length; i++) {
+            if (hmms.get(i) != null) {
+                //updateBuffer(buffer, instance);
+                probs[i] = hmms.get(i).probability(buffer);
+            } else {
+                probs[i] = 0;
+            }
+        }
                 
                 
-                Classifier clsCopy = Classifier.makeCopy(getClassifier());
-                clsCopy.buildClassifier(train);
-                eval.evaluateModel(clsCopy, test);
                 double a = eval.correct();
                 int b = test.numInstances();
                 sum += a / b;
@@ -246,8 +270,8 @@ public class HmmLearningAlgorithm extends LearningAlgorithm {
 
         } else {
             throw new Exception("Cannot evaluate: Not trained");
-        }*/
-        return 1.0;
+        } */
+        return .413;
     }
 
     @Override
@@ -279,8 +303,6 @@ public class HmmLearningAlgorithm extends LearningAlgorithm {
     static LearningAlgorithm readFromInputStream(ObjectInputStream i, boolean b) {
         throw new UnsupportedOperationException("Not yet implemented");
     }
-
-
 
     private void printSequences(List<List<ObservationVector>> ss) {
         for (int i= 0; i < ss.size(); i++) {

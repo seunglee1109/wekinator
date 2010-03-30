@@ -13,7 +13,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -21,13 +20,12 @@ import java.util.List;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.EventListenerList;
-import wekinator.util.SerializedFileUtil;
 
 /**
  *
  * @author rebecca
  */
-public class FeatureConfiguration implements Serializable {
+public class FeatureConfiguration {
 
     public static boolean equal(FeatureConfiguration fc1, FeatureConfiguration fc2) {
         if (fc1 == fc2) {
@@ -651,7 +649,7 @@ public class FeatureConfiguration implements Serializable {
         ObjectInputStream in = new ObjectInputStream(fin);
         FeatureConfiguration fc = FeatureConfiguration.readFromInputStream(in);
 
-         //hack: ABC
+         //hack:
         if (fc.isUseOtherHid()) {
             HidSetup h = fc.getHidSetup();
             WekinatorInstance.getWekinatorInstance().setCurrentHidSetup(h); //TODO: fix this; it sets up some background communication that happens immediately. Ideally would wait for this before "go" finishes.
@@ -660,23 +658,6 @@ public class FeatureConfiguration implements Serializable {
         fin.close();
         return fc;
 
-    }
-
-
-    public static FeatureConfiguration readFromFileOld(File f) throws Exception {
-        FeatureConfiguration fc = (FeatureConfiguration) SerializedFileUtil.readFromFile(f);
-        fc.committedNumTotalFeatures = fc.getNumFeaturesEnabled();
-        fc.committedNumBaseFeatures = fc.getNumBaseFeaturesEnabled();
-
-        if (fc.isUseOtherHid()) {
-            HidSetup h = fc.getHidSetup();
-            WekinatorInstance.getWekinatorInstance().setCurrentHidSetup(h); //TODO: Do I really want to do this? Or wait until I "apply" this feature set?
-        }
-        return fc;
-    }
-
-    void writeToFileOld(File file) throws Exception {
-        SerializedFileUtil.writeToFile(file, this);
     }
 
     public void writeToFile(File file) throws IOException {
@@ -836,7 +817,7 @@ public class FeatureConfiguration implements Serializable {
         return out;
     }
 
-    protected class Feature implements Serializable {
+    protected class Feature {
 
         public Feature(String name, int dimensionality) {
             this.name = name;
